@@ -1,0 +1,77 @@
+<%- include('partials/header', { title: 'Soporte' }) %>
+
+<main class="inner-page">
+  <div class="container">
+    <div class="inner-header">
+      <h1>
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--gold)">
+          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+        </svg>
+        Soporte
+      </h1>
+      <p>¿Tienes alguna pregunta sobre un vehículo o el proceso de importación? Estamos aquí para ayudarte.</p>
+    </div>
+
+    <div class="support-layout">
+      <!-- Formulario nuevo ticket -->
+      <div class="support-new-ticket">
+        <div class="card">
+          <h2 class="card-title">Nueva consulta</h2>
+          <form action="/soporte" method="post" class="support-form">
+            <div class="form-group">
+              <label class="form-label" for="asunto">Asunto</label>
+              <input type="text" id="asunto" name="asunto" class="form-input"
+                     placeholder="Ej: Información sobre el BMW Serie 3 2022" required maxlength="200">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="mensaje">Mensaje</label>
+              <textarea id="mensaje" name="mensaje" class="form-textarea"
+                        placeholder="Cuéntanos en qué podemos ayudarte..." required rows="6"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              Enviar consulta
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Historial de tickets -->
+      <div class="support-tickets-list">
+        <h2 class="support-tickets-title">Mis consultas</h2>
+        <% if (tickets.length === 0) { %>
+          <div class="empty-state empty-state-sm">
+            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            <p>Aún no has enviado ninguna consulta.</p>
+          </div>
+        <% } else { %>
+          <div class="tickets-list">
+            <% tickets.forEach(ticket => { %>
+              <div class="ticket-item">
+                <div class="ticket-head">
+                  <div class="ticket-info">
+                    <h4 class="ticket-subject"><%= ticket.asunto %></h4>
+                    <span class="ticket-date"><%= new Date(ticket.created_at).toLocaleDateString('es-ES', { day:'2-digit', month:'short', year:'numeric' }) %></span>
+                  </div>
+                  <span class="badge badge-<%= ticket.estado.replace('_','-') %>"><%= ticket.estado.replace('_',' ') %></span>
+                </div>
+                <p class="ticket-msg"><%= ticket.mensaje %></p>
+                <% if (ticket.respuesta) { %>
+                  <div class="ticket-response">
+                    <div class="ticket-response-label">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+                      Respuesta del equipo
+                    </div>
+                    <p><%= ticket.respuesta %></p>
+                  </div>
+                <% } %>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,87 @@
+<%- include('../partials/header', { title: 'Gestión de vehículos' }) %>
+
+<div class="admin-wrapper">
+  <%- include('./sidebar', { active: 'coches' }) %>
+  <main class="admin-main">
+    <div class="admin-top-bar">
+      <h1 class="admin-page-title">Vehículos (<%= cars.length %>)</h1>
+      <a href="/admin/coches/nuevo" class="btn btn-primary btn-sm">+ Añadir vehículo</a>
+    </div>
+
+    <div class="admin-card">
+      <% if (cars.length === 0) { %>
+        <div class="admin-empty" style="padding:3rem;text-align:center">
+          <p>No hay vehículos. <a href="/admin/coches/nuevo">Añade el primero</a>.</p>
+        </div>
+      <% } else { %>
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width:60px">Foto</th>
+              <th>Vehículo</th>
+              <th>Precio</th>
+              <th>KM</th>
+              <th>Estado</th>
+              <th>Fotos</th>
+              <th>Destacado</th>
+              <th style="text-align:right">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% cars.forEach(car => { %>
+              <tr>
+                <td>
+                  <div class="table-thumb">
+                    <% if (car.imagen_primera) { %>
+                      <img src="<%= car.imagen_primera %>" alt="" loading="lazy">
+                    <% } else { %>
+                      <img src="/img/car-placeholder.svg" alt="">
+                    <% } %>
+                  </div>
+                </td>
+                <td>
+                  <div class="table-car-name"><%= car.marca %> <%= car.modelo %></div>
+                  <div class="table-car-sub"><%= car.anio %> · <%= car.combustible %> · <%= car.pais_origen %></div>
+                </td>
+                <td class="td-price">
+                  <%= new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(car.precio) %>
+                </td>
+                <td><%= car.kilometraje.toLocaleString('es-ES') %> km</td>
+                <td><span class="badge badge-<%= car.estado %>"><%= car.estado %></span></td>
+                <td>
+                  <span class="table-img-count">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                    <%= car.num_imagenes %>/15
+                  </span>
+                </td>
+                <td>
+                  <% if (car.destacado) { %>
+                    <span style="color:var(--gold)">★ Sí</span>
+                  <% } else { %>
+                    <span style="color:var(--text-muted)">–</span>
+                  <% } %>
+                </td>
+                <td style="text-align:right">
+                  <div class="table-actions">
+                    <a href="/coches/<%= car.slug %>" target="_blank" class="btn btn-ghost btn-xs" title="Ver en web">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                    </a>
+                    <a href="/admin/coches/<%= car.id %>/editar" class="btn btn-outline btn-xs">Editar</a>
+                    <form action="/admin/coches/<%= car.id %>/eliminar" method="post"
+                          onsubmit="return confirm('¿Eliminar este vehículo y todas sus imágenes? Esta acción no se puede deshacer.')">
+                      <button type="submit" class="btn btn-danger btn-xs">Eliminar</button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+      <% } %>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

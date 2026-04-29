@@ -1,0 +1,32 @@
+<%- include('partials/header', { title: 'Mis favoritos' }) %>
+
+<main class="inner-page">
+  <div class="container">
+    <div class="inner-header">
+      <h1>
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" stroke="none" style="color:var(--gold)">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+        Mis favoritos
+      </h1>
+      <p><%= cars.length %> vehículo<%= cars.length !== 1 ? 's' : '' %> guardado<%= cars.length !== 1 ? 's' : '' %></p>
+    </div>
+
+    <% if (cars.length === 0) { %>
+      <div class="empty-state">
+        <svg width="72" height="72" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <h3>Aún no tienes favoritos</h3>
+        <p>Guarda los vehículos que más te interesen para encontrarlos fácilmente.</p>
+        <a href="/coches" class="btn btn-primary">Explorar catálogo</a>
+      </div>
+    <% } else { %>
+      <div class="cars-grid">
+        <% cars.forEach(car => { %>
+          <%- include('partials/car-card', { car }) %>
+        <% }) %>
+      </div>
+    <% } %>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,105 @@
+<%- include('partials/header', { title: 'Catálogo de coches importados' }) %>
+
+<main class="catalog-page">
+  <div class="catalog-header">
+    <div class="container">
+      <h1>Catálogo de vehículos</h1>
+      <p class="catalog-subtitle"><strong><%= total %></strong> vehículo<%= total !== 1 ? 's' : '' %> encontrado<%= total !== 1 ? 's' : '' %></p>
+    </div>
+  </div>
+
+  <div class="container catalog-layout">
+    <!-- ── FILTROS ──────────────────────────────────────── -->
+    <aside class="filters-panel">
+      <div class="filters-header">
+        <h3>Filtrar</h3>
+        <a href="/coches" class="filters-reset">Limpiar</a>
+      </div>
+
+      <form action="/coches" method="get" id="filtersForm">
+        <div class="filter-group">
+          <label class="filter-label">Marca</label>
+          <input type="text" name="marca" value="<%= filters.marca || '' %>"
+                 placeholder="Ej: BMW, Audi…" class="form-input form-input-sm"
+                 list="marcas-list">
+          <datalist id="marcas-list">
+            <% marcas.forEach(m => { %>
+              <option value="<%= m.marca %>">
+            <% }) %>
+          </datalist>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Combustible</label>
+          <select name="combustible" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            <% ['gasolina','diesel','híbrido','eléctrico','GLP'].forEach(c => { %>
+              <option value="<%= c %>" <%= filters.combustible === c ? 'selected' : '' %>><%= c.charAt(0).toUpperCase()+c.slice(1) %></option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Transmisión</label>
+          <select name="transmision" class="form-select form-select-sm">
+            <option value="">Todas</option>
+            <option value="manual"     <%= filters.transmision === 'manual'     ? 'selected' : '' %>>Manual</option>
+            <option value="automática" <%= filters.transmision === 'automática' ? 'selected' : '' %>>Automática</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Año desde</label>
+          <select name="anio_desde" class="form-select form-select-sm">
+            <option value="">Cualquiera</option>
+            <% for (let y = new Date().getFullYear(); y >= 2005; y--) { %>
+              <option value="<%= y %>" <%= parseInt(filters.anio_desde) === y ? 'selected' : '' %>><%= y %></option>
+            <% } %>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Precio máximo</label>
+          <select name="precio_max" class="form-select form-select-sm">
+            <option value="">Sin límite</option>
+            <% [10000,15000,20000,25000,30000,40000,50000,75000,100000].forEach(p => { %>
+              <option value="<%= p %>" <%= parseInt(filters.precio_max) === p ? 'selected' : '' %>><%= p.toLocaleString('es-ES') %> €</option>
+            <% }) %>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Ordenar por</label>
+          <select name="orden" class="form-select form-select-sm">
+            <option value="nuevo"       <%= filters.orden === 'nuevo'       ? 'selected' : '' %>>Más recientes</option>
+            <option value="precio_asc"  <%= filters.orden === 'precio_asc'  ? 'selected' : '' %>>Precio: menor a mayor</option>
+            <option value="precio_desc" <%= filters.orden === 'precio_desc' ? 'selected' : '' %>>Precio: mayor a menor</option>
+            <option value="anio_desc"   <%= filters.orden === 'anio_desc'   ? 'selected' : '' %>>Más nuevo primero</option>
+            <option value="km_asc"      <%= filters.orden === 'km_asc'      ? 'selected' : '' %>>Menos kilómetros</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Aplicar filtros</button>
+      </form>
+    </aside>
+
+    <!-- ── RESULTADOS ─────────────────────────────────── -->
+    <section class="catalog-results">
+      <% if (cars.length === 0) { %>
+        <div class="empty-state">
+          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <h3>No se encontraron vehículos</h3>
+          <p>Prueba a ajustar los filtros o <a href="/coches">ver todo el catálogo</a>.</p>
+        </div>
+      <% } else { %>
+        <div class="cars-grid">
+          <% cars.forEach(car => { %>
+            <%- include('partials/car-card', { car }) %>
+          <% }) %>
+        </div>
+      <% } %>
+    </section>
+  </div>
+</main>
+
+<%- include('partials/footer') %>

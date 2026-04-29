@@ -1,0 +1,194 @@
+<%
+  const precio = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(car.precio);
+  const km     = car.kilometraje.toLocaleString('es-ES');
+%>
+<%- include('partials/header', { title: `${car.marca} ${car.modelo} ${car.anio}` }) %>
+
+<main class="car-detail-page">
+  <div class="container">
+
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb">
+      <a href="/">Inicio</a>
+      <span class="bc-sep">›</span>
+      <a href="/coches">Catálogo</a>
+      <span class="bc-sep">›</span>
+      <span><%= car.marca %> <%= car.modelo %></span>
+    </nav>
+
+    <!-- Grid principal -->
+    <div class="car-detail-grid">
+
+      <!-- ── GALERÍA ───────────────────────────────────── -->
+      <div class="car-gallery">
+        <div class="gallery-main" id="galleryMain">
+          <% if (images.length > 0) { %>
+            <img src="<%= images[0].url %>"
+                 alt="<%= car.marca %> <%= car.modelo %>"
+                 id="mainImage" loading="eager">
+            <div class="gallery-zoom-hint">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+              Ampliar
+            </div>
+          <% } else { %>
+            <img src="/img/car-placeholder.svg" alt="Sin imagen disponible">
+          <% } %>
+        </div>
+
+        <% if (images.length > 1) { %>
+          <div class="gallery-thumbs" id="galleryThumbs">
+            <% images.forEach((img, i) => { %>
+              <div class="gallery-thumb <%= i === 0 ? 'active' : '' %>"
+                   data-src="<%= img.url %>"
+                   data-index="<%= i %>">
+                <img src="<%= img.url %>" alt="" loading="lazy">
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <% if (images.length > 0) { %>
+          <div class="gallery-counter-bar">
+            <span id="galleryCurrent">1</span> / <%= images.length %> fotos
+          </div>
+        <% } %>
+      </div>
+
+      <!-- ── PANEL DE INFO ─────────────────────────────── -->
+      <div class="car-info-panel">
+        <div class="car-status-row">
+          <span class="badge badge-<%= car.estado %>"><%= car.estado %></span>
+          <% if (car.destacado) { %><span class="badge badge-gold">★ Destacado</span><% } %>
+        </div>
+
+        <h1 class="car-detail-title"><%= car.marca %> <%= car.modelo %></h1>
+        <p class="car-detail-sub"><%= car.anio %> · Importado de <strong><%= car.pais_origen %></strong></p>
+
+        <div class="car-detail-price"><%= precio %></div>
+
+        <!-- Specs rápidas -->
+        <div class="quick-specs-grid">
+          <div class="qs-item">
+            <svg class="qs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div>
+              <div class="qs-value"><%= km %> km</div>
+              <div class="qs-key">Kilometraje</div>
+            </div>
+          </div>
+          <div class="qs-item">
+            <svg class="qs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 22V11l9-9 9 9v11H15v-6H9v6H3z"/></svg>
+            <div>
+              <div class="qs-value"><%= car.combustible.charAt(0).toUpperCase()+car.combustible.slice(1) %></div>
+              <div class="qs-key">Combustible</div>
+            </div>
+          </div>
+          <div class="qs-item">
+            <svg class="qs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>
+            <div>
+              <div class="qs-value"><%= car.transmision.charAt(0).toUpperCase()+car.transmision.slice(1) %></div>
+              <div class="qs-key">Cambio</div>
+            </div>
+          </div>
+          <% if (car.potencia) { %>
+          <div class="qs-item">
+            <svg class="qs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <div>
+              <div class="qs-value"><%= car.potencia %> CV</div>
+              <div class="qs-key">Potencia</div>
+            </div>
+          </div>
+          <% } %>
+        </div>
+
+        <!-- Acciones -->
+        <div class="car-actions-panel">
+          <% if (user) { %>
+            <button class="btn btn-heart <%= isFavorite ? 'is-favorite' : '' %>"
+                    id="favoriteBtn" data-car-id="<%= car.id %>">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="<%= isFavorite ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+              </svg>
+              <span id="favBtnText"><%= isFavorite ? 'En favoritos' : 'Guardar favorito' %></span>
+            </button>
+          <% } else { %>
+            <a href="/auth/login?redirect=/coches/<%= car.slug %>" class="btn btn-heart">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+              Guardar favorito
+            </a>
+          <% } %>
+          <a href="/soporte" class="btn btn-primary btn-block">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            Solicitar información
+          </a>
+        </div>
+
+        <!-- Tags -->
+        <div class="car-tags">
+          <span class="car-tag">🌍 <%= car.pais_origen %></span>
+          <% if (car.color) { %><span class="car-tag">🎨 <%= car.color %></span><% } %>
+          <span class="car-tag">🚪 <%= car.puertas %> puertas</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── DESCRIPCIÓN ──────────────────────────────── -->
+    <% if (car.descripcion) { %>
+    <section class="car-section">
+      <h2 class="car-section-title">Descripción</h2>
+      <div class="car-description"><%- car.descripcion.replace(/\n/g, '<br>') %></div>
+    </section>
+    <% } %>
+
+    <!-- ── FICHA TÉCNICA ────────────────────────────── -->
+    <section class="car-section">
+      <h2 class="car-section-title">Ficha técnica</h2>
+      <div class="specs-table">
+        <div class="spec-row"><span class="spec-key">Marca</span>        <span class="spec-val"><%= car.marca %></span></div>
+        <div class="spec-row"><span class="spec-key">Modelo</span>       <span class="spec-val"><%= car.modelo %></span></div>
+        <div class="spec-row"><span class="spec-key">Año</span>          <span class="spec-val"><%= car.anio %></span></div>
+        <div class="spec-row"><span class="spec-key">País de origen</span><span class="spec-val"><%= car.pais_origen %></span></div>
+        <div class="spec-row"><span class="spec-key">Kilometraje</span>  <span class="spec-val"><%= km %> km</span></div>
+        <div class="spec-row"><span class="spec-key">Combustible</span>  <span class="spec-val"><%= car.combustible %></span></div>
+        <div class="spec-row"><span class="spec-key">Transmisión</span>  <span class="spec-val"><%= car.transmision %></span></div>
+        <% if (car.color) { %>
+        <div class="spec-row"><span class="spec-key">Color</span>        <span class="spec-val"><%= car.color %></span></div>
+        <% } %>
+        <% if (car.potencia) { %>
+        <div class="spec-row"><span class="spec-key">Potencia</span>     <span class="spec-val"><%= car.potencia %> CV</span></div>
+        <% } %>
+        <div class="spec-row"><span class="spec-key">Puertas</span>      <span class="spec-val"><%= car.puertas %></span></div>
+        <div class="spec-row"><span class="spec-key">Estado</span>        <span class="spec-val"><span class="badge badge-<%= car.estado %>"><%= car.estado %></span></span></div>
+      </div>
+    </section>
+
+    <!-- ── RELACIONADOS ─────────────────────────────── -->
+    <% if (related.length > 0) { %>
+    <section class="car-section">
+      <h2 class="car-section-title">Más <%= car.marca %></h2>
+      <div class="cars-grid cars-grid-3">
+        <% related.forEach(r => { %>
+          <%- include('partials/car-card', { car: r }) %>
+        <% }) %>
+      </div>
+    </section>
+    <% } %>
+
+  </div>
+</main>
+
+<!-- ── LIGHTBOX ────────────────────────────────────────────── -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galería de imágenes">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">✕</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Anterior">&#8249;</button>
+  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Siguiente">&#8250;</button>
+  <div class="lightbox-counter">
+    <span id="lightboxCurrent">1</span> / <span id="lightboxTotal"><%= images.length %></span>
+  </div>
+</div>
+
+<script>
+  const CAR_IMAGES = <%- JSON.stringify(images.map(img => img.url)) %>;
+</script>
+
+<%- include('partials/footer') %>

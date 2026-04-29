@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 300" fill="none">
+  <rect width="480" height="300" fill="#111620"/>
+  <!-- Car body -->
+  <path d="M100 190 L130 145 L175 128 L305 128 L350 145 L380 190 Z" fill="#1a2234" stroke="#1e2a40" stroke-width="2"/>
+  <!-- Roof -->
+  <path d="M175 128 L195 92 L285 92 L305 128 Z" fill="#141c2e" stroke="#1e2a40" stroke-width="1.5"/>
+  <!-- Window -->
+  <path d="M198 127 L212 98 L268 98 L282 127 Z" fill="#0d1320" opacity="0.8"/>
+  <!-- Wheel wells -->
+  <ellipse cx="165" cy="195" rx="38" ry="12" fill="#0a0e18"/>
+  <ellipse cx="315" cy="195" rx="38" ry="12" fill="#0a0e18"/>
+  <!-- Wheels -->
+  <circle cx="165" cy="200" r="32" fill="#0c1018" stroke="#1e2a40" stroke-width="3"/>
+  <circle cx="165" cy="200" r="18" fill="#111820" stroke="#1e2a40" stroke-width="2"/>
+  <circle cx="165" cy="200" r="6" fill="#1a2234"/>
+  <circle cx="315" cy="200" r="32" fill="#0c1018" stroke="#1e2a40" stroke-width="3"/>
+  <circle cx="315" cy="200" r="18" fill="#111820" stroke="#1e2a40" stroke-width="2"/>
+  <circle cx="315" cy="200" r="6" fill="#1a2234"/>
+  <!-- Headlight -->
+  <ellipse cx="380" cy="175" rx="10" ry="7" fill="#c9a227" opacity="0.3"/>
+  <!-- Taillight -->
+  <ellipse cx="100" cy="175" rx="10" ry="7" fill="#ef4444" opacity="0.2"/>
+  <!-- Ground shadow -->
+  <ellipse cx="240" cy="232" rx="130" ry="8" fill="#000000" opacity="0.4"/>
+  <!-- Text -->
+  <text x="240" y="265" text-anchor="middle" fill="#2d3a4a" font-size="13" font-family="Inter, system-ui, sans-serif" font-weight="500">Sin imagen disponible</text>
+</svg>

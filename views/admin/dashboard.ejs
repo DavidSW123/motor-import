@@ -1,0 +1,129 @@
+<%- include('../partials/header', { title: 'Dashboard Admin' }) %>
+
+<div class="admin-wrapper">
+  <%- include('./sidebar', { active: 'dashboard' }) %>
+  <main class="admin-main">
+    <div class="admin-top-bar">
+      <h1 class="admin-page-title">Dashboard</h1>
+      <a href="/admin/coches/nuevo" class="btn btn-primary btn-sm">+ Añadir coche</a>
+    </div>
+
+    <!-- Stats -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon admin-stat-icon-green">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <div class="admin-stat-body">
+          <div class="admin-stat-value"><%= stats.disponible %></div>
+          <div class="admin-stat-label">Disponibles</div>
+        </div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon admin-stat-icon-yellow">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <div class="admin-stat-body">
+          <div class="admin-stat-value"><%= stats.reservado %></div>
+          <div class="admin-stat-label">Reservados</div>
+        </div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon admin-stat-icon-red">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+        </div>
+        <div class="admin-stat-body">
+          <div class="admin-stat-value"><%= stats.vendido %></div>
+          <div class="admin-stat-label">Vendidos</div>
+        </div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon admin-stat-icon-blue">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div class="admin-stat-body">
+          <div class="admin-stat-value"><%= stats.usuarios %></div>
+          <div class="admin-stat-label">Usuarios</div>
+        </div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon admin-stat-icon-orange">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="admin-stat-body">
+          <div class="admin-stat-value"><%= stats.tickets %></div>
+          <div class="admin-stat-label">Tickets abiertos</div>
+        </div>
+      </div>
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon admin-stat-icon-purple">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <div class="admin-stat-body">
+          <div class="admin-stat-value"><%= stats.total %></div>
+          <div class="admin-stat-label">Total vehículos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="admin-two-col">
+      <!-- Coches recientes -->
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <h2 class="admin-card-title">Últimos vehículos</h2>
+          <a href="/admin/coches" class="admin-card-link">Ver todos →</a>
+        </div>
+        <% if (recentCars.length === 0) { %>
+          <p class="admin-empty">No hay vehículos aún. <a href="/admin/coches/nuevo">Añade el primero</a>.</p>
+        <% } else { %>
+        <div class="admin-mini-list">
+          <% recentCars.forEach(car => { %>
+            <div class="admin-mini-item">
+              <div class="admin-mini-img">
+                <% if (car.imagen_primera) { %>
+                  <img src="/uploads/cars/<%= car.id %>/<%= car.imagen_primera %>" alt="" loading="lazy">
+                <% } else { %>
+                  <img src="/img/car-placeholder.svg" alt="">
+                <% } %>
+              </div>
+              <div class="admin-mini-info">
+                <strong><%= car.marca %> <%= car.modelo %> <%= car.anio %></strong>
+                <span class="badge badge-<%= car.estado %>"><%= car.estado %></span>
+              </div>
+              <div class="admin-mini-price">
+                <%= new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(car.precio) %>
+              </div>
+              <a href="/admin/coches/<%= car.id %>/editar" class="btn btn-ghost btn-sm">Editar</a>
+            </div>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+
+      <!-- Tickets recientes -->
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <h2 class="admin-card-title">Tickets recientes</h2>
+          <a href="/admin/tickets" class="admin-card-link">Ver todos →</a>
+        </div>
+        <% if (recentTickets.length === 0) { %>
+          <p class="admin-empty">No hay tickets de soporte.</p>
+        <% } else { %>
+        <div class="admin-mini-list">
+          <% recentTickets.forEach(t => { %>
+            <div class="admin-mini-item">
+              <div class="admin-mini-info">
+                <strong><%= t.asunto.length > 40 ? t.asunto.slice(0,40)+'…' : t.asunto %></strong>
+                <span class="ticket-user-label"><%= t.user_nombre %></span>
+              </div>
+              <span class="badge badge-<%= t.estado.replace('_','-') %>"><%= t.estado.replace('_',' ') %></span>
+            </div>
+          <% }) %>
+        </div>
+        <% } %>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

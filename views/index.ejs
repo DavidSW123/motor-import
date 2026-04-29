@@ -1,0 +1,232 @@
+<%- include('partials/header', { title: 'Coches importados con transparencia total' }) %>
+
+<!-- ── HERO ─────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="badge-dot"></span>
+      Importación con transparencia total
+    </div>
+    <h1 class="hero-title">
+      El coche que siempre quisiste,<br>
+      <span class="text-gold">al mejor precio de Europa</span>
+    </h1>
+    <p class="hero-subtitle">
+      Importamos vehículos de primera calidad desde Alemania, Francia, Japón y más.<br>
+      Proceso 100% transparente · Documentación completa · Garantía incluida.
+    </p>
+    <div class="hero-actions">
+      <a href="/coches" class="btn btn-primary btn-lg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Ver catálogo
+      </a>
+      <a href="#como-funciona" class="btn btn-ghost btn-lg">Cómo funciona</a>
+    </div>
+  </div>
+
+  <!-- Buscador rápido -->
+  <div class="hero-search">
+    <form action="/coches" method="get" class="search-form">
+      <div class="search-group">
+        <label for="hs-marca">Marca</label>
+        <input type="text" id="hs-marca" name="marca" placeholder="BMW, Audi, Toyota…" class="form-input" autocomplete="off">
+      </div>
+      <div class="search-group">
+        <label for="hs-combustible">Combustible</label>
+        <select id="hs-combustible" name="combustible" class="form-select">
+          <option value="">Cualquiera</option>
+          <option value="gasolina">Gasolina</option>
+          <option value="diesel">Diésel</option>
+          <option value="híbrido">Híbrido</option>
+          <option value="eléctrico">Eléctrico</option>
+          <option value="GLP">GLP</option>
+        </select>
+      </div>
+      <div class="search-group">
+        <label for="hs-precio">Precio máximo</label>
+        <select id="hs-precio" name="precio_max" class="form-select">
+          <option value="">Sin límite</option>
+          <option value="10000">10.000 €</option>
+          <option value="15000">15.000 €</option>
+          <option value="20000">20.000 €</option>
+          <option value="30000">30.000 €</option>
+          <option value="50000">50.000 €</option>
+          <option value="80000">80.000 €</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Buscar
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ── STATS ─────────────────────────────────────────────────── -->
+<section class="stats-section">
+  <div class="container">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-number" data-count="<%= stats.total %>"><%= stats.total %>+</div>
+        <div class="stat-label">Vehículos gestionados</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number" data-count="<%= stats.disponible %>"><%= stats.disponible %></div>
+        <div class="stat-label">En stock ahora</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">15+</div>
+        <div class="stat-label">Años de experiencia</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">12</div>
+        <div class="stat-label">Países de origen</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COCHES DESTACADOS ─────────────────────────────────────── -->
+<% if (featuredCars.length > 0) { %>
+<section class="section featured-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Destacados</div>
+      <h2>Selección de esta semana</h2>
+      <p>Vehículos escogidos por calidad, precio y origen verificado</p>
+    </div>
+    <div class="cars-grid">
+      <% featuredCars.forEach(car => { %>
+        <%- include('partials/car-card', { car }) %>
+      <% }) %>
+    </div>
+    <div class="section-cta">
+      <a href="/coches" class="btn btn-outline">Ver catálogo completo →</a>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- ── ÚLTIMAS INCORPORACIONES ───────────────────────────────── -->
+<% if (recentCars.length > 0) { %>
+<section class="section recent-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Recién llegados</div>
+      <h2>Últimas incorporaciones</h2>
+    </div>
+    <div class="cars-grid cars-grid-3">
+      <% recentCars.forEach(car => { %>
+        <%- include('partials/car-card', { car }) %>
+      <% }) %>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- ── POR QUÉ ELEGIRNOS ──────────────────────────────────────── -->
+<section class="section why-section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">Por qué elegirnos</div>
+      <h2>Importación con todas las garantías</h2>
+      <p>Nos diferenciamos por la transparencia absoluta en cada paso del proceso</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Transparencia total</h3>
+        <p>Historial completo del vehículo, informe Carfax, inspección técnica detallada y documentación original.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        </div>
+        <h3>Origen verificado</h3>
+        <p>Importamos directamente de concesionarios y subastas verificadas en Alemania, Francia, Japón y más.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Homologación completa</h3>
+        <p>Nos encargamos de todo: homologación española, ITV, matrícula y todos los trámites administrativos.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </div>
+        <h3>Entrega en puerta</h3>
+        <p>Recibe tu vehículo donde quieras con toda la documentación en regla y listo para circular.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CÓMO FUNCIONA ─────────────────────────────────────────── -->
+<section class="section how-section" id="como-funciona">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">El proceso</div>
+      <h2>Así de sencillo</h2>
+      <p>En 4 pasos tienes tu vehículo importado, homologado y listo para circular</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <h3>Elige tu coche</h3>
+        <p>Navega por nuestro catálogo con todas las especificaciones, historial y fotografías del vehículo.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <h3>Confirmamos el precio</h3>
+        <p>Te presentamos el precio final sin sorpresas: vehículo + transporte + homologación + ITV.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <h3>Nosotros lo tramitamos</h3>
+        <p>Gestionamos la compra, el transporte, la homologación y todos los trámites en tu nombre.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-card">
+        <div class="step-num">04</div>
+        <h3>Lo recibes listo</h3>
+        <p>Te entregamos el vehículo con placa española, ITV pasada, garantía y todos los documentos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA FINAL ─────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-box">
+      <div class="cta-content">
+        <h2>¿Listo para encontrar tu coche ideal?</h2>
+        <p>Más de <%= stats.disponible %> vehículos disponibles ahora mismo. Crea tu cuenta para guardar favoritos y acceder al soporte personalizado.</p>
+        <div class="cta-actions">
+          <a href="/coches" class="btn btn-primary btn-lg">Ver catálogo</a>
+          <% if (!user) { %>
+            <a href="/auth/registro" class="btn btn-outline btn-lg">Crear cuenta gratis</a>
+          <% } else { %>
+            <a href="/soporte" class="btn btn-outline btn-lg">Contactar con soporte</a>
+          <% } %>
+        </div>
+      </div>
+      <div class="cta-decoration">
+        <div class="cta-ring cta-ring-1"></div>
+        <div class="cta-ring cta-ring-2"></div>
+        <div class="cta-ring cta-ring-3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

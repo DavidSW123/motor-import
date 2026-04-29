@@ -1,0 +1,52 @@
+<%- include('../partials/header', { title: 'Usuarios' }) %>
+
+<div class="admin-wrapper">
+  <%- include('./sidebar', { active: 'usuarios' }) %>
+  <main class="admin-main">
+    <div class="admin-top-bar">
+      <h1 class="admin-page-title">Usuarios (<%= users.length %>)</h1>
+    </div>
+
+    <div class="admin-card">
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Usuario</th>
+              <th>Email</th>
+              <th>Rol</th>
+              <th>Favoritos</th>
+              <th>Tickets</th>
+              <th>Registrado</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% users.forEach(u => { %>
+              <tr>
+                <td>
+                  <div class="user-cell">
+                    <div class="user-cell-avatar"><%= u.nombre.charAt(0).toUpperCase() %></div>
+                    <span><%= u.nombre %></span>
+                  </div>
+                </td>
+                <td><%= u.email %></td>
+                <td>
+                  <% if (u.role === 'admin') { %>
+                    <span class="badge badge-gold">Admin</span>
+                  <% } else { %>
+                    <span class="badge" style="background:rgba(255,255,255,0.06);color:var(--text-muted)">Usuario</span>
+                  <% } %>
+                </td>
+                <td><%= u.num_favoritos %></td>
+                <td><%= u.num_tickets %></td>
+                <td><%= new Date(u.created_at).toLocaleDateString('es-ES') %></td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

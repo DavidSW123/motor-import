@@ -1,0 +1,234 @@
+<%- include('../partials/header', { title: title }) %>
+
+<div class="admin-wrapper">
+  <%- include('./sidebar', { active: 'coches' }) %>
+  <main class="admin-main">
+    <div class="admin-top-bar">
+      <div class="admin-breadcrumb">
+        <a href="/admin/coches">Vehículos</a>
+        <span>›</span>
+        <span><%= car ? `${car.marca} ${car.modelo}` : 'Nuevo vehículo' %></span>
+      </div>
+      <a href="/admin/coches" class="btn btn-ghost btn-sm">← Volver</a>
+    </div>
+
+    <div class="admin-form-layout">
+
+      <!-- ── DATOS DEL VEHÍCULO ────────────────────────── -->
+      <div class="admin-card">
+        <h2 class="admin-card-title">Datos del vehículo</h2>
+
+        <form action="<%= car ? `/admin/coches/${car.id}` : '/admin/coches' %>" method="post"
+              enctype="multipart/form-data" id="carForm">
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Marca <span class="req">*</span></label>
+              <input type="text" name="marca" class="form-input" required
+                     placeholder="BMW" value="<%= car ? car.marca : '' %>"
+                     list="marcas-sugg">
+              <datalist id="marcas-sugg">
+                <% ['Audi','BMW','Mercedes-Benz','Volkswagen','Toyota','Honda','Mazda','Lexus','Porsche','Volvo','Renault','Peugeot','Citroën','Ford','Opel','Seat','Skoda','Hyundai','Kia','Nissan'].forEach(m => { %>
+                  <option value="<%= m %>">
+                <% }) %>
+              </datalist>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Modelo <span class="req">*</span></label>
+              <input type="text" name="modelo" class="form-input" required
+                     placeholder="Serie 3" value="<%= car ? car.modelo : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Año <span class="req">*</span></label>
+              <input type="number" name="anio" class="form-input" required
+                     min="1990" max="<%= new Date().getFullYear()+1 %>"
+                     value="<%= car ? car.anio : new Date().getFullYear() %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Precio (€) <span class="req">*</span></label>
+              <input type="number" name="precio" class="form-input" required
+                     min="0" step="100" placeholder="25000"
+                     value="<%= car ? car.precio : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Kilometraje <span class="req">*</span></label>
+              <input type="number" name="kilometraje" class="form-input" required
+                     min="0" placeholder="45000"
+                     value="<%= car ? car.kilometraje : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Combustible <span class="req">*</span></label>
+              <select name="combustible" class="form-select" required>
+                <% ['gasolina','diesel','híbrido','eléctrico','GLP','hidrógeno'].forEach(c => { %>
+                  <option value="<%= c %>" <%= car && car.combustible===c ? 'selected' : '' %>><%= c.charAt(0).toUpperCase()+c.slice(1) %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Transmisión <span class="req">*</span></label>
+              <select name="transmision" class="form-select" required>
+                <option value="manual"     <%= car && car.transmision==='manual'     ? 'selected' : '' %>>Manual</option>
+                <option value="automática" <%= car && car.transmision==='automática' ? 'selected' : '' %>>Automática</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">País de origen <span class="req">*</span></label>
+              <select name="pais_origen" class="form-select" required>
+                <% ['Alemania','Francia','Japón','Reino Unido','Italia','Bélgica','Países Bajos','Suecia','España','Austria','Suiza','Polonia','Portugal','Dinamarca','Corea del Sur','Estados Unidos'].forEach(p => { %>
+                  <option value="<%= p %>" <%= car && car.pais_origen===p ? 'selected' : '' %>><%= p %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Color</label>
+              <input type="text" name="color" class="form-input"
+                     placeholder="Negro, Blanco, Plata…"
+                     value="<%= car && car.color ? car.color : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Potencia (CV)</label>
+              <input type="number" name="potencia" class="form-input"
+                     min="50" max="2000" placeholder="150"
+                     value="<%= car && car.potencia ? car.potencia : '' %>">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Puertas</label>
+              <select name="puertas" class="form-select">
+                <% [2,3,4,5].forEach(n => { %>
+                  <option value="<%= n %>" <%= car && car.puertas==n ? 'selected' : (!car && n==4 ? 'selected' : '') %>><%= n %></option>
+                <% }) %>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Estado</label>
+              <select name="estado" class="form-select">
+                <% ['disponible','reservado','vendido'].forEach(e => { %>
+                  <option value="<%= e %>" <%= car && car.estado===e ? 'selected' : (!car && e==='disponible' ? 'selected' : '') %>><%= e.charAt(0).toUpperCase()+e.slice(1) %></option>
+                <% }) %>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Descripción</label>
+            <textarea name="descripcion" class="form-textarea" rows="6"
+                      placeholder="Describe el estado, características especiales, historial de mantenimiento…"><%= car && car.descripcion ? car.descripcion : '' %></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-check">
+              <input type="checkbox" name="destacado" value="1" <%= car && car.destacado ? 'checked' : '' %>>
+              <span>Marcar como vehículo destacado (aparece en la portada)</span>
+            </label>
+          </div>
+
+          <% if (!car) { %>
+          <!-- Imágenes en creación -->
+          <div class="form-group">
+            <label class="form-label">
+              Imágenes
+              <span class="form-label-hint">(máx. 15 · JPG, PNG, WebP · 8 MB/foto)</span>
+            </label>
+            <div class="upload-zone" id="uploadZone">
+              <input type="file" name="imagenes" id="imageInput" multiple accept="image/*" class="upload-input">
+              <div class="upload-zone-content">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <p>Arrastra las imágenes aquí o <span class="upload-zone-link">haz clic para seleccionar</span></p>
+                <p class="upload-zone-hint">La primera imagen será la principal</p>
+              </div>
+            </div>
+            <div class="upload-preview" id="uploadPreview"></div>
+          </div>
+          <% } %>
+
+          <div class="form-actions">
+            <button type="submit" class="btn btn-primary"><%= car ? 'Guardar cambios' : 'Crear vehículo' %></button>
+            <a href="/admin/coches" class="btn btn-ghost">Cancelar</a>
+          </div>
+        </form>
+      </div>
+
+      <!-- ── GESTIÓN DE IMÁGENES (solo edición) ─────── -->
+      <% if (car) { %>
+      <div class="admin-card">
+        <div class="admin-card-head">
+          <h2 class="admin-card-title">
+            Imágenes
+            <span class="img-counter-badge"><%= images.length %>/15</span>
+          </h2>
+        </div>
+
+        <!-- Grid de imágenes existentes -->
+        <% if (images.length > 0) { %>
+          <div class="admin-img-grid" id="adminImgGrid">
+            <% images.forEach(img => { %>
+              <div class="admin-img-item" data-id="<%= img.id %>">
+                <img src="<%= img.url %>" alt="" loading="lazy">
+                <div class="admin-img-overlay">
+                  <% if (!img.es_principal) { %>
+                    <form action="/admin/imagenes/<%= img.id %>/principal" method="post" class="img-action-form">
+                      <button type="submit" class="admin-img-btn" title="Marcar como principal">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      </button>
+                    </form>
+                  <% } %>
+                  <form action="/admin/imagenes/<%= img.id %>/eliminar" method="post" class="img-action-form"
+                        onsubmit="return confirm('¿Eliminar esta imagen?')">
+                    <button type="submit" class="admin-img-btn admin-img-btn-del" title="Eliminar imagen">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    </button>
+                  </form>
+                </div>
+                <% if (img.es_principal) { %>
+                  <div class="admin-img-principal">★ Principal</div>
+                <% } %>
+              </div>
+            <% }) %>
+          </div>
+        <% } else { %>
+          <p class="admin-empty" style="padding:1.5rem">Este vehículo aún no tiene imágenes.</p>
+        <% } %>
+
+        <!-- Subir más imágenes -->
+        <% if (images.length < 15) { %>
+        <div style="margin-top:1.5rem">
+          <form action="/admin/coches/<%= car.id %>/imagenes" method="post"
+                enctype="multipart/form-data" id="addImgForm">
+            <label class="form-label">
+              Añadir imágenes
+              <span class="form-label-hint">(puedes añadir hasta <%= 15 - images.length %> más)</span>
+            </label>
+            <div class="upload-zone upload-zone-sm" id="addUploadZone">
+              <input type="file" name="imagenes" id="addImageInput" multiple accept="image/*" class="upload-input">
+              <div class="upload-zone-content">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                <p>Arrastra o <span class="upload-zone-link">selecciona imágenes</span></p>
+              </div>
+            </div>
+            <div class="upload-preview" id="addUploadPreview"></div>
+            <button type="submit" class="btn btn-primary btn-sm" style="margin-top:1rem">Subir imágenes</button>
+          </form>
+        </div>
+        <% } else { %>
+          <p class="form-label-hint" style="margin-top:1rem">Límite de 15 imágenes alcanzado. Elimina alguna para poder añadir más.</p>
+        <% } %>
+      </div>
+
+      <!-- Vista previa en web -->
+      <div class="admin-card">
+        <h2 class="admin-card-title">Vista previa</h2>
+        <p class="admin-empty" style="padding:0 0 1rem">
+          <a href="/coches/<%= car.slug %>" target="_blank" class="btn btn-outline btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            Ver en la web →
+          </a>
+        </p>
+      </div>
+      <% } %>
+
+    </div>
+  </main>
+</div>
+
+<script src="/js/admin.js"></script>
+<%- include('../partials/footer') %>

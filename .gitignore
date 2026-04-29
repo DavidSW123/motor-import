@@ -1,0 +1,13 @@
+node_modules/
+.env
+
+# SQLite local
+database/*.sqlite
+database/*.sqlite-shm
+database/*.sqlite-wal
+
+# Uploaded images (served from Cloudinary in prod)
+public/uploads/cars/
+
+# Build artifacts
+.vercel/
