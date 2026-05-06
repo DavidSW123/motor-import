@@ -43,7 +43,8 @@ router.post('/login', async (req, res) => {
 });
 
 router.get('/logout', (req, res) => {
-  req.session.destroy(() => res.redirect('/'));
+  req.session = null;
+  res.redirect('/');
 });
 
 // ══════════════════════════════════════════════════════════════════

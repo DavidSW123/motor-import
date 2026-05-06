@@ -1,7 +1,7 @@
 require('dotenv').config();
-const express  = require('express');
-const session  = require('express-session');
-const path     = require('path');
+const express      = require('express');
+const cookieSession = require('cookie-session');
+const path         = require('path');
 const { initDB, NEEDS_SETUP, getSettings } = require('./database/db');
 
 const app  = express();
@@ -16,16 +16,14 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── Sesión ───────────────────────────────────────────────────────
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'cars-and-campers-dev-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production'
-  }
+// ── Sesión basada en cookie (compatible con serverless) ──────────
+app.use(cookieSession({
+  name:     'session',
+  keys:     [process.env.SESSION_SECRET || 'cars-and-campers-dev-secret'],
+  maxAge:   7 * 24 * 60 * 60 * 1000,
+  httpOnly: true,
+  sameSite: 'lax',
+  secure:   process.env.NODE_ENV === 'production'
 }));
 
 // ── DB ready gate (esperar a initDB antes de servir) ─────────────
