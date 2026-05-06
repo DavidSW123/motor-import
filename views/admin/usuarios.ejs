@@ -1,49 +1,51 @@
-<%- include('../partials/header', { title: 'Usuarios' }) %>
+<%- include('../partials/header', { title: 'Administradores' }) %>
 
 <div class="admin-wrapper">
   <%- include('./sidebar', { active: 'usuarios' }) %>
   <main class="admin-main">
     <div class="admin-top-bar">
-      <h1 class="admin-page-title">Usuarios (<%= users.length %>)</h1>
+      <h1 class="admin-page-title">Administradores (<%= users.length %>)</h1>
     </div>
 
     <div class="admin-card">
-      <div class="table-wrap">
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>Usuario</th>
-              <th>Email</th>
-              <th>Rol</th>
-              <th>Favoritos</th>
-              <th>Tickets</th>
-              <th>Registrado</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% users.forEach(u => { %>
-              <tr>
-                <td>
-                  <div class="user-cell">
-                    <div class="user-cell-avatar"><%= u.nombre.charAt(0).toUpperCase() %></div>
-                    <span><%= u.nombre %></span>
-                  </div>
-                </td>
-                <td><%= u.email %></td>
-                <td>
-                  <% if (u.role === 'admin') { %>
-                    <span class="badge badge-gold">Admin</span>
-                  <% } else { %>
-                    <span class="badge" style="background:rgba(255,255,255,0.06);color:var(--text-muted)">Usuario</span>
-                  <% } %>
-                </td>
-                <td><%= u.num_favoritos %></td>
-                <td><%= u.num_tickets %></td>
-                <td><%= new Date(u.created_at).toLocaleDateString('es-ES') %></td>
-              </tr>
-            <% }) %>
-          </tbody>
-        </table>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem">
+        El sistema cuenta con dos cuentas de administrador. Desde aquí puedes cambiar las contraseñas.
+      </p>
+
+      <div class="admin-users-grid">
+        <% users.forEach(u => { %>
+          <div class="admin-user-card">
+            <div class="admin-user-head">
+              <div class="user-cell-avatar admin-user-avatar"><%= u.nombre.charAt(0).toUpperCase() %></div>
+              <div>
+                <div class="admin-user-name"><%= u.nombre %></div>
+                <div class="admin-user-email"><%= u.email %></div>
+              </div>
+              <span class="badge badge-gold">Admin</span>
+            </div>
+
+            <details class="admin-user-pwd">
+              <summary>Cambiar contraseña</summary>
+              <form action="/admin/usuarios/<%= u.id %>/password" method="post" class="admin-pwd-form">
+                <div class="form-group">
+                  <label class="form-label">Nueva contraseña</label>
+                  <input type="password" name="password" class="form-input" minlength="8" required
+                         placeholder="Mínimo 8 caracteres" autocomplete="new-password">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Repetir contraseña</label>
+                  <input type="password" name="password2" class="form-input" minlength="8" required
+                         autocomplete="new-password">
+                </div>
+                <button type="submit" class="btn btn-primary btn-sm">Actualizar contraseña</button>
+              </form>
+            </details>
+
+            <div class="admin-user-foot">
+              Creado el <%= new Date(u.created_at).toLocaleDateString('es-ES') %>
+            </div>
+          </div>
+        <% }) %>
       </div>
     </div>
   </main>

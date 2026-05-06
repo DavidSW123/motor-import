@@ -1,6 +1,9 @@
 <%
   const precio = new Intl.NumberFormat('es-ES', { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 }).format(car.precio);
   const km     = car.kilometraje.toLocaleString('es-ES');
+  const isCamper = car.categoria === 'camper';
+  const tipoLabel = isCamper ? 'Camper' : 'Coche';
+  const waMsg = encodeURIComponent(`Hola, me interesa el ${car.marca} ${car.modelo} ${car.anio} (${precio}). ¿Sigue disponible?`);
 %>
 <%- include('partials/header', { title: `${car.marca} ${car.modelo} ${car.anio}` }) %>
 
@@ -11,7 +14,7 @@
     <nav class="breadcrumb">
       <a href="/">Inicio</a>
       <span class="bc-sep">›</span>
-      <a href="/coches">Catálogo</a>
+      <a href="<%= isCamper ? '/campers' : '/coches' %>"><%= isCamper ? 'Campers' : 'Coches' %></a>
       <span class="bc-sep">›</span>
       <span><%= car.marca %> <%= car.modelo %></span>
     </nav>
@@ -57,12 +60,13 @@
       <!-- ── PANEL DE INFO ─────────────────────────────── -->
       <div class="car-info-panel">
         <div class="car-status-row">
+          <span class="badge badge-tipo"><%= tipoLabel %></span>
           <span class="badge badge-<%= car.estado %>"><%= car.estado %></span>
           <% if (car.destacado) { %><span class="badge badge-gold">★ Destacado</span><% } %>
         </div>
 
         <h1 class="car-detail-title"><%= car.marca %> <%= car.modelo %></h1>
-        <p class="car-detail-sub"><%= car.anio %> · Importado de <strong><%= car.pais_origen %></strong></p>
+        <p class="car-detail-sub"><%= car.anio %> · <strong><%= car.pais_origen %></strong></p>
 
         <div class="car-detail-price"><%= precio %></div>
 
@@ -89,7 +93,15 @@
               <div class="qs-key">Cambio</div>
             </div>
           </div>
-          <% if (car.potencia) { %>
+          <% if (isCamper && car.plazas) { %>
+          <div class="qs-item">
+            <svg class="qs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+            <div>
+              <div class="qs-value"><%= car.plazas %></div>
+              <div class="qs-key">Plazas</div>
+            </div>
+          </div>
+          <% } else if (car.potencia) { %>
           <div class="qs-item">
             <svg class="qs-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             <div>
@@ -102,31 +114,27 @@
 
         <!-- Acciones -->
         <div class="car-actions-panel">
-          <% if (user) { %>
-            <button class="btn btn-heart <%= isFavorite ? 'is-favorite' : '' %>"
-                    id="favoriteBtn" data-car-id="<%= car.id %>">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="<%= isFavorite ? 'currentColor' : 'none' %>" stroke="currentColor" stroke-width="2">
-                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-              </svg>
-              <span id="favBtnText"><%= isFavorite ? 'En favoritos' : 'Guardar favorito' %></span>
-            </button>
-          <% } else { %>
-            <a href="/auth/login?redirect=/coches/<%= car.slug %>" class="btn btn-heart">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-              Guardar favorito
-            </a>
-          <% } %>
-          <a href="/soporte" class="btn btn-primary btn-block">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            Solicitar información
+          <a href="https://wa.me/34600000000?text=<%= waMsg %>" target="_blank" rel="noopener" class="btn btn-primary btn-block">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884"/></svg>
+            Consultar por WhatsApp
           </a>
+          <div class="actions-row-2">
+            <a href="tel:+34600000000" class="btn btn-outline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 1.36h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              Llamar
+            </a>
+            <a href="mailto:info@carsandcampers.es?subject=Consulta sobre <%= car.marca %> <%= car.modelo %>" class="btn btn-outline">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Email
+            </a>
+          </div>
         </div>
 
         <!-- Tags -->
         <div class="car-tags">
           <span class="car-tag">🌍 <%= car.pais_origen %></span>
           <% if (car.color) { %><span class="car-tag">🎨 <%= car.color %></span><% } %>
-          <span class="car-tag">🚪 <%= car.puertas %> puertas</span>
+          <% if (!isCamper) { %><span class="car-tag">🚪 <%= car.puertas %> puertas</span><% } %>
         </div>
       </div>
     </div>
@@ -143,20 +151,25 @@
     <section class="car-section">
       <h2 class="car-section-title">Ficha técnica</h2>
       <div class="specs-table">
-        <div class="spec-row"><span class="spec-key">Marca</span>        <span class="spec-val"><%= car.marca %></span></div>
-        <div class="spec-row"><span class="spec-key">Modelo</span>       <span class="spec-val"><%= car.modelo %></span></div>
-        <div class="spec-row"><span class="spec-key">Año</span>          <span class="spec-val"><%= car.anio %></span></div>
-        <div class="spec-row"><span class="spec-key">País de origen</span><span class="spec-val"><%= car.pais_origen %></span></div>
-        <div class="spec-row"><span class="spec-key">Kilometraje</span>  <span class="spec-val"><%= km %> km</span></div>
-        <div class="spec-row"><span class="spec-key">Combustible</span>  <span class="spec-val"><%= car.combustible %></span></div>
-        <div class="spec-row"><span class="spec-key">Transmisión</span>  <span class="spec-val"><%= car.transmision %></span></div>
+        <div class="spec-row"><span class="spec-key">Tipo</span>          <span class="spec-val"><%= tipoLabel %></span></div>
+        <div class="spec-row"><span class="spec-key">Marca</span>         <span class="spec-val"><%= car.marca %></span></div>
+        <div class="spec-row"><span class="spec-key">Modelo</span>        <span class="spec-val"><%= car.modelo %></span></div>
+        <div class="spec-row"><span class="spec-key">Año</span>           <span class="spec-val"><%= car.anio %></span></div>
+        <div class="spec-row"><span class="spec-key">Origen</span>        <span class="spec-val"><%= car.pais_origen %></span></div>
+        <div class="spec-row"><span class="spec-key">Kilometraje</span>   <span class="spec-val"><%= km %> km</span></div>
+        <div class="spec-row"><span class="spec-key">Combustible</span>   <span class="spec-val"><%= car.combustible %></span></div>
+        <div class="spec-row"><span class="spec-key">Transmisión</span>   <span class="spec-val"><%= car.transmision %></span></div>
         <% if (car.color) { %>
-        <div class="spec-row"><span class="spec-key">Color</span>        <span class="spec-val"><%= car.color %></span></div>
+        <div class="spec-row"><span class="spec-key">Color</span>         <span class="spec-val"><%= car.color %></span></div>
         <% } %>
         <% if (car.potencia) { %>
-        <div class="spec-row"><span class="spec-key">Potencia</span>     <span class="spec-val"><%= car.potencia %> CV</span></div>
+        <div class="spec-row"><span class="spec-key">Potencia</span>      <span class="spec-val"><%= car.potencia %> CV</span></div>
         <% } %>
-        <div class="spec-row"><span class="spec-key">Puertas</span>      <span class="spec-val"><%= car.puertas %></span></div>
+        <% if (isCamper && car.plazas) { %>
+        <div class="spec-row"><span class="spec-key">Plazas</span>        <span class="spec-val"><%= car.plazas %></span></div>
+        <% } else { %>
+        <div class="spec-row"><span class="spec-key">Puertas</span>       <span class="spec-val"><%= car.puertas %></span></div>
+        <% } %>
         <div class="spec-row"><span class="spec-key">Estado</span>        <span class="spec-val"><span class="badge badge-<%= car.estado %>"><%= car.estado %></span></span></div>
       </div>
     </section>
@@ -164,7 +177,7 @@
     <!-- ── RELACIONADOS ─────────────────────────────── -->
     <% if (related.length > 0) { %>
     <section class="car-section">
-      <h2 class="car-section-title">Más <%= car.marca %></h2>
+      <h2 class="car-section-title">También te puede interesar</h2>
       <div class="cars-grid cars-grid-3">
         <% related.forEach(r => { %>
           <%- include('partials/car-card', { car: r }) %>

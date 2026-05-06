@@ -1062,3 +1062,259 @@ body.admin-body { }
   .steps-grid { grid-template-columns: 1fr; }
   .cars-grid { grid-template-columns: 1fr; }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   Cars & Campers — Estilos añadidos (rebrand v2)
+   ═════════════════════════════════════════════════════════════════ */
+
+/* Badge tipo (Coche / Camper) */
+.badge-tipo {
+  background: linear-gradient(135deg, rgba(201,162,39,0.18), rgba(201,162,39,0.08));
+  color: var(--gold);
+  border: 1px solid rgba(201,162,39,0.35);
+  text-transform: none;
+  letter-spacing: 0.01em;
+}
+
+/* Card: badge de tipo flotante sobre la imagen */
+.car-card-type-badge {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.65rem;
+  background: rgba(8,9,12,0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(201,162,39,0.35);
+  color: var(--gold);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+/* Radio buttons del formulario admin (tipo de vehículo) */
+.form-radio-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+.form-radio {
+  position: relative;
+  cursor: pointer;
+}
+.form-radio input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.form-radio-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 1rem;
+  background: rgba(255,255,255,0.03);
+  border: 1.5px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-weight: 500;
+  transition: all 0.18s ease;
+}
+.form-radio:hover .form-radio-label {
+  border-color: rgba(201,162,39,0.35);
+  background: rgba(201,162,39,0.05);
+}
+.form-radio input[type="radio"]:checked + .form-radio-label {
+  border-color: var(--gold);
+  background: rgba(201,162,39,0.12);
+  color: var(--gold);
+  box-shadow: 0 0 0 1px var(--gold) inset;
+}
+
+/* Detalle: fila de acciones secundarias (Llamar / Email) */
+.actions-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin-top: 0.6rem;
+}
+
+/* ── Página de contacto ───────────────────────────────────────── */
+.contact-page {
+  padding: 4rem 0 5rem;
+}
+.contact-hero {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 3.5rem;
+}
+.contact-hero h1 {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  margin: 0.75rem 0 1rem;
+}
+.contact-hero p {
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 3.5rem;
+}
+.contact-card {
+  display: block;
+  padding: 2rem 1.75rem;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+  text-decoration: none;
+  color: var(--text);
+  text-align: center;
+  transition: all 0.22s ease;
+}
+.contact-card:hover {
+  border-color: var(--gold);
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.4);
+}
+.contact-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.25rem;
+  background: rgba(201,162,39,0.12);
+  border: 1px solid rgba(201,162,39,0.3);
+  border-radius: 50%;
+  color: var(--gold);
+}
+.contact-card h3 {
+  font-size: 1.15rem;
+  margin: 0 0 0.5rem;
+}
+.contact-card p {
+  color: var(--text-muted);
+  margin: 0 0 1rem;
+  font-size: 0.95rem;
+}
+.contact-card-cta {
+  display: inline-block;
+  color: var(--gold);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.contact-info-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+.contact-info-card {
+  padding: 1.75rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+}
+.contact-info-card h3 {
+  margin: 0 0 1.25rem;
+  font-size: 1.1rem;
+}
+.contact-hours {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.contact-hours li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.95rem;
+}
+.contact-hours li:last-child { border: none; }
+.contact-hours span { color: var(--text-muted); }
+.contact-hours strong { color: var(--text); }
+.contact-address {
+  font-size: 1rem;
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+.contact-note {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin: 0;
+  font-style: italic;
+}
+@media (max-width: 768px) {
+  .contact-grid { grid-template-columns: 1fr; }
+  .contact-info-block { grid-template-columns: 1fr; }
+}
+
+/* ── Admin: tarjetas de administradores ──────────────────────── */
+.admin-users-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 1.25rem;
+}
+.admin-user-card {
+  padding: 1.5rem;
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius);
+}
+.admin-user-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+.admin-user-avatar {
+  width: 48px;
+  height: 48px;
+  font-size: 1.15rem;
+}
+.admin-user-name {
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+.admin-user-email {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+  margin-top: 0.15rem;
+}
+.admin-user-head .badge { margin-left: auto; }
+.admin-user-pwd summary {
+  cursor: pointer;
+  padding: 0.6rem 0.9rem;
+  background: rgba(201,162,39,0.06);
+  border: 1px solid rgba(201,162,39,0.18);
+  border-radius: var(--radius-sm);
+  font-size: 0.9rem;
+  color: var(--gold);
+  font-weight: 500;
+  list-style: none;
+}
+.admin-user-pwd summary::before { content: "🔒  "; }
+.admin-user-pwd[open] summary { margin-bottom: 1rem; }
+.admin-pwd-form {
+  padding-top: 0.5rem;
+}
+.admin-user-foot {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+/* Mini-list meta (badges agrupadas) */
+.admin-mini-meta {
+  display: flex;
+  gap: 0.4rem;
+  margin-top: 0.3rem;
+  flex-wrap: wrap;
+}

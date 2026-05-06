@@ -12,7 +12,7 @@ if (process.env.TURSO_DATABASE_URL) {
 } else {
   const DB_DIR = path.join(__dirname);
   fs.mkdirSync(DB_DIR, { recursive: true });
-  const dbPath = path.join(DB_DIR, 'motorimport.sqlite').replace(/\\/g, '/');
+  const dbPath = path.join(DB_DIR, 'cars-and-campers.sqlite').replace(/\\/g, '/');
   client = createClient({ url: `file:${dbPath}` });
 }
 
@@ -40,11 +40,12 @@ async function initDB() {
       nombre     TEXT    NOT NULL,
       email      TEXT    UNIQUE NOT NULL,
       password   TEXT    NOT NULL,
-      role       TEXT    DEFAULT 'user',
+      role       TEXT    DEFAULT 'admin',
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`,
     `CREATE TABLE IF NOT EXISTS cars (
       id           INTEGER PRIMARY KEY AUTOINCREMENT,
+      categoria    TEXT    DEFAULT 'coche',
       marca        TEXT    NOT NULL,
       modelo       TEXT    NOT NULL,
       anio         INTEGER NOT NULL,
@@ -56,6 +57,7 @@ async function initDB() {
       color        TEXT,
       potencia     INTEGER,
       puertas      INTEGER DEFAULT 4,
+      plazas       INTEGER,
       descripcion  TEXT,
       estado       TEXT    DEFAULT 'disponible',
       destacado    INTEGER DEFAULT 0,
@@ -70,23 +72,6 @@ async function initDB() {
       orden        INTEGER DEFAULT 0,
       es_principal INTEGER DEFAULT 0,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
-    )`,
-    `CREATE TABLE IF NOT EXISTS favorites (
-      id         INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id    INTEGER NOT NULL,
-      car_id     INTEGER NOT NULL,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(user_id, car_id)
-    )`,
-    `CREATE TABLE IF NOT EXISTS support_tickets (
-      id         INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id    INTEGER NOT NULL,
-      asunto     TEXT    NOT NULL,
-      mensaje    TEXT    NOT NULL,
-      estado     TEXT    DEFAULT 'abierto',
-      respuesta  TEXT,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
     )`
   ];
 
@@ -94,17 +79,39 @@ async function initDB() {
     await client.execute(sql);
   }
 
-  // Admin por defecto
-  const admin = await getOne("SELECT id FROM users WHERE role = 'admin' LIMIT 1");
-  if (!admin) {
-    const pwd  = 'Admin2024!';
-    const hash = bcrypt.hashSync(pwd, 10);
-    await run('INSERT INTO users (nombre, email, password, role) VALUES (?, ?, ?, ?)',
-      ['Administrador', 'admin@motorimport.es', hash, 'admin']);
-    console.log('🔐 Admin por defecto creado:');
-    console.log('   Email:      admin@motorimport.es');
-    console.log('   Contraseña: Admin2024!');
-    console.log('   ⚠️  Cambia la contraseña en producción!\n');
+  // ── Migración: añadir columna `categoria` a tablas antiguas ──
+  try {
+    const cols = await getAll('PRAGMA table_info(cars)');
+    if (!cols.some(c => c.name === 'categoria')) {
+      await run("ALTER TABLE cars ADD COLUMN categoria TEXT DEFAULT 'coche'");
+    }
+    if (!cols.some(c => c.name === 'plazas')) {
+      await run('ALTER TABLE cars ADD COLUMN plazas INTEGER');
+    }
+  } catch (_) {}
+
+  // ── Crear los dos administradores por defecto ─────────────────
+  const admins = [
+    {
+      nombre:   process.env.ADMIN1_NOMBRE   || 'Administrador 1',
+      email:    process.env.ADMIN1_EMAIL    || 'admin1@carsandcampers.es',
+      password: process.env.ADMIN1_PASSWORD || 'Admin1234!'
+    },
+    {
+      nombre:   process.env.ADMIN2_NOMBRE   || 'Administrador 2',
+      email:    process.env.ADMIN2_EMAIL    || 'admin2@carsandcampers.es',
+      password: process.env.ADMIN2_PASSWORD || 'Admin1234!'
+    }
+  ];
+
+  for (const a of admins) {
+    const exists = await getOne('SELECT id FROM users WHERE email = ?', [a.email]);
+    if (!exists) {
+      const hash = bcrypt.hashSync(a.password, 10);
+      await run('INSERT INTO users (nombre, email, password, role) VALUES (?, ?, ?, ?)',
+        [a.nombre, a.email, hash, 'admin']);
+      console.log(`🔐 Admin creado: ${a.email}`);
+    }
   }
 }
 

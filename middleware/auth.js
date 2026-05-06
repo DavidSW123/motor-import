@@ -1,20 +1,9 @@
-function requireAuth(req, res, next) {
-  if (!req.session.user) {
-    req.session.flash = { type: 'error', msg: 'Debes iniciar sesión para acceder a esta página.' };
-    return res.redirect(`/auth/login?redirect=${encodeURIComponent(req.originalUrl)}`);
-  }
-  next();
-}
-
 function requireAdmin(req, res, next) {
-  if (!req.session.user) {
-    req.session.flash = { type: 'error', msg: 'Acceso restringido.' };
-    return res.redirect('/auth/login');
-  }
-  if (req.session.user.role !== 'admin') {
-    return res.status(403).render('404', { title: 'Acceso denegado' });
+  if (!req.session.user || req.session.user.role !== 'admin') {
+    req.session.flash = { type: 'error', msg: 'Acceso restringido. Inicia sesión como administrador.' };
+    return res.redirect(`/admin/login?redirect=${encodeURIComponent(req.originalUrl)}`);
   }
   next();
 }
 
-module.exports = { requireAuth, requireAdmin };
+module.exports = { requireAdmin };

@@ -16,9 +16,9 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── Sesión (memory store, válido para uso local) ─────────────────
+// ── Sesión ───────────────────────────────────────────────────────
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'motorimport-dev-secret',
+  secret: process.env.SESSION_SECRET || 'cars-and-campers-dev-secret',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -27,6 +27,18 @@ app.use(session({
     secure: process.env.NODE_ENV === 'production'
   }
 }));
+
+// ── DB ready gate (esperar a initDB antes de servir) ─────────────
+let dbReady = false;
+const dbInit = initDB().then(() => { dbReady = true; }).catch(err => {
+  console.error('Error al inicializar la base de datos:', err);
+});
+app.use(async (req, res, next) => {
+  if (!dbReady) {
+    try { await dbInit; } catch (err) { return res.status(500).send('Error al inicializar la base de datos.'); }
+  }
+  next();
+});
 
 // ── Locals globales ──────────────────────────────────────────────
 app.use((req, res, next) => {
@@ -43,10 +55,8 @@ app.use((req, res, next) => {
 
 // ── Rutas ────────────────────────────────────────────────────────
 app.use('/',         require('./routes/index'));
-app.use('/auth',     require('./routes/auth'));
 app.use('/coches',   require('./routes/cars'));
-app.use('/favoritos',require('./routes/favorites'));
-app.use('/soporte',  require('./routes/support'));
+app.use('/campers',  require('./routes/campers'));
 app.use('/admin',    require('./routes/admin'));
 
 // ── 404 ──────────────────────────────────────────────────────────
@@ -61,15 +71,10 @@ app.use((err, req, res, next) => {
 });
 
 // ── Arranque ─────────────────────────────────────────────────────
-const ready = initDB().catch(err => {
-  console.error('Error al inicializar la base de datos:', err);
-  process.exit(1);
-});
-
 if (require.main === module) {
-  ready.then(() => {
+  dbInit.then(() => {
     app.listen(PORT, () => {
-      console.log(`\n🚗 MotorImport arrancado en http://localhost:${PORT}\n`);
+      console.log(`\n🚐 Cars & Campers arrancado en http://localhost:${PORT}\n`);
     });
   });
 }

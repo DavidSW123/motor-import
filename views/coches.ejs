@@ -1,9 +1,11 @@
-<%- include('partials/header', { title: 'Catálogo de coches importados' }) %>
+<%- include('partials/header', { title: title }) %>
 
 <main class="catalog-page">
   <div class="catalog-header">
     <div class="container">
-      <h1>Catálogo de vehículos</h1>
+      <h1>
+        <% if (fixedCategoria === 'camper') { %>Campers y autocaravanas<% } else { %>Catálogo de vehículos<% } %>
+      </h1>
       <p class="catalog-subtitle"><strong><%= total %></strong> vehículo<%= total !== 1 ? 's' : '' %> encontrado<%= total !== 1 ? 's' : '' %></p>
     </div>
   </div>
@@ -13,14 +15,26 @@
     <aside class="filters-panel">
       <div class="filters-header">
         <h3>Filtrar</h3>
-        <a href="/coches" class="filters-reset">Limpiar</a>
+        <a href="<%= fixedCategoria === 'camper' ? '/campers' : '/coches' %>" class="filters-reset">Limpiar</a>
       </div>
 
-      <form action="/coches" method="get" id="filtersForm">
+      <form action="<%= fixedCategoria === 'camper' ? '/campers' : '/coches' %>" method="get" id="filtersForm">
+
+        <% if (!fixedCategoria) { %>
+        <div class="filter-group">
+          <label class="filter-label">Tipo</label>
+          <select name="categoria" class="form-select form-select-sm">
+            <option value="">Todos</option>
+            <option value="coche"  <%= filters.categoria === 'coche'  ? 'selected' : '' %>>Coches</option>
+            <option value="camper" <%= filters.categoria === 'camper' ? 'selected' : '' %>>Campers</option>
+          </select>
+        </div>
+        <% } %>
+
         <div class="filter-group">
           <label class="filter-label">Marca</label>
           <input type="text" name="marca" value="<%= filters.marca || '' %>"
-                 placeholder="Ej: BMW, Audi…" class="form-input form-input-sm"
+                 placeholder="Ej: BMW, Volkswagen…" class="form-input form-input-sm"
                  list="marcas-list">
           <datalist id="marcas-list">
             <% marcas.forEach(m => { %>
@@ -52,7 +66,7 @@
           <label class="filter-label">Año desde</label>
           <select name="anio_desde" class="form-select form-select-sm">
             <option value="">Cualquiera</option>
-            <% for (let y = new Date().getFullYear(); y >= 2005; y--) { %>
+            <% for (let y = new Date().getFullYear(); y >= 2000; y--) { %>
               <option value="<%= y %>" <%= parseInt(filters.anio_desde) === y ? 'selected' : '' %>><%= y %></option>
             <% } %>
           </select>
@@ -89,7 +103,7 @@
         <div class="empty-state">
           <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
           <h3>No se encontraron vehículos</h3>
-          <p>Prueba a ajustar los filtros o <a href="/coches">ver todo el catálogo</a>.</p>
+          <p>Prueba a ajustar los filtros o <a href="<%= fixedCategoria === 'camper' ? '/campers' : '/coches' %>">ver todo el catálogo</a>.</p>
         </div>
       <% } else { %>
         <div class="cars-grid">

@@ -129,34 +129,6 @@ if (mainImage && thumbs.length > 0) {
   }
 }
 
-// ── Favorite button (car detail) ──────────────────────────────────
-const favoriteBtn = document.getElementById('favoriteBtn');
-if (favoriteBtn) {
-  favoriteBtn.addEventListener('click', async () => {
-    const carId = favoriteBtn.dataset.carId;
-    favoriteBtn.disabled = true;
-    try {
-      const res  = await fetch(`/favoritos/${carId}/toggle`, { method: 'POST' });
-      const data = await res.json();
-      const heart = favoriteBtn.querySelector('svg');
-      const text  = document.getElementById('favBtnText');
-      if (data.favorited) {
-        favoriteBtn.classList.add('is-favorite');
-        if (heart) heart.setAttribute('fill', 'currentColor');
-        if (text)  text.textContent = 'En favoritos';
-      } else {
-        favoriteBtn.classList.remove('is-favorite');
-        if (heart) heart.setAttribute('fill', 'none');
-        if (text)  text.textContent = 'Guardar favorito';
-      }
-    } catch (err) {
-      console.error('Error toggling favorite:', err);
-    } finally {
-      favoriteBtn.disabled = false;
-    }
-  });
-}
-
 // ── Scroll-triggered fade animations ─────────────────────────────
 if ('IntersectionObserver' in window) {
   const obs = new IntersectionObserver((entries) => {

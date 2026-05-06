@@ -1,7 +1,7 @@
 {
-  "name": "motor-import",
-  "version": "1.0.0",
-  "description": "Compraventa de coches importados con transparencia total",
+  "name": "cars-and-campers",
+  "version": "2.0.0",
+  "description": "Cars & Campers — web informativa de coches y autocaravanas con panel de administración",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

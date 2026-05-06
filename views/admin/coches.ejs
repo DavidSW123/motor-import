@@ -20,6 +20,7 @@
             <tr>
               <th style="width:60px">Foto</th>
               <th>Vehículo</th>
+              <th>Tipo</th>
               <th>Precio</th>
               <th>KM</th>
               <th>Estado</th>
@@ -43,6 +44,9 @@
                 <td>
                   <div class="table-car-name"><%= car.marca %> <%= car.modelo %></div>
                   <div class="table-car-sub"><%= car.anio %> · <%= car.combustible %> · <%= car.pais_origen %></div>
+                </td>
+                <td>
+                  <span class="badge badge-tipo"><%= car.categoria === 'camper' ? 'Camper' : 'Coche' %></span>
                 </td>
                 <td class="td-price">
                   <%= new Intl.NumberFormat('es-ES',{style:'currency',currency:'EUR',maximumFractionDigits:0}).format(car.precio) %>
