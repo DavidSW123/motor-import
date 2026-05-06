@@ -24,8 +24,12 @@
 
 <header class="site-header" id="site-header">
   <nav class="nav-container">
-    <!-- Logo -->
-    <%- include('logo', { size: 240, withText: false }) %>
+    <!-- Logo (puede ocultarse desde Ajustes) -->
+    <% if (!settings || settings.show_logo !== '0') { %>
+      <%- include('logo', { size: 240, withText: false }) %>
+    <% } else { %>
+      <a href="/" class="brand-text-only">Cars<strong>&amp;Campers</strong></a>
+    <% } %>
 
     <!-- Nav desktop -->
     <ul class="nav-links" id="navLinks">

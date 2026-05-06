@@ -13,11 +13,12 @@ if (isCloud) {
   });
 }
 
-async function upload(buffer, originalname, carId) {
+// ── Upload genérico a una subcarpeta ─────────────────────────────
+async function uploadToFolder(buffer, originalname, subfolder) {
   if (isCloud) {
     return new Promise((resolve, reject) => {
       const stream = cloudinary.uploader.upload_stream(
-        { folder: `motor-import/cars/${carId}`, resource_type: 'image' },
+        { folder: `motor-import/${subfolder}`, resource_type: 'image' },
         (error, result) => {
           if (error) return reject(error);
           resolve({ url: result.secure_url, cloud_id: result.public_id });
@@ -26,15 +27,25 @@ async function upload(buffer, originalname, carId) {
       stream.end(buffer);
     });
   }
-
   const ext  = path.extname(originalname).toLowerCase();
   const name = `${Date.now()}-${Math.round(Math.random() * 1e6)}${ext}`;
-  const dir  = path.join(__dirname, '..', 'public', 'uploads', 'cars', String(carId));
+  const dir  = path.join(__dirname, '..', 'public', 'uploads', subfolder);
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, name), buffer);
-  return { url: `/uploads/cars/${carId}/${name}`, cloud_id: null };
+  return { url: `/uploads/${subfolder}/${name}`, cloud_id: null };
 }
 
+// ── Upload de imágenes de un coche (compatibilidad) ──────────────
+async function upload(buffer, originalname, carId) {
+  return uploadToFolder(buffer, originalname, `cars/${carId}`);
+}
+
+// ── Upload del logo de la marca ──────────────────────────────────
+async function uploadLogo(buffer, originalname) {
+  return uploadToFolder(buffer, originalname, 'branding');
+}
+
+// ── Eliminar imagen (Cloudinary o disco local) ───────────────────
 async function deleteImage(url, cloud_id) {
   if (isCloud && cloud_id) {
     try { await cloudinary.uploader.destroy(cloud_id); } catch (_) {}
@@ -46,4 +57,4 @@ async function deleteImage(url, cloud_id) {
   }
 }
 
-module.exports = { upload, deleteImage };
+module.exports = { upload, uploadLogo, uploadToFolder, deleteImage };

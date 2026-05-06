@@ -2,7 +2,7 @@ require('dotenv').config();
 const express  = require('express');
 const session  = require('express-session');
 const path     = require('path');
-const { initDB, NEEDS_SETUP } = require('./database/db');
+const { initDB, NEEDS_SETUP, getSettings } = require('./database/db');
 
 const app  = express();
 const PORT = process.env.PORT || 4000;
@@ -41,7 +41,7 @@ app.use(async (req, res, next) => {
 });
 
 // ── Locals globales ──────────────────────────────────────────────
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
   res.locals.user        = req.session.user || null;
   res.locals.currentPath = req.path;
   if (req.session.flash) {
@@ -49,6 +49,11 @@ app.use((req, res, next) => {
     delete req.session.flash;
   } else {
     res.locals.flash = null;
+  }
+  try {
+    res.locals.settings = await getSettings();
+  } catch (_) {
+    res.locals.settings = { show_logo: '1', logo_url: '', logo_cloud_id: '' };
   }
   next();
 });

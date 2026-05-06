@@ -1,10 +1,10 @@
 const express            = require('express');
 const bcrypt             = require('bcryptjs');
 const slugify            = require('slugify');
-const { getOne, getAll, run } = require('../database/db');
+const { getOne, getAll, run, getSettings, setSetting } = require('../database/db');
 const { requireAdmin }   = require('../middleware/auth');
 const upload             = require('../middleware/upload');
-const { upload: uploadImg, deleteImage } = require('../utils/imageUpload');
+const { upload: uploadImg, uploadLogo, deleteImage } = require('../utils/imageUpload');
 const router             = express.Router();
 
 function makeSlug(marca, modelo, anio) {
@@ -219,6 +219,58 @@ router.get('/usuarios', async (req, res) => {
     const users = await getAll(`SELECT id, nombre, email, role, created_at FROM users ORDER BY created_at ASC`);
     res.render('admin/usuarios', { title: 'Administradores', users });
   } catch (err) { console.error(err); res.status(500).send('Error interno'); }
+});
+
+// ── Ajustes / Branding ────────────────────────────────────────────
+router.get('/ajustes', async (req, res) => {
+  try {
+    const settings = await getSettings();
+    res.render('admin/ajustes', { title: 'Ajustes', settings });
+  } catch (err) { console.error(err); res.status(500).send('Error interno'); }
+});
+
+router.post('/ajustes', async (req, res) => {
+  await setSetting('show_logo', req.body.show_logo === '1' ? '1' : '0');
+  req.session.flash = { type: 'success', msg: 'Ajustes guardados.' };
+  res.redirect('/admin/ajustes');
+});
+
+router.post('/ajustes/logo', upload.single('logo'), async (req, res) => {
+  if (!req.file) {
+    req.session.flash = { type: 'error', msg: 'Selecciona una imagen.' };
+    return res.redirect('/admin/ajustes');
+  }
+  try {
+    // borrar logo anterior si existía
+    const current = await getSettings();
+    if (current.logo_url) {
+      try { await deleteImage(current.logo_url, current.logo_cloud_id); } catch (_) {}
+    }
+    const { url, cloud_id } = await uploadLogo(req.file.buffer, req.file.originalname);
+    await setSetting('logo_url', url);
+    await setSetting('logo_cloud_id', cloud_id || '');
+    req.session.flash = { type: 'success', msg: 'Logo actualizado.' };
+  } catch (err) {
+    console.error(err);
+    req.session.flash = { type: 'error', msg: 'Error al subir el logo.' };
+  }
+  res.redirect('/admin/ajustes');
+});
+
+router.post('/ajustes/logo/eliminar', async (req, res) => {
+  try {
+    const current = await getSettings();
+    if (current.logo_url) {
+      try { await deleteImage(current.logo_url, current.logo_cloud_id); } catch (_) {}
+    }
+    await setSetting('logo_url', '');
+    await setSetting('logo_cloud_id', '');
+    req.session.flash = { type: 'success', msg: 'Logo eliminado. Se usará el predeterminado.' };
+  } catch (err) {
+    console.error(err);
+    req.session.flash = { type: 'error', msg: 'Error al eliminar el logo.' };
+  }
+  res.redirect('/admin/ajustes');
 });
 
 router.post('/usuarios/:id/password', async (req, res) => {

@@ -1,0 +1,74 @@
+<%- include('../partials/header', { title: 'Ajustes' }) %>
+
+<div class="admin-wrapper">
+  <%- include('./sidebar', { active: 'ajustes' }) %>
+  <main class="admin-main">
+    <div class="admin-top-bar">
+      <h1 class="admin-page-title">Ajustes de la web</h1>
+    </div>
+
+    <div class="admin-two-col">
+
+      <!-- ── Visibilidad del logo ─────────────────────────────── -->
+      <div class="admin-card">
+        <h2 class="admin-card-title">Logo en el header</h2>
+        <p class="admin-card-sub">Activa o desactiva el logo flotante de arriba a la izquierda.</p>
+
+        <form action="/admin/ajustes" method="post" class="admin-toggle-form">
+          <label class="toggle-switch">
+            <input type="checkbox" name="show_logo" value="1"
+                   <%= settings.show_logo === '1' ? 'checked' : '' %>>
+            <span class="toggle-track"><span class="toggle-thumb"></span></span>
+            <span class="toggle-label">Mostrar logo en la web pública</span>
+          </label>
+          <button type="submit" class="btn btn-primary btn-sm" style="margin-top:1.25rem">
+            Guardar visibilidad
+          </button>
+        </form>
+      </div>
+
+      <!-- ── Imagen del logo ───────────────────────────────────── -->
+      <div class="admin-card">
+        <h2 class="admin-card-title">Imagen del logo</h2>
+        <p class="admin-card-sub">Sube tu logo. Recomendado: PNG cuadrado, mínimo 400×400 px, fondo transparente o circular.</p>
+
+        <div class="logo-preview">
+          <% if (settings.logo_url) { %>
+            <img src="<%= settings.logo_url %>" alt="Logo actual">
+            <span class="logo-preview-tag">Logo actual</span>
+          <% } else { %>
+            <img src="/img/logo.png" alt="Logo predeterminado"
+                 onerror="this.onerror=null;this.src='/img/logo.svg'">
+            <span class="logo-preview-tag logo-preview-default">Predeterminado</span>
+          <% } %>
+        </div>
+
+        <form action="/admin/ajustes/logo" method="post" enctype="multipart/form-data"
+              class="logo-upload-form">
+          <label class="logo-upload-zone">
+            <input type="file" name="logo" accept="image/*" required>
+            <div class="logo-upload-inner">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span>Selecciona un archivo (PNG, JPG, WebP)</span>
+            </div>
+          </label>
+          <div class="logo-upload-actions">
+            <button type="submit" class="btn btn-primary btn-sm">Subir nuevo logo</button>
+            <% if (settings.logo_url) { %>
+              <button type="button" class="btn btn-ghost btn-sm"
+                      onclick="if(confirm('¿Eliminar el logo personalizado y volver al predeterminado?'))document.getElementById('delLogo').submit()">
+                Quitar logo personalizado
+              </button>
+            <% } %>
+          </div>
+        </form>
+
+        <% if (settings.logo_url) { %>
+          <form id="delLogo" action="/admin/ajustes/logo/eliminar" method="post" style="display:none"></form>
+        <% } %>
+      </div>
+    </div>
+  </main>
+</div>
+
+<%- include('../partials/footer') %>

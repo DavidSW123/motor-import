@@ -83,6 +83,10 @@ async function initDB() {
       orden        INTEGER DEFAULT 0,
       es_principal INTEGER DEFAULT 0,
       created_at   DATETIME DEFAULT CURRENT_TIMESTAMP
+    )`,
+    `CREATE TABLE IF NOT EXISTS settings (
+      key   TEXT PRIMARY KEY,
+      value TEXT
     )`
   ];
 
@@ -115,6 +119,16 @@ async function initDB() {
     }
   ];
 
+  // ── Settings por defecto ──────────────────────────────────────
+  const defaultSettings = [
+    ['show_logo',     '1'],   // mostrar logo en el header (1) o no (0)
+    ['logo_url',      ''],    // URL del logo personalizado (vacío = usa /img/logo.png)
+    ['logo_cloud_id', '']     // public_id de Cloudinary (vacío en local)
+  ];
+  for (const [k, v] of defaultSettings) {
+    await run('INSERT OR IGNORE INTO settings (key, value) VALUES (?, ?)', [k, v]);
+  }
+
   for (const a of admins) {
     const exists = await getOne('SELECT id FROM users WHERE email = ?', [a.email]);
     if (!exists) {
@@ -126,4 +140,21 @@ async function initDB() {
   }
 }
 
-module.exports = { client, getOne, getAll, run, initDB, NEEDS_SETUP };
+// ── Settings helpers ─────────────────────────────────────────────
+async function getSettings() {
+  if (NEEDS_SETUP) return { show_logo: '1', logo_url: '', logo_cloud_id: '' };
+  const rows = await getAll('SELECT key, value FROM settings');
+  const obj = {};
+  for (const r of rows) obj[r.key] = r.value;
+  // defaults por si la tabla está incompleta
+  if (obj.show_logo === undefined) obj.show_logo = '1';
+  if (obj.logo_url === undefined)  obj.logo_url = '';
+  return obj;
+}
+
+async function setSetting(key, value) {
+  await run('INSERT INTO settings (key, value) VALUES (?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value',
+    [key, String(value ?? '')]);
+}
+
+module.exports = { client, getOne, getAll, run, initDB, NEEDS_SETUP, getSettings, setSetting };

@@ -4,10 +4,11 @@
   const _size  = typeof size  !== 'undefined' ? size  : 38;
   const _text  = typeof withText !== 'undefined' ? withText : true;
   const _variant = typeof variant !== 'undefined' ? variant : 'default';
+  const _logoUrl = (locals.settings && locals.settings.logo_url) ? locals.settings.logo_url : '/img/logo.png';
 %>
 <a href="/" class="brand-logo brand-logo-<%= _variant %>" aria-label="Cars & Campers">
   <span class="brand-mark" style="width:<%= _size %>px;height:<%= _size %>px">
-    <img src="/img/logo.png" alt="Cars & Campers" loading="eager"
+    <img src="<%= _logoUrl %>" alt="Cars & Campers" loading="eager"
          onerror="this.onerror=null;this.src='/img/logo.svg'">
   </span>
   <% if (_text) { %>
