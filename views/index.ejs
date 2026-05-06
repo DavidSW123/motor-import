@@ -1,102 +1,140 @@
 <%- include('partials/header', { title: 'Coches y autocaravanas seleccionados' }) %>
 
-<!-- ── HERO ─────────────────────────────────────────────────── -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
+<!-- ══════════════════════════════════════════════════════════════
+     HERO CINEMATOGRÁFICO
+     ══════════════════════════════════════════════════════════════ -->
+<section class="hero-v2">
+  <div class="hero-v2-bg">
+    <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&w=2400&q=80"
+         alt="" class="hero-v2-img" loading="eager" fetchpriority="high">
+    <div class="hero-v2-grad"></div>
+    <div class="hero-v2-mesh"></div>
+  </div>
 
-  <div class="hero-content">
-    <div class="hero-badge">
-      <span class="badge-dot"></span>
-      Coches y campers seleccionados
+  <div class="hero-v2-content">
+    <div class="hero-v2-eyebrow">
+      <span class="dot"></span>
+      Selección premium · Documentación completa
     </div>
-    <h1 class="hero-title">
-      Tu próximo viaje empieza<br>
-      <span class="text-gold">con el vehículo adecuado</span>
+
+    <h1 class="hero-v2-title">
+      Cars
+      <span class="hero-v2-amp">&amp;</span>
+      <span class="hero-v2-grad-txt">Campers</span>
     </h1>
-    <p class="hero-subtitle">
+
+    <p class="hero-v2-sub">
       Coches de calidad y autocaravanas listas para la aventura.<br>
-      Selección cuidada · Documentación completa · Trato cercano.
+      <span class="hero-v2-sub-em">Selección cuidada · Garantía incluida · Trato cercano.</span>
     </p>
-    <div class="hero-actions">
-      <a href="/coches" class="btn btn-primary btn-lg">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+
+    <div class="hero-v2-stats">
+      <div><strong><%= stats.coches %></strong><span>coches</span></div>
+      <div class="sep"></div>
+      <div><strong><%= stats.campers %></strong><span>campers</span></div>
+      <div class="sep"></div>
+      <div><strong>12<i>m</i></strong><span>garantía</span></div>
+    </div>
+
+    <div class="hero-v2-cta">
+      <a href="/coches" class="hero-v2-btn primary">
         Ver coches
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
-      <a href="/campers" class="btn btn-outline btn-lg">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="2" y="9" width="14" height="9" rx="1.5"/><path d="M16 12 H22 V18 H16"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>
+      <a href="/campers" class="hero-v2-btn">
         Ver campers
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </div>
   </div>
 
-  <!-- Buscador rápido -->
-  <div class="hero-search">
-    <form action="/coches" method="get" class="search-form">
-      <div class="search-group">
-        <label for="hs-categoria">Tipo</label>
-        <select id="hs-categoria" name="categoria" class="form-select">
-          <option value="">Todos</option>
-          <option value="coche">Coches</option>
-          <option value="camper">Campers</option>
-        </select>
-      </div>
-      <div class="search-group">
-        <label for="hs-marca">Marca</label>
-        <input type="text" id="hs-marca" name="marca" placeholder="BMW, Mercedes, Volkswagen…" class="form-input" autocomplete="off">
-      </div>
-      <div class="search-group">
-        <label for="hs-precio">Precio máximo</label>
-        <select id="hs-precio" name="precio_max" class="form-select">
-          <option value="">Sin límite</option>
-          <option value="10000">10.000 €</option>
-          <option value="15000">15.000 €</option>
-          <option value="25000">25.000 €</option>
-          <option value="40000">40.000 €</option>
-          <option value="60000">60.000 €</option>
-          <option value="90000">90.000 €</option>
-        </select>
-      </div>
-      <button type="submit" class="btn btn-primary">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-        Buscar
-      </button>
-    </form>
+  <div class="hero-v2-scroll">
+    <span>Descubre</span>
+    <div class="scroll-line"></div>
   </div>
 </section>
 
-<!-- ── STATS ─────────────────────────────────────────────────── -->
-<section class="stats-section">
+<!-- ══════════════════════════════════════════════════════════════
+     SHOWCASE VISUAL — COCHES vs CAMPERS
+     ══════════════════════════════════════════════════════════════ -->
+<section class="showcase-v2">
   <div class="container">
-    <div class="stats-grid">
-      <div class="stat-item">
-        <div class="stat-number" data-count="<%= stats.coches %>"><%= stats.coches %></div>
-        <div class="stat-label">Coches en stock</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number" data-count="<%= stats.campers %>"><%= stats.campers %></div>
-        <div class="stat-label">Campers en stock</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">100%</div>
-        <div class="stat-label">Documentación verificada</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-number">12</div>
-        <div class="stat-label">Meses de garantía</div>
-      </div>
+    <div class="section-header">
+      <div class="section-tag">Dos mundos, un mismo cuidado</div>
+      <h2>Lo que tenemos para ti</h2>
+      <p>Desde berlinas y SUVs urbanos hasta campers y autocaravanas listas para la carretera</p>
+    </div>
+
+    <div class="showcase-grid">
+      <a href="/coches" class="showcase-card">
+        <div class="showcase-img">
+          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1600&q=80" alt="Coches" loading="lazy">
+        </div>
+        <div class="showcase-overlay"></div>
+        <div class="showcase-body">
+          <div class="showcase-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            Coches
+          </div>
+          <h3>Selección de coches</h3>
+          <p>Berlinas, SUVs, deportivos. De cualquier marca, perfectamente revisados.</p>
+          <span class="showcase-cta">
+            Ver catálogo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a href="/campers" class="showcase-card">
+        <div class="showcase-img">
+          <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=1600&q=80" alt="Campers" loading="lazy">
+        </div>
+        <div class="showcase-overlay"></div>
+        <div class="showcase-body">
+          <div class="showcase-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="9" width="14" height="9" rx="1.5"/><path d="M16 12 H22 V18 H16"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>
+            Campers
+          </div>
+          <h3>Campers y autocaravanas</h3>
+          <p>Para escaparse el fin de semana o vivir en la carretera. Listas para salir.</p>
+          <span class="showcase-cta">
+            Ver catálogo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
     </div>
   </div>
 </section>
 
-<!-- ── DESTACADOS ────────────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════
+     MARCAS — MARQUEE INFINITO
+     ══════════════════════════════════════════════════════════════ -->
+<section class="brands-marquee">
+  <div class="brands-label">Trabajamos con las mejores marcas</div>
+  <div class="marquee">
+    <div class="marquee-track">
+      <% const brands = ['BMW','Audi','Mercedes-Benz','Volkswagen','Toyota','Volvo','Porsche','Ford','Renault','Peugeot','Mazda','Lexus','Honda','Hyundai','Kia']; %>
+      <% for (let i = 0; i < 2; i++) { %>
+        <% brands.forEach(b => { %>
+          <span class="marquee-item"><%= b %></span>
+          <span class="marquee-dot">●</span>
+        <% }) %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════
+     DESTACADOS (solo si hay)
+     ══════════════════════════════════════════════════════════════ -->
 <% if (featuredCars.length > 0) { %>
 <section class="section featured-section">
   <div class="container">
     <div class="section-header">
-      <div class="section-tag">Destacados</div>
+      <div class="section-tag">★ Destacados</div>
       <h2>Selección de la semana</h2>
-      <p>Coches y campers escogidos por relación calidad-precio</p>
+      <p>Los vehículos que más nos están pidiendo</p>
     </div>
     <div class="cars-grid">
       <% featuredCars.forEach(car => { %>
@@ -110,7 +148,9 @@
 </section>
 <% } %>
 
-<!-- ── ÚLTIMOS COCHES ────────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════
+     ÚLTIMOS COCHES
+     ══════════════════════════════════════════════════════════════ -->
 <% if (recentCoches.length > 0) { %>
 <section class="section recent-section">
   <div class="container">
@@ -130,13 +170,15 @@
 </section>
 <% } %>
 
-<!-- ── ÚLTIMOS CAMPERS ───────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════
+     ÚLTIMOS CAMPERS
+     ══════════════════════════════════════════════════════════════ -->
 <% if (recentCampers.length > 0) { %>
 <section class="section recent-section">
   <div class="container">
     <div class="section-header">
       <div class="section-tag">Para la aventura</div>
-      <h2>Últimos campers y autocaravanas</h2>
+      <h2>Últimos campers</h2>
     </div>
     <div class="cars-grid cars-grid-3">
       <% recentCampers.forEach(car => { %>
@@ -150,7 +192,34 @@
 </section>
 <% } %>
 
-<!-- ── POR QUÉ ELEGIRNOS ─────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════
+     EMPTY STATE — si no hay coches todavía
+     ══════════════════════════════════════════════════════════════ -->
+<% if (featuredCars.length === 0 && recentCoches.length === 0 && recentCampers.length === 0) { %>
+<section class="section coming-soon-section">
+  <div class="container">
+    <div class="coming-soon-card">
+      <div class="cs-img">
+        <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80" alt="" loading="lazy">
+        <div class="cs-img-grad"></div>
+      </div>
+      <div class="cs-body">
+        <div class="section-tag">Muy pronto</div>
+        <h2>Estamos preparando el catálogo</h2>
+        <p>Estamos seleccionando los próximos vehículos que pasarán a formar parte del catálogo. Si quieres adelantarte, contáctanos y te avisamos en cuanto tengamos algo que pueda interesarte.</p>
+        <div class="cs-actions">
+          <a href="/contacto" class="btn btn-primary">Contactar ahora</a>
+          <a href="https://wa.me/34600000000" target="_blank" rel="noopener" class="btn btn-outline">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<% } %>
+
+<!-- ══════════════════════════════════════════════════════════════
+     POR QUÉ ELEGIRNOS
+     ══════════════════════════════════════════════════════════════ -->
 <section class="section why-section">
   <div class="container">
     <div class="section-header">
@@ -191,7 +260,9 @@
   </div>
 </section>
 
-<!-- ── CÓMO FUNCIONA ─────────────────────────────────────────── -->
+<!-- ══════════════════════════════════════════════════════════════
+     CÓMO FUNCIONA
+     ══════════════════════════════════════════════════════════════ -->
 <section class="section how-section" id="como-funciona">
   <div class="container">
     <div class="section-header">
@@ -203,47 +274,50 @@
       <div class="step-card">
         <div class="step-num">01</div>
         <h3>Encuentra tu vehículo</h3>
-        <p>Navega por el catálogo con todas las especificaciones, fotos y documentación de cada modelo.</p>
+        <p>Navega por el catálogo con todas las especificaciones, fotos y documentación.</p>
       </div>
       <div class="step-arrow">→</div>
       <div class="step-card">
         <div class="step-num">02</div>
         <h3>Contáctanos</h3>
-        <p>Llámanos, escríbenos por WhatsApp o ven a verlo. Resolvemos cualquier duda sin compromiso.</p>
+        <p>Llámanos, escríbenos por WhatsApp o ven a verlo. Resolvemos cualquier duda.</p>
       </div>
       <div class="step-arrow">→</div>
       <div class="step-card">
         <div class="step-num">03</div>
         <h3>Pruébalo</h3>
-        <p>Concertamos una prueba de conducción para que veas que el vehículo es exactamente como esperas.</p>
+        <p>Concertamos una prueba para que veas que el vehículo es como esperas.</p>
       </div>
       <div class="step-arrow">→</div>
       <div class="step-card">
         <div class="step-num">04</div>
         <h3>Llévatelo</h3>
-        <p>Nos encargamos del cambio de nombre, ITV y cualquier trámite. Tú solo coge las llaves.</p>
+        <p>Nos encargamos del cambio de nombre, ITV y trámites. Tú solo coge las llaves.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ── CTA FINAL ─────────────────────────────────────────────── -->
-<section class="cta-section">
-  <div class="container">
-    <div class="cta-box">
-      <div class="cta-content">
-        <h2>¿Te ayudamos a encontrar tu próximo vehículo?</h2>
-        <p>Más de <%= stats.disponible %> vehículo<%= stats.disponible !== 1 ? 's' : '' %> disponible<%= stats.disponible !== 1 ? 's' : '' %> ahora mismo. Contáctanos y te asesoramos sin compromiso.</p>
-        <div class="cta-actions">
-          <a href="/coches" class="btn btn-primary btn-lg">Ver catálogo</a>
-          <a href="/contacto" class="btn btn-outline btn-lg">Contactar</a>
-        </div>
-      </div>
-      <div class="cta-decoration">
-        <div class="cta-ring cta-ring-1"></div>
-        <div class="cta-ring cta-ring-2"></div>
-        <div class="cta-ring cta-ring-3"></div>
-      </div>
+<!-- ══════════════════════════════════════════════════════════════
+     CTA FINAL
+     ══════════════════════════════════════════════════════════════ -->
+<section class="cta-v2">
+  <div class="cta-v2-bg">
+    <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=2400&q=80" alt="" loading="lazy">
+    <div class="cta-v2-grad"></div>
+  </div>
+  <div class="container cta-v2-content">
+    <h2>¿Listo para encontrar tu próximo vehículo?</h2>
+    <p>Contáctanos sin compromiso. Resolvemos cualquier duda y te ayudamos a encontrar exactamente lo que buscas.</p>
+    <div class="cta-v2-actions">
+      <a href="/contacto" class="hero-v2-btn primary">
+        Contactar ahora
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="https://wa.me/34600000000" target="_blank" rel="noopener" class="hero-v2-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+        WhatsApp
+      </a>
     </div>
   </div>
 </section>
