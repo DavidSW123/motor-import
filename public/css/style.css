@@ -38,7 +38,7 @@
   --shadow:       0 4px 20px rgba(0,0,0,0.3);
   --shadow-card:  0 8px 40px rgba(0,0,0,0.5);
   --shadow-gold:  0 0 40px rgba(201,162,39,0.2);
-  --nav-h:        70px;
+  --nav-h:        96px;
 }
 
 /* ── 2. Reset ─────────────────────────────── */
@@ -2046,7 +2046,7 @@ body.admin-body { }
 /* Mobile — escalar logos */
 @media (max-width: 640px) {
   .hero-v2-logo { width: 120px; height: 120px; }
-  .site-header .brand-mark { width: 48px !important; height: 48px !important; }
+  .site-header .brand-mark { width: 60px !important; height: 60px !important; }
   .footer-brand .brand-mark { width: 80px !important; height: 80px !important; }
   .admin-sidebar-brand .brand-mark { width: 48px !important; height: 48px !important; }
   .auth-logo .brand-mark { width: 100px !important; height: 100px !important; }
