@@ -22,21 +22,34 @@ router.get('/login', (req, res) => {
 
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log('[LOGIN] intento con email:', email);
   if (!email || !password) {
     req.session.flash = { type: 'error', msg: 'Rellena todos los campos.' };
     return res.redirect('/admin/login');
   }
   try {
     const user = await getOne('SELECT * FROM users WHERE email = ?', [email.trim().toLowerCase()]);
-    if (!user || !bcrypt.compareSync(password, user.password) || user.role !== 'admin') {
-      req.session.flash = { type: 'error', msg: 'Credenciales incorrectas.' };
+    if (!user) {
+      console.log('[LOGIN] FAIL: usuario no encontrado');
+      req.session.flash = { type: 'error', msg: 'Credenciales incorrectas (email no existe).' };
+      return res.redirect('/admin/login');
+    }
+    if (!bcrypt.compareSync(password, user.password)) {
+      console.log('[LOGIN] FAIL: password no coincide para', email);
+      req.session.flash = { type: 'error', msg: 'Credenciales incorrectas (contraseña).' };
+      return res.redirect('/admin/login');
+    }
+    if (user.role !== 'admin') {
+      console.log('[LOGIN] FAIL: usuario no es admin (role=' + user.role + ')');
+      req.session.flash = { type: 'error', msg: 'Esta cuenta no tiene permisos de administrador.' };
       return res.redirect('/admin/login');
     }
     req.session.user = { id: Number(user.id), nombre: user.nombre, email: user.email, role: user.role };
     req.session.flash = { type: 'success', msg: `Bienvenido, ${user.nombre.split(' ')[0]}!` };
+    console.log('[LOGIN] OK:', email, '→ redirect a', req.query.redirect || '/admin');
     res.redirect(req.query.redirect || '/admin');
   } catch (err) {
-    console.error(err);
+    console.error('[LOGIN] error:', err);
     req.session.flash = { type: 'error', msg: 'Error al iniciar sesión.' };
     res.redirect('/admin/login');
   }

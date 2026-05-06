@@ -7,6 +7,10 @@ const { initDB, NEEDS_SETUP, getSettings } = require('./database/db');
 const app  = express();
 const PORT = process.env.PORT || 4000;
 
+// ── Vercel está detrás de un proxy: confiar en él para que
+//    `req.secure` sea true cuando llega por HTTPS ────────────────
+app.set('trust proxy', 1);
+
 // ── View engine ──────────────────────────────────────────────────
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
