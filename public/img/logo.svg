@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <radialGradient id="metal" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#5a5a5e"/>
+      <stop offset="55%" stop-color="#1c1d22"/>
+      <stop offset="100%" stop-color="#0a0b0f"/>
+    </radialGradient>
+    <linearGradient id="ring" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#d8dbe0"/>
+      <stop offset="50%" stop-color="#7c7e85"/>
+      <stop offset="100%" stop-color="#d8dbe0"/>
+    </linearGradient>
+    <linearGradient id="gold-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f0d168"/>
+      <stop offset="50%" stop-color="#c9a227"/>
+      <stop offset="100%" stop-color="#8a6e15"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ring -->
+  <circle cx="100" cy="100" r="96" fill="url(#ring)"/>
+  <circle cx="100" cy="100" r="90" fill="url(#metal)"/>
+  <circle cx="100" cy="100" r="90" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+  <!-- top label "CARS & CAMPERS" -->
+  <rect x="38" y="64" width="124" height="34" rx="6" fill="#1a0e0e" stroke="rgba(255,255,255,0.08)" stroke-width="0.5"/>
+  <rect x="38" y="64" width="62"  height="34" rx="6" fill="#b0181d"/>
+  <text x="69" y="86" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="14" fill="#fff" letter-spacing="0.5">CARS</text>
+  <text x="100" y="87" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-style="italic" font-size="16" fill="#ec5057">&amp;</text>
+  <text x="131" y="86" text-anchor="middle" font-family="Arial Black, sans-serif" font-weight="900" font-size="14" fill="#fff" letter-spacing="0.5">CAMPERS</text>
+
+  <!-- wings shield -->
+  <path d="M 40 130 Q 65 118 95 128 L 100 132 L 105 128 Q 135 118 160 130 Q 145 134 130 132 L 100 142 L 70 132 Q 55 134 40 130 Z"
+        fill="none" stroke="url(#ring)" stroke-width="0.8" opacity="0.85"/>
+  <path d="M 80 132 L 100 158 L 120 132" fill="none" stroke="url(#ring)" stroke-width="0.6" opacity="0.7"/>
+
+  <!-- subtle car icon centered (placeholder) -->
+  <g transform="translate(82,128)" opacity="0.9">
+    <rect x="2" y="6" width="14" height="6" rx="2" fill="#9a9da3"/>
+    <path d="M0 12 L4 6 L14 6 L18 12 Z" fill="#9a9da3"/>
+    <circle cx="5" cy="13" r="1.5" fill="#1a1b1f"/>
+    <circle cx="13" cy="13" r="1.5" fill="#1a1b1f"/>
+  </g>
+  <g transform="translate(106,126)" opacity="0.9">
+    <rect x="0" y="4" width="22" height="10" rx="1.5" fill="#7c7f86"/>
+    <rect x="2" y="6" width="6" height="4" fill="#0a0b0f"/>
+    <rect x="14" y="6" width="6" height="4" fill="#0a0b0f"/>
+    <circle cx="5" cy="15" r="1.7" fill="#1a1b1f"/>
+    <circle cx="17" cy="15" r="1.7" fill="#1a1b1f"/>
+  </g>
+
+  <!-- BCN -->
+  <text x="100" y="178" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="11" fill="url(#ring)" letter-spacing="3.5">B C N</text>
+</svg>
