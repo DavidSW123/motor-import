@@ -1,39 +1,50 @@
-const { createClient } = require('@libsql/client');
 const bcrypt = require('bcryptjs');
 const path   = require('path');
 const fs     = require('fs');
 
-let client;
-if (process.env.TURSO_DATABASE_URL) {
-  client = createClient({
-    url:       process.env.TURSO_DATABASE_URL,
-    authToken: process.env.TURSO_AUTH_TOKEN
-  });
-} else {
-  const DB_DIR = path.join(__dirname);
-  fs.mkdirSync(DB_DIR, { recursive: true });
-  const dbPath = path.join(DB_DIR, 'cars-and-campers.sqlite').replace(/\\/g, '/');
-  client = createClient({ url: `file:${dbPath}` });
+const isServerless = !!process.env.VERCEL || !!process.env.AWS_LAMBDA_FUNCTION_NAME;
+const hasTurso     = !!process.env.TURSO_DATABASE_URL;
+const NEEDS_SETUP  = isServerless && !hasTurso;
+
+let client = null;
+
+if (!NEEDS_SETUP) {
+  const { createClient } = require('@libsql/client');
+  if (hasTurso) {
+    client = createClient({
+      url:       process.env.TURSO_DATABASE_URL,
+      authToken: process.env.TURSO_AUTH_TOKEN
+    });
+  } else {
+    const DB_DIR = path.join(__dirname);
+    fs.mkdirSync(DB_DIR, { recursive: true });
+    const dbPath = path.join(DB_DIR, 'cars-and-campers.sqlite').replace(/\\/g, '/');
+    client = createClient({ url: `file:${dbPath}` });
+  }
 }
 
 // ── Query helpers ─────────────────────────────────────────────────
 async function getOne(sql, args = []) {
+  if (NEEDS_SETUP) throw new Error('NEEDS_TURSO_SETUP');
   const r = await client.execute({ sql, args });
   return r.rows[0] || null;
 }
 
 async function getAll(sql, args = []) {
+  if (NEEDS_SETUP) throw new Error('NEEDS_TURSO_SETUP');
   const r = await client.execute({ sql, args });
   return r.rows;
 }
 
 async function run(sql, args = []) {
+  if (NEEDS_SETUP) throw new Error('NEEDS_TURSO_SETUP');
   const r = await client.execute({ sql, args });
   return { lastInsertRowid: Number(r.lastInsertRowid), rowsAffected: r.rowsAffected };
 }
 
 // ── DB init ───────────────────────────────────────────────────────
 async function initDB() {
+  if (NEEDS_SETUP) return;
   const tables = [
     `CREATE TABLE IF NOT EXISTS users (
       id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -115,4 +126,4 @@ async function initDB() {
   }
 }
 
-module.exports = { client, getOne, getAll, run, initDB };
+module.exports = { client, getOne, getAll, run, initDB, NEEDS_SETUP };
