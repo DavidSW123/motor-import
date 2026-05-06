@@ -1981,8 +1981,10 @@ body.admin-body { }
   padding: 0;
   position: relative;
   z-index: 5;
-  /* Logo grande flotante: header 90px, logo 240px → -75px arriba/abajo */
-  margin: -75px 0;
+  /* Logo flota SOLO hacia abajo (no se corta arriba)
+     Header 90px, logo 240px → 8px desde top, sobresale 158px abajo */
+  align-self: flex-start;
+  margin: 8px 0 -158px 0;
 }
 .site-header .brand-mark { overflow: visible; }
 .site-header .brand-mark {
@@ -2058,8 +2060,41 @@ body.admin-body { }
   .hero-v2-logo { width: 120px; height: 120px; }
   :root { --nav-h: 72px; }
   .site-header .brand-mark { width: 140px !important; height: 140px !important; }
-  .site-header .brand-logo { margin: -34px 0 !important; }
+  .site-header .brand-logo { margin: 4px 0 -72px 0 !important; }
   .footer-brand .brand-mark { width: 80px !important; height: 80px !important; }
   .admin-sidebar-brand .brand-mark { width: 48px !important; height: 48px !important; }
   .auth-logo .brand-mark { width: 100px !important; height: 100px !important; }
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   Compensación de espacio: el logo del header flota 158px abajo,
+   las páginas internas dejan ese espacio para que no quede tapado
+   ═════════════════════════════════════════════════════════════════ */
+.catalog-page,
+.car-detail-page,
+.inner-page,
+.error-page,
+.contact-page,
+.coming-soon-section {
+  padding-top: 260px !important;
+}
+.auth-page {
+  padding-top: 260px !important;
+  min-height: calc(100vh - 260px) !important;
+}
+.admin-wrapper { padding-top: 110px; }
+@media (max-width: 640px) {
+  .catalog-page,
+  .car-detail-page,
+  .inner-page,
+  .error-page,
+  .contact-page,
+  .coming-soon-section {
+    padding-top: 160px !important;
+  }
+  .auth-page {
+    padding-top: 160px !important;
+    min-height: calc(100vh - 160px) !important;
+  }
+  .admin-wrapper { padding-top: 90px; }
 }
