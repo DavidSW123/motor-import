@@ -38,7 +38,7 @@
   --shadow:       0 4px 20px rgba(0,0,0,0.3);
   --shadow-card:  0 8px 40px rgba(0,0,0,0.5);
   --shadow-gold:  0 0 40px rgba(201,162,39,0.2);
-  --nav-h:        96px;
+  --nav-h:        130px;
 }
 
 /* ── 2. Reset ─────────────────────────────── */
@@ -1974,7 +1974,8 @@ body.admin-body { }
 }
 
 /* Header — logo prominente sin texto al lado */
-.site-header .brand-logo { padding: 0.25rem 0; }
+.site-header .brand-logo { padding: 0; margin: -10px 0; }
+.site-header .brand-mark { overflow: visible; }
 .site-header .brand-mark {
   filter: drop-shadow(0 4px 14px rgba(0,0,0,0.5))
           drop-shadow(0 0 8px rgba(201,162,39,0.18));
@@ -2046,7 +2047,9 @@ body.admin-body { }
 /* Mobile — escalar logos */
 @media (max-width: 640px) {
   .hero-v2-logo { width: 120px; height: 120px; }
-  .site-header .brand-mark { width: 60px !important; height: 60px !important; }
+  :root { --nav-h: 92px; }
+  .site-header .brand-mark { width: 72px !important; height: 72px !important; }
+  .site-header .brand-logo { margin: -6px 0 !important; }
   .footer-brand .brand-mark { width: 80px !important; height: 80px !important; }
   .admin-sidebar-brand .brand-mark { width: 48px !important; height: 48px !important; }
   .auth-logo .brand-mark { width: 100px !important; height: 100px !important; }
