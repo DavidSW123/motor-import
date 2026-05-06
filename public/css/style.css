@@ -38,7 +38,7 @@
   --shadow:       0 4px 20px rgba(0,0,0,0.3);
   --shadow-card:  0 8px 40px rgba(0,0,0,0.5);
   --shadow-gold:  0 0 40px rgba(201,162,39,0.2);
-  --nav-h:        78px;
+  --nav-h:        90px;
 }
 
 /* ── 2. Reset ─────────────────────────────── */
@@ -1981,8 +1981,8 @@ body.admin-body { }
   padding: 0;
   position: relative;
   z-index: 5;
-  /* Logo grande sobresaliendo: header 78px, logo 130px → -26px arriba/abajo */
-  margin: -26px 0;
+  /* Logo grande flotante: header 90px, logo 240px → -75px arriba/abajo */
+  margin: -75px 0;
 }
 .site-header .brand-mark { overflow: visible; }
 .site-header .brand-mark {
@@ -2056,9 +2056,9 @@ body.admin-body { }
 /* Mobile — escalar logos */
 @media (max-width: 640px) {
   .hero-v2-logo { width: 120px; height: 120px; }
-  :root { --nav-h: 64px; }
-  .site-header .brand-mark { width: 92px !important; height: 92px !important; }
-  .site-header .brand-logo { margin: -14px 0 !important; }
+  :root { --nav-h: 72px; }
+  .site-header .brand-mark { width: 140px !important; height: 140px !important; }
+  .site-header .brand-logo { margin: -34px 0 !important; }
   .footer-brand .brand-mark { width: 80px !important; height: 80px !important; }
   .admin-sidebar-brand .brand-mark { width: 48px !important; height: 48px !important; }
   .auth-logo .brand-mark { width: 100px !important; height: 100px !important; }
