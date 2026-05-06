@@ -2241,3 +2241,292 @@ body.admin-body { }
   flex-wrap: wrap;
   margin-top: 1rem;
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   BOTÓN FLOTANTE WHATSAPP — visible en todas las páginas
+   ═════════════════════════════════════════════════════════════════ */
+.wa-float {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 60px;
+  height: 60px;
+  background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+  color: #fff;
+  border-radius: 50%;
+  box-shadow:
+    0 8px 24px rgba(37, 211, 102, 0.45),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+  text-decoration: none;
+  transition: transform 0.25s cubic-bezier(0.2, 0.7, 0.3, 1.4),
+              box-shadow 0.25s ease;
+  isolation: isolate;
+}
+.wa-float::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: inherit;
+  z-index: -1;
+}
+.wa-float-pulse {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(37, 211, 102, 0.5);
+  z-index: -2;
+  animation: waPulse 2.4s ease-out infinite;
+}
+@keyframes waPulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  70%  { transform: scale(1.6); opacity: 0;   }
+  100% { transform: scale(1.6); opacity: 0;   }
+}
+.wa-float-icon {
+  width: 32px;
+  height: 32px;
+  filter: drop-shadow(0 1px 1px rgba(0,0,0,0.15));
+  transition: transform 0.25s ease;
+}
+.wa-float:hover {
+  transform: scale(1.1) rotate(-6deg);
+  box-shadow:
+    0 12px 32px rgba(37, 211, 102, 0.6),
+    0 6px 16px rgba(0, 0, 0, 0.35);
+}
+.wa-float:hover .wa-float-icon { transform: scale(1.05); }
+.wa-float:active { transform: scale(0.95); }
+
+.wa-float-tooltip {
+  position: absolute;
+  right: 72px;
+  top: 50%;
+  transform: translateY(-50%) translateX(8px);
+  background: #08090c;
+  color: #fff;
+  padding: 0.5rem 0.85rem;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+  border: 1px solid rgba(255,255,255,0.08);
+}
+.wa-float-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -5px;
+  transform: translateY(-50%) rotate(45deg);
+  width: 10px;
+  height: 10px;
+  background: #08090c;
+  border-right: 1px solid rgba(255,255,255,0.08);
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.wa-float:hover .wa-float-tooltip {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+}
+
+/* Footer telefonenlace */
+.footer-tel {
+  color: var(--text);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.footer-tel:hover { color: var(--gold); }
+
+/* ═════════════════════════════════════════════════════════════════
+   RESPONSIVE FULL — tablets y móviles, todos los dispositivos
+   ═════════════════════════════════════════════════════════════════ */
+
+/* ── Tablet grande (≤ 1024px) ──────────────────────────────────── */
+@media (max-width: 1024px) {
+  .container { padding: 0 1.5rem; }
+  .nav-container { padding: 0 0.5rem; gap: 1.25rem; }
+  .nav-links { gap: 1.25rem; }
+  .hero-v2-title { font-size: clamp(2.8rem, 9vw, 7rem); }
+  .showcase-grid { gap: 1rem; }
+  .showcase-card { height: 420px; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps-grid { flex-wrap: wrap; }
+  .step-arrow { display: none; }
+  .cars-grid { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .catalog-layout { grid-template-columns: 1fr; }
+  .filters-panel { position: static; }
+  .car-detail-grid { grid-template-columns: 1fr; }
+  .car-gallery { position: static; }
+}
+
+/* ── Tablet (≤ 900px) ──────────────────────────────────────────── */
+@media (max-width: 900px) {
+  /* Logo flotante: reducir agresivo */
+  .site-header .brand-mark { width: 180px !important; height: 180px !important; }
+  .site-header .brand-logo { margin: 6px 0 -110px 0 !important; }
+  .catalog-page,
+  .car-detail-page,
+  .inner-page,
+  .error-page,
+  .contact-page,
+  .coming-soon-section { padding-top: 220px !important; }
+  .auth-page {
+    padding-top: 220px !important;
+    min-height: calc(100vh - 220px) !important;
+  }
+  /* Mostrar menú móvil */
+  .nav-links { display: none; }
+  .nav-actions .btn { display: none; }
+  .mobile-menu-btn { display: flex; }
+  /* Showcase 1 columna */
+  .showcase-grid { grid-template-columns: 1fr; }
+  .showcase-card { height: 360px; }
+  /* Coming soon 1 columna */
+  .coming-soon-card { grid-template-columns: 1fr; }
+  .cs-img { height: 220px; }
+  /* Stats hero compactos */
+  .hero-v2-stats { gap: 1.25rem; padding: 1rem 1.25rem; }
+  .hero-v2-stats strong { font-size: 1.5rem; }
+  /* Footer 2 columnas */
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+
+/* ── Móvil (≤ 640px) ───────────────────────────────────────────── */
+@media (max-width: 640px) {
+  :root { --nav-h: 72px; }
+  .container { padding: 0 1rem; }
+  /* Logo flotante más pequeño */
+  .site-header .brand-mark { width: 130px !important; height: 130px !important; }
+  .site-header .brand-logo { margin: 6px 0 -68px 0 !important; }
+  /* Padding extra ajustado */
+  .catalog-page,
+  .car-detail-page,
+  .inner-page,
+  .error-page,
+  .contact-page,
+  .coming-soon-section { padding-top: 150px !important; }
+  .auth-page {
+    padding-top: 150px !important;
+    min-height: calc(100vh - 150px) !important;
+  }
+  /* Hero compacto */
+  .hero-v2 { min-height: 88vh; padding: 4rem 1rem 3rem; }
+  .hero-v2-title { font-size: clamp(2.2rem, 13vw, 4.5rem); }
+  .hero-v2-eyebrow { font-size: 0.7rem; padding: 0.4rem 0.85rem; margin-bottom: 1.25rem; }
+  .hero-v2-sub { font-size: 0.95rem; margin-bottom: 1.75rem; }
+  .hero-v2-stats {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.85rem 1.25rem;
+    padding: 0.85rem 1rem;
+  }
+  .hero-v2-stats .sep { display: none; }
+  .hero-v2-stats strong { font-size: 1.35rem; }
+  .hero-v2-stats span { font-size: 0.65rem; }
+  .hero-v2-cta { flex-direction: column; width: 100%; gap: 0.6rem; }
+  .hero-v2-btn { justify-content: center; width: 100%; padding: 0.9rem 1.5rem; }
+  /* Showcase compacto */
+  .showcase-card { height: 320px; }
+  .showcase-body { padding: 1.5rem; }
+  .showcase-body h3 { font-size: 1.4rem; }
+  .showcase-body p { font-size: 0.92rem; max-width: 100%; }
+  /* Sección headers */
+  .section-header h2 { font-size: 1.75rem; }
+  .section-header p { font-size: 0.95rem; }
+  /* Features y steps 1 columna */
+  .features-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .steps-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .step-card { padding: 1.5rem; }
+  /* Cars grid */
+  .cars-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .cars-grid-3 { grid-template-columns: 1fr; }
+  /* Marquee slow down */
+  .marquee-track { animation-duration: 50s; }
+  .marquee-item { font-size: 1.15rem; }
+  .marquee-track { gap: 1.25rem; }
+  /* Footer 1 columna */
+  .footer-grid { grid-template-columns: 1fr; gap: 2rem; }
+  /* Coming soon */
+  .cs-body { padding: 2rem 1.5rem; }
+  .cs-body h2 { font-size: 1.5rem; }
+  /* Contact grid */
+  .contact-grid { grid-template-columns: 1fr; gap: 1rem; }
+  .contact-info-block { grid-template-columns: 1fr; }
+  /* CTA v2 */
+  .cta-v2 { min-height: 360px; }
+  .cta-v2-actions { flex-direction: column; width: 100%; }
+  .cta-v2-actions .hero-v2-btn { width: 100%; justify-content: center; }
+  /* Quick specs grid */
+  .quick-specs-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  /* Car gallery */
+  .gallery-thumbs { gap: 0.4rem; }
+  .gallery-thumb { width: 70px; height: 50px; }
+  /* Admin sidebar mobile */
+  .admin-wrapper { grid-template-columns: 1fr; }
+  .admin-sidebar { display: none; }
+  .admin-main { padding: 1.5rem 1rem; }
+  .admin-stats-grid { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+  .admin-two-col { grid-template-columns: 1fr; gap: 1rem; }
+  /* Botón whatsapp móvil */
+  .wa-float {
+    width: 56px;
+    height: 56px;
+    bottom: 18px;
+    right: 18px;
+  }
+  .wa-float-icon { width: 28px; height: 28px; }
+  .wa-float-tooltip { display: none; } /* en móvil no hay hover, no sirve */
+}
+
+/* ── Móvil pequeño (≤ 380px) ───────────────────────────────────── */
+@media (max-width: 380px) {
+  .site-header .brand-mark { width: 110px !important; height: 110px !important; }
+  .site-header .brand-logo { margin: 6px 0 -50px 0 !important; }
+  .catalog-page,
+  .car-detail-page,
+  .inner-page,
+  .error-page,
+  .contact-page,
+  .coming-soon-section { padding-top: 130px !important; }
+  .auth-page {
+    padding-top: 130px !important;
+    min-height: calc(100vh - 130px) !important;
+  }
+  .hero-v2-title { font-size: 2rem; }
+  .quick-specs-grid { grid-template-columns: 1fr; }
+  .admin-stats-grid { grid-template-columns: 1fr; }
+}
+
+/* ── Soporte safe-area en iPhone (notch) ───────────────────────── */
+@supports (padding: env(safe-area-inset-bottom)) {
+  .wa-float {
+    bottom: max(24px, env(safe-area-inset-bottom));
+    right:  max(24px, env(safe-area-inset-right));
+  }
+  .site-footer { padding-bottom: env(safe-area-inset-bottom); }
+}
+
+/* ── Touch devices: animar el pulso aun sin hover ──────────────── */
+@media (hover: none) {
+  .wa-float-pulse { animation-duration: 2s; }
+}
+
+/* ── Reducir movimiento si el usuario lo prefiere ─────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .wa-float-pulse,
+  .hero-v2-img,
+  .hero-v2-mesh,
+  .marquee-track,
+  .cs-img img,
+  .hero-v2-grad-txt {
+    animation: none !important;
+  }
+}
