@@ -9,6 +9,16 @@ function getResend() {
   console.log('[email][diag] RESEND_API_KEY existe:', !!apiKey,
               '| longitud:', apiKey ? apiKey.length : 0,
               '| prefijo:', apiKey ? apiKey.slice(0, 4) : 'N/A');
+
+  // Si no existe, listar todas las env vars que empiezan por R/E para
+  // encontrar typos: RESEND-API-KEY, RESEND_API_KEY_, etc.
+  if (!apiKey) {
+    const candidatas = Object.keys(process.env)
+      .filter(k => /^(RES|EMA|TUR|SES|VERC|NODE)/i.test(k))
+      .sort();
+    console.log('[email][diag] env vars encontradas:', candidatas.join(', ') || '(ninguna)');
+  }
+
   if (!apiKey) return null;
   try {
     const { Resend } = require('resend');
