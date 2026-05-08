@@ -5,26 +5,33 @@
 // Cargar el cliente de Resend bajo demanda (lazy) para evitar problemas
 // de env vars que aún no están disponibles cuando se carga el módulo.
 function getResend() {
-  const apiKey = process.env.RESEND_API_KEY;
-  console.log('[email][diag] RESEND_API_KEY existe:', !!apiKey,
-              '| longitud:', apiKey ? apiKey.length : 0,
-              '| prefijo:', apiKey ? apiKey.slice(0, 4) : 'N/A');
+  // Probamos varios nombres por si hay problemas con uno concreto
+  const candidates = [
+    process.env.RESEND_API_KEY,
+    process.env.RESEND_KEY,
+    process.env.RESEND_TOKEN
+  ];
+  const apiKey = candidates.find(v => typeof v === 'string' && v.trim().length > 10);
 
-  // Si no existe, listar todas las env vars que empiezan por R/E para
-  // encontrar typos: RESEND-API-KEY, RESEND_API_KEY_, etc.
+  // Diagnóstico detallado
+  const k1 = process.env.RESEND_API_KEY;
+  console.log('[email][diag2] RESEND_API_KEY → typeof:', typeof k1,
+              '| length:', (k1 || '').length,
+              '| isEmptyString:', k1 === '',
+              '| prefijo:', k1 ? k1.slice(0, 4) : 'N/A');
+
   if (!apiKey) {
     const candidatas = Object.keys(process.env)
       .filter(k => /^(RES|EMA|TUR|SES|VERC|NODE)/i.test(k))
       .sort();
-    console.log('[email][diag] env vars encontradas:', candidatas.join(', ') || '(ninguna)');
+    console.log('[email][diag2] env vars encontradas:', candidatas.join(', ') || '(ninguna)');
+    return null;
   }
-
-  if (!apiKey) return null;
   try {
     const { Resend } = require('resend');
     return new Resend(apiKey);
   } catch (err) {
-    console.error('[email][diag] error cargando Resend:', err.message);
+    console.error('[email][diag2] error cargando Resend:', err.message);
     return null;
   }
 }
