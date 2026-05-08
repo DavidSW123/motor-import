@@ -33,6 +33,31 @@ if (userMenuTrigger && userDropdown) {
   document.addEventListener('click', () => userDropdown.classList.remove('open'));
 }
 
+// ── Header dropdown "Coches" en táctil/mobile (sin hover) ───────
+// En desktop ya funciona con :hover por CSS. Para tablets/móvil
+// (donde no hay hover) hacemos un toggle al primer toque del padre.
+document.querySelectorAll('.has-dropdown').forEach(parent => {
+  const trigger = parent.querySelector('a');
+  if (!trigger) return;
+  trigger.addEventListener('click', (e) => {
+    // Solo si NO hay hover real (touch device o pantalla pequeña)
+    if (window.matchMedia('(hover: hover)').matches) return;
+    if (!parent.classList.contains('open')) {
+      e.preventDefault(); // primer toque: abrir dropdown
+      // cerrar otros abiertos
+      document.querySelectorAll('.has-dropdown.open').forEach(p => p.classList.remove('open'));
+      parent.classList.add('open');
+    }
+    // segundo toque: el navegador sigue el href
+  });
+});
+// Cerrar dropdown al tocar fuera
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.has-dropdown')) {
+    document.querySelectorAll('.has-dropdown.open').forEach(p => p.classList.remove('open'));
+  }
+});
+
 // ── Password toggle ───────────────────────────────────────────────
 document.querySelectorAll('.pwd-toggle').forEach(btn => {
   btn.addEventListener('click', () => {
