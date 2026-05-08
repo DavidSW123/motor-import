@@ -13,7 +13,7 @@
 %>
 <a href="/" class="brand-logo brand-logo-<%= _variant %>" aria-label="Cars & Campers BCN">
   <% if (_showMark) { %>
-    <span class="brand-mark" style="width:<%= _markSize %>px;height:<%= _markSize %>px">
+    <span class="brand-mark"<% if (_variant !== 'header') { %> style="width:<%= _markSize %>px;height:<%= _markSize %>px"<% } %>>
       <img src="<%= _logoUrl %>" alt="" loading="eager"
            onerror="this.onerror=null;this.src='/img/logo.svg'">
     </span>

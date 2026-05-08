@@ -10,21 +10,21 @@
   --card:         #ffffff;
   --card-hover:   #f1f3f6;
   --border:       rgba(15,20,25,0.08);
-  --border-hover: rgba(220,27,34,0.45);
+  --border-hover: rgba(237,28,36,0.45);
 
   /* Colores de marca (extraídos del logo Cars & Campers BCN) */
-  --brand-red:    #dc1b22;
+  --brand-red:    #ed1c24;
   --brand-dark:   #0f1419;
   --brand-white:  #ffffff;
 
   /* Aliases — el rojo del logo es el acento principal */
-  --gold:         #dc1b22;
+  --gold:         #ed1c24;
   --gold-light:   #ea2730;
   --gold-dark:    #b81015;
-  --gold-dim:     rgba(220,27,34,0.10);
-  --gold-glow:    rgba(220,27,34,0.22);
+  --gold-dim:     rgba(237,28,36,0.10);
+  --gold-glow:    rgba(237,28,36,0.22);
 
-  --accent:       #dc1b22;
+  --accent:       #ed1c24;
   --accent-light: #ea2730;
   --accent-dark:  #b81015;
 
@@ -48,8 +48,9 @@
 
   --shadow:       0 4px 16px rgba(15,20,25,0.06);
   --shadow-card:  0 8px 28px rgba(15,20,25,0.10);
-  --shadow-gold:  0 0 30px rgba(220,27,34,0.15);
-  --nav-h:        78px;
+  --shadow-gold:  0 0 30px rgba(237,28,36,0.15);
+  --nav-h:        108px;
+  --nav-h-scrolled: 64px;
 }
 
 /* ── 2. Reset ─────────────────────────────── */
@@ -3106,7 +3107,7 @@ body.admin-body { }
   color: #fff !important;
   white-space: nowrap;
 }
-.bw-red  { background: var(--brand-red, #dc1b22) !important; }
+.bw-red  { background: var(--brand-red, #ed1c24) !important; }
 .bw-dark { background: var(--brand-dark, #0f1419) !important; }
 
 /* Visor solo para lectores de pantalla */
@@ -3170,7 +3171,7 @@ body.admin-body { }
   align-items: center !important;
 }
 .brand-logo-auth .brand-mark {
-  filter: drop-shadow(0 8px 24px rgba(220,27,34,0.25));
+  filter: drop-shadow(0 8px 24px rgba(237,28,36,0.25));
 }
 .brand-logo-auth .brand-wordmark {
   font-size: 1.25rem;
@@ -3186,4 +3187,66 @@ body.admin-body { }
   .brand-logo-header .brand-wordmark { display: none; }
   .brand-logo-footer .brand-wordmark { font-size: 0.95rem; }
   .brand-logo-auth .brand-wordmark { font-size: 1.05rem; }
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   HEADER RESIZE ON SCROLL — logo grande al inicio, compacto al scroll
+   ═════════════════════════════════════════════════════════════════ */
+
+/* El header anima su altura entre estado inicial y scrolled */
+.site-header {
+  height: var(--nav-h);
+  transition: height 0.28s cubic-bezier(0.2, 0.7, 0.3, 1),
+              background var(--transition-md),
+              border-color var(--transition-md);
+}
+.site-header.scrolled {
+  height: var(--nav-h-scrolled);
+}
+
+/* Logo del header — grande al inicio, pequeño al scroll */
+.brand-logo-header .brand-mark {
+  width: 80px;
+  height: 80px;
+  transition: width 0.28s cubic-bezier(0.2, 0.7, 0.3, 1),
+              height 0.28s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.site-header.scrolled .brand-logo-header .brand-mark {
+  width: 44px;
+  height: 44px;
+}
+
+/* Wordmark también se reduce ligeramente al scroll */
+.brand-logo-header .brand-wordmark {
+  font-size: 1.05rem;
+  transition: font-size 0.28s ease;
+}
+.site-header.scrolled .brand-logo-header .brand-wordmark {
+  font-size: 0.85rem;
+}
+.brand-logo-header .bw-red,
+.brand-logo-header .bw-dark {
+  transition: padding 0.28s ease;
+}
+.site-header.scrolled .brand-logo-header .bw-red,
+.site-header.scrolled .brand-logo-header .bw-dark {
+  padding: 0.45rem 0.55rem;
+}
+
+/* Mobile: nav inicial más compacto, menos diferencia */
+@media (max-width: 640px) {
+  :root {
+    --nav-h: 78px;
+    --nav-h-scrolled: 60px;
+  }
+  .brand-logo-header .brand-mark { width: 56px !important; height: 56px !important; }
+  .site-header.scrolled .brand-logo-header .brand-mark {
+    width: 40px !important; height: 40px !important;
+  }
+}
+@media (max-width: 380px) {
+  .brand-logo-header .brand-mark { width: 48px !important; height: 48px !important; }
+  .site-header.scrolled .brand-logo-header .brand-mark {
+    width: 36px !important; height: 36px !important;
+  }
 }
