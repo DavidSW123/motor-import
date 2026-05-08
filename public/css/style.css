@@ -10,18 +10,23 @@
   --card:         #ffffff;
   --card-hover:   #f1f3f6;
   --border:       rgba(15,20,25,0.08);
-  --border-hover: rgba(185,28,28,0.45);
+  --border-hover: rgba(220,27,34,0.45);
 
-  /* Rojo burgundy / Ferrari oscuro — elegante, no estridente */
-  --gold:         #b91c1c;
-  --gold-light:   #dc2626;
-  --gold-dark:    #7f1d1d;
-  --gold-dim:     rgba(185,28,28,0.10);
-  --gold-glow:    rgba(185,28,28,0.22);
+  /* Colores de marca (extraídos del logo Cars & Campers BCN) */
+  --brand-red:    #dc1b22;
+  --brand-dark:   #0f1419;
+  --brand-white:  #ffffff;
 
-  --accent:       #b91c1c;
-  --accent-light: #dc2626;
-  --accent-dark:  #7f1d1d;
+  /* Aliases — el rojo del logo es el acento principal */
+  --gold:         #dc1b22;
+  --gold-light:   #ea2730;
+  --gold-dark:    #b81015;
+  --gold-dim:     rgba(220,27,34,0.10);
+  --gold-glow:    rgba(220,27,34,0.22);
+
+  --accent:       #dc1b22;
+  --accent-light: #ea2730;
+  --accent-dark:  #b81015;
 
   --text:         #0f1419;
   --text-muted:   #5a6472;
@@ -43,8 +48,8 @@
 
   --shadow:       0 4px 16px rgba(15,20,25,0.06);
   --shadow-card:  0 8px 28px rgba(15,20,25,0.10);
-  --shadow-gold:  0 0 30px rgba(185,28,28,0.15);
-  --nav-h:        90px;
+  --shadow-gold:  0 0 30px rgba(220,27,34,0.15);
+  --nav-h:        78px;
 }
 
 /* ── 2. Reset ─────────────────────────────── */
@@ -1983,27 +1988,14 @@ body.admin-body { }
   50%      { opacity: 1;   transform: scale(1.08); }
 }
 
-/* Header — logo prominente sin texto al lado */
-/* El header NO crece: el logo flota sobre él (overflow visible) */
-.site-header { overflow: visible; }
-.nav-container { overflow: visible; }
+/* Header — logo in-flow, ya no flotante */
 .site-header .brand-logo {
   padding: 0;
-  position: relative;
-  z-index: 5;
-  /* Logo flota SOLO hacia abajo (no se corta arriba)
-     Header 90px, logo 240px → 8px desde top, sobresale 158px abajo */
-  align-self: flex-start;
-  margin: 8px 0 -158px 0;
+  margin: 0;
+  align-self: center;
 }
-.site-header .brand-mark { overflow: visible; }
 .site-header .brand-mark {
-  filter: drop-shadow(0 4px 14px rgba(0,0,0,0.5))
-          drop-shadow(0 0 8px rgba(185,28,28,0.18));
-}
-.site-header .brand-logo:hover .brand-mark {
-  filter: drop-shadow(0 6px 18px rgba(0,0,0,0.55))
-          drop-shadow(0 0 14px rgba(185,28,28,0.45));
+  filter: drop-shadow(0 2px 6px rgba(15,20,25,0.12));
 }
 
 /* Footer — logo grande con glow más sutil */
@@ -2065,48 +2057,13 @@ body.admin-body { }
   margin-top: 0.5rem;
 }
 
-/* Mobile — escalar logos */
+/* Mobile — escalar logos del header */
 @media (max-width: 640px) {
   .hero-v2-logo { width: 120px; height: 120px; }
-  :root { --nav-h: 72px; }
-  .site-header .brand-mark { width: 140px !important; height: 140px !important; }
-  .site-header .brand-logo { margin: 4px 0 -72px 0 !important; }
-  .footer-brand .brand-mark { width: 80px !important; height: 80px !important; }
-  .admin-sidebar-brand .brand-mark { width: 48px !important; height: 48px !important; }
-  .auth-logo .brand-mark { width: 100px !important; height: 100px !important; }
-}
-
-/* ═════════════════════════════════════════════════════════════════
-   Compensación de espacio: el logo del header flota 158px abajo,
-   las páginas internas dejan ese espacio para que no quede tapado
-   ═════════════════════════════════════════════════════════════════ */
-.catalog-page,
-.car-detail-page,
-.inner-page,
-.error-page,
-.contact-page,
-.coming-soon-section {
-  padding-top: 260px !important;
-}
-.auth-page {
-  padding-top: 260px !important;
-  min-height: calc(100vh - 260px) !important;
-}
-.admin-wrapper { padding-top: 110px; }
-@media (max-width: 640px) {
-  .catalog-page,
-  .car-detail-page,
-  .inner-page,
-  .error-page,
-  .contact-page,
-  .coming-soon-section {
-    padding-top: 160px !important;
-  }
-  .auth-page {
-    padding-top: 160px !important;
-    min-height: calc(100vh - 160px) !important;
-  }
-  .admin-wrapper { padding-top: 90px; }
+  .site-header .brand-mark { width: 40px !important; height: 40px !important; }
+  .footer-brand .brand-mark { width: 64px !important; height: 64px !important; }
+  .admin-sidebar-brand .brand-mark { width: 36px !important; height: 36px !important; }
+  .auth-logo .brand-mark { width: 88px !important; height: 88px !important; }
 }
 
 /* ═════════════════════════════════════════════════════════════════
@@ -2377,19 +2334,6 @@ body.admin-body { }
 
 /* ── Tablet (≤ 900px) ──────────────────────────────────────────── */
 @media (max-width: 900px) {
-  /* Logo flotante: reducir agresivo */
-  .site-header .brand-mark { width: 180px !important; height: 180px !important; }
-  .site-header .brand-logo { margin: 6px 0 -110px 0 !important; }
-  .catalog-page,
-  .car-detail-page,
-  .inner-page,
-  .error-page,
-  .contact-page,
-  .coming-soon-section { padding-top: 220px !important; }
-  .auth-page {
-    padding-top: 220px !important;
-    min-height: calc(100vh - 220px) !important;
-  }
   /* Mostrar menú móvil */
   .nav-links { display: none; }
   .nav-actions .btn { display: none; }
@@ -2405,26 +2349,14 @@ body.admin-body { }
   .hero-v2-stats strong { font-size: 1.5rem; }
   /* Footer 2 columnas */
   .footer-grid { grid-template-columns: 1fr 1fr; }
+  /* En tablet podemos ocultar el wordmark (cajas) y dejar solo el círculo del logo */
+  .site-header .brand-wordmark { display: none; }
 }
 
 /* ── Móvil (≤ 640px) ───────────────────────────────────────────── */
 @media (max-width: 640px) {
-  :root { --nav-h: 72px; }
+  :root { --nav-h: 64px; }
   .container { padding: 0 1rem; }
-  /* Logo flotante más pequeño */
-  .site-header .brand-mark { width: 130px !important; height: 130px !important; }
-  .site-header .brand-logo { margin: 6px 0 -68px 0 !important; }
-  /* Padding extra ajustado */
-  .catalog-page,
-  .car-detail-page,
-  .inner-page,
-  .error-page,
-  .contact-page,
-  .coming-soon-section { padding-top: 150px !important; }
-  .auth-page {
-    padding-top: 150px !important;
-    min-height: calc(100vh - 150px) !important;
-  }
   /* Hero compacto */
   .hero-v2 { min-height: 88vh; padding: 4rem 1rem 3rem; }
   .hero-v2-title { font-size: clamp(2.2rem, 13vw, 4.5rem); }
@@ -2496,18 +2428,7 @@ body.admin-body { }
 
 /* ── Móvil pequeño (≤ 380px) ───────────────────────────────────── */
 @media (max-width: 380px) {
-  .site-header .brand-mark { width: 110px !important; height: 110px !important; }
-  .site-header .brand-logo { margin: 6px 0 -50px 0 !important; }
-  .catalog-page,
-  .car-detail-page,
-  .inner-page,
-  .error-page,
-  .contact-page,
-  .coming-soon-section { padding-top: 130px !important; }
-  .auth-page {
-    padding-top: 130px !important;
-    min-height: calc(100vh - 130px) !important;
-  }
+  .site-header .brand-mark { width: 36px !important; height: 36px !important; }
   .hero-v2-title { font-size: 2rem; }
   .quick-specs-grid { grid-template-columns: 1fr; }
   .admin-stats-grid { grid-template-columns: 1fr; }

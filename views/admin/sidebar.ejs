@@ -1,6 +1,10 @@
 <nav class="admin-sidebar">
   <div class="admin-sidebar-brand">
-    <%- include('../partials/logo', { size: 56, withText: false }) %>
+    <%- include('../partials/logo', {
+          variant: 'sidebar',
+          showMark: true, showWordmark: true,
+          markSize: 44
+        }) %>
     <span class="admin-badge-label">Panel admin</span>
   </div>
 

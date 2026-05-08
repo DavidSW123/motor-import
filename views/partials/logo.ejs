@@ -1,17 +1,27 @@
 <%
   // Reusable brand logo
-  // Props: size (default 38), withText (default true), variant ('default'|'compact'|'mark')
-  const _size  = typeof size  !== 'undefined' ? size  : 38;
-  const _text  = typeof withText !== 'undefined' ? withText : true;
-  const _variant = typeof variant !== 'undefined' ? variant : 'default';
-  const _logoUrl = (locals.settings && locals.settings.logo_url) ? locals.settings.logo_url : '/img/logo.png';
+  // Props:
+  //   variant: 'header' | 'footer' | 'auth' | 'sidebar' (default 'header')
+  //   showMark: boolean (default true) — mostrar el círculo del logo
+  //   showWordmark: boolean (default true) — mostrar las cajas roja+negra "CARS & CAMPERS"
+  //   markSize: number (default 56) — tamaño del círculo en px
+  const _variant      = typeof variant      !== 'undefined' ? variant      : 'header';
+  const _showMark     = typeof showMark     !== 'undefined' ? showMark     : true;
+  const _showWordmark = typeof showWordmark !== 'undefined' ? showWordmark : true;
+  const _markSize     = typeof markSize     !== 'undefined' ? markSize     : 56;
+  const _logoUrl      = (locals.settings && locals.settings.logo_url) ? locals.settings.logo_url : '/img/logo.png';
 %>
-<a href="/" class="brand-logo brand-logo-<%= _variant %>" aria-label="Cars & Campers">
-  <span class="brand-mark" style="width:<%= _size %>px;height:<%= _size %>px">
-    <img src="<%= _logoUrl %>" alt="Cars & Campers" loading="eager"
-         onerror="this.onerror=null;this.src='/img/logo.svg'">
-  </span>
-  <% if (_text) { %>
-    <span class="brand-text">Cars<strong>&amp;Campers</strong></span>
+<a href="/" class="brand-logo brand-logo-<%= _variant %>" aria-label="Cars & Campers BCN">
+  <% if (_showMark) { %>
+    <span class="brand-mark" style="width:<%= _markSize %>px;height:<%= _markSize %>px">
+      <img src="<%= _logoUrl %>" alt="" loading="eager"
+           onerror="this.onerror=null;this.src='/img/logo.svg'">
+    </span>
+  <% } %>
+  <% if (_showWordmark) { %>
+    <span class="brand-wordmark" aria-hidden="true">
+      <span class="bw-red">CARS&nbsp;&amp;</span><span class="bw-dark">CAMPERS</span>
+    </span>
+    <span class="sr-only">Cars &amp; Campers BCN</span>
   <% } %>
 </a>

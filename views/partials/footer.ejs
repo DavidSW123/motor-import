@@ -3,7 +3,11 @@
     <div class="footer-grid">
       <!-- Brand -->
       <div class="footer-brand">
-        <%- include('logo', { size: 96, withText: false }) %>
+        <%- include('logo', {
+              variant: 'footer',
+              showMark: true, showWordmark: true,
+              markSize: 88
+            }) %>
         <p class="footer-tagline">Coches y autocaravanas seleccionados con total transparencia.</p>
         <div class="footer-badges">
           <span class="footer-badge">✓ Documentación completa</span>

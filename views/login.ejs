@@ -3,7 +3,11 @@
 <main class="auth-page">
   <div class="auth-card">
     <div class="auth-logo">
-      <%- include('partials/logo', { size: 130, withText: false }) %>
+      <%- include('partials/logo', {
+            variant: 'auth',
+            showMark: true, showWordmark: true,
+            markSize: 110
+          }) %>
     </div>
 
     <h1 class="auth-title">Acceso administradores</h1>

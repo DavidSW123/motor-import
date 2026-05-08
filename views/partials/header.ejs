@@ -24,12 +24,13 @@
 
 <header class="site-header" id="site-header">
   <nav class="nav-container">
-    <!-- Logo (puede ocultarse desde Ajustes) -->
-    <% if (!settings || settings.show_logo !== '0') { %>
-      <%- include('logo', { size: 240, withText: false }) %>
-    <% } else { %>
-      <a href="/" class="brand-text-only">Cars<strong>&amp;Campers</strong></a>
-    <% } %>
+    <!-- Logo: círculo opcional + wordmark con cajas (siempre visible) -->
+    <%- include('logo', {
+          variant: 'header',
+          showMark: !settings || settings.show_logo !== '0',
+          showWordmark: true,
+          markSize: 52
+        }) %>
 
     <!-- Nav desktop -->
     <ul class="nav-links" id="navLinks">
