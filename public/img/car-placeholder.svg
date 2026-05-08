@@ -17,7 +17,7 @@
   <circle cx="315" cy="200" r="18" fill="#111820" stroke="#1e2a40" stroke-width="2"/>
   <circle cx="315" cy="200" r="6" fill="#1a2234"/>
   <!-- Headlight -->
-  <ellipse cx="380" cy="175" rx="10" ry="7" fill="#e10600" opacity="0.3"/>
+  <ellipse cx="380" cy="175" rx="10" ry="7" fill="#b91c1c" opacity="0.3"/>
   <!-- Taillight -->
   <ellipse cx="100" cy="175" rx="10" ry="7" fill="#ef4444" opacity="0.2"/>
   <!-- Ground shadow -->

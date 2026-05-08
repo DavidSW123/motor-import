@@ -64,20 +64,20 @@ app.use(async (req, res, next) => {
 if (NEEDS_SETUP) {
   app.use((req, res) => {
     res.status(503).send(`<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"><title>Configuración pendiente · Cars & Campers</title><meta name="viewport" content="width=device-width,initial-scale=1"><style>
-      body{margin:0;background:#08090c;color:#e6e7ea;font:16px/1.6 system-ui,-apple-system,sans-serif;padding:2rem;display:flex;align-items:center;justify-content:center;min-height:100vh}
-      .box{max-width:640px;background:#10131a;border:1px solid #1f2533;border-radius:14px;padding:2.5rem}
-      h1{margin:0 0 .5rem;font-size:1.6rem;color:#e10600}
+      body{margin:0;background:#f7f8fa;color:#e6e7ea;font:16px/1.6 system-ui,-apple-system,sans-serif;padding:2rem;display:flex;align-items:center;justify-content:center;min-height:100vh}
+      .box{max-width:640px;background:#ffffff;border:1px solid #e5e7eb;border-radius:14px;padding:2.5rem}
+      h1{margin:0 0 .5rem;font-size:1.6rem;color:#b91c1c}
       .sub{color:#9aa1ad;margin:0 0 1.75rem}
       ol{padding-left:1.4rem;color:#cfd3db}
       ol li{margin-bottom:.85rem}
-      code,kbd{background:#1c2230;color:#e10600;padding:.15rem .45rem;border-radius:4px;font-size:.92em;font-family:ui-monospace,Menlo,monospace}
-      a{color:#e10600}
-      .tag{display:inline-block;background:rgba(225,6,0,.12);color:#e10600;border:1px solid rgba(225,6,0,.3);padding:.25rem .7rem;border-radius:999px;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
-      .vars{background:#0c0f15;border:1px solid #1f2533;border-radius:8px;padding:1rem 1.25rem;margin:1rem 0}
-      .vars div{padding:.4rem 0;border-bottom:1px dashed #1f2533;display:flex;gap:1rem}
+      code,kbd{background:#f1f3f6;color:#b91c1c;padding:.15rem .45rem;border-radius:4px;font-size:.92em;font-family:ui-monospace,Menlo,monospace}
+      a{color:#b91c1c}
+      .tag{display:inline-block;background:rgba(185,28,28,.12);color:#b91c1c;border:1px solid rgba(185,28,28,.3);padding:.25rem .7rem;border-radius:999px;font-size:.78rem;letter-spacing:.04em;text-transform:uppercase;margin-bottom:1rem}
+      .vars{background:#0c0f15;border:1px solid #e5e7eb;border-radius:8px;padding:1rem 1.25rem;margin:1rem 0}
+      .vars div{padding:.4rem 0;border-bottom:1px dashed #e5e7eb;display:flex;gap:1rem}
       .vars div:last-child{border:none}
-      .vars b{color:#e10600;min-width:200px;font-family:ui-monospace,Menlo,monospace;font-size:.88rem}
-      .footer-note{margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid #1f2533;font-size:.85rem;color:#7d838f}
+      .vars b{color:#b91c1c;min-width:200px;font-family:ui-monospace,Menlo,monospace;font-size:.88rem}
+      .footer-note{margin-top:1.75rem;padding-top:1.25rem;border-top:1px solid #e5e7eb;font-size:.85rem;color:#7d838f}
     </style></head><body>
     <div class="box">
       <span class="tag">⚙️ Configuración pendiente</span>
