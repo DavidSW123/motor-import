@@ -1,5 +1,6 @@
 const express          = require('express');
 const { getOne, getAll } = require('../database/db');
+const { sendContactEmail } = require('../utils/email');
 const router           = express.Router();
 
 router.get('/', async (req, res) => {
@@ -60,7 +61,42 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/contacto', (req, res) => {
-  res.render('contacto', { title: 'Contacto' });
+  res.render('contacto', { title: 'Contacto', form: {}, errors: null });
+});
+
+router.post('/contacto', async (req, res) => {
+  const f = req.body || {};
+  if (f._honey) return res.redirect('/contacto'); // honeypot anti-spam
+
+  const errors = [];
+  if (!f.nombre || !f.nombre.trim()) errors.push('nombre');
+  if (!f.email  || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email)) errors.push('email');
+  if (!f.mensaje || !f.mensaje.trim()) errors.push('mensaje');
+
+  if (errors.length) {
+    req.session.flash = { type: 'error', msg: 'Revisa los campos marcados.' };
+    return res.render('contacto', { title: 'Contacto', form: f, errors });
+  }
+
+  const data = {
+    nombre:   f.nombre.trim(),
+    email:    f.email.trim().toLowerCase(),
+    telefono: (f.telefono || '').trim(),
+    mensaje:  f.mensaje.trim()
+  };
+
+  try {
+    await sendContactEmail(data);
+  } catch (err) {
+    console.error('[contacto] Error enviando email:', err);
+  }
+
+  res.render('gracias', {
+    title: '¡Mensaje recibido!',
+    tipo:  'contacto',
+    nombre: data.nombre,
+    email:  data.email
+  });
 });
 
 module.exports = router;

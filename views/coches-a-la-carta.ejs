@@ -1,0 +1,188 @@
+<%- include('partials/header', { title: 'Coches a la carta' }) %>
+
+<main class="carta-page">
+  <div class="container">
+
+    <!-- ── HERO de la página ─────────────────────────────── -->
+    <header class="carta-hero">
+      <div class="section-tag">★ Servicio personalizado</div>
+      <h1>¿No encuentras tu coche perfecto?<br><span class="carta-hero-em">Lo buscamos por ti.</span></h1>
+      <p class="carta-hero-sub">
+        Si no ves en nuestro catálogo el modelo, año o características que buscas, dinos exactamente
+        qué quieres. Nos pondremos manos a la obra para encontrar el vehículo que se ajuste a tus
+        necesidades y a tu presupuesto.
+      </p>
+    </header>
+
+    <!-- ── Cómo funciona ────────────────────────────────── -->
+    <section class="carta-how">
+      <div class="carta-step">
+        <div class="carta-step-num">1</div>
+        <h3>Cuéntanos qué buscas</h3>
+        <p>Marca, modelo, año, presupuesto… cuanto más detalle, mejor.</p>
+      </div>
+      <div class="carta-step">
+        <div class="carta-step-num">2</div>
+        <h3>Te enviamos el contrato</h3>
+        <p>Antes de empezar te informamos del importe de gestión. Sin sorpresas.</p>
+      </div>
+      <div class="carta-step">
+        <div class="carta-step-num">3</div>
+        <h3>Buscamos por ti</h3>
+        <p>Activamos nuestra red de contactos en España y Europa.</p>
+      </div>
+      <div class="carta-step">
+        <div class="carta-step-num">4</div>
+        <h3>Te entregamos tu coche</h3>
+        <p>Con toda la documentación, ITV y trámites listos.</p>
+      </div>
+    </section>
+
+    <!-- ── FORMULARIO ───────────────────────────────────── -->
+    <section class="form-section">
+      <div class="form-card">
+        <h2 class="form-section-title">Tu solicitud</h2>
+        <p class="form-section-sub">Rellena los detalles del vehículo que buscas. Solo tardas 2 minutos.</p>
+
+        <form action="/coches/a-la-carta" method="post" class="big-form" novalidate>
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+
+          <!-- Datos personales -->
+          <fieldset>
+            <legend>Tus datos</legend>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Nombre y apellidos <span class="req">*</span></label>
+                <input type="text" name="nombre" class="form-input <%= errors && errors.includes('nombre') ? 'is-error' : '' %>"
+                       value="<%= form.nombre || '' %>" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email <span class="req">*</span></label>
+                <input type="email" name="email" class="form-input <%= errors && errors.includes('email') ? 'is-error' : '' %>"
+                       value="<%= form.email || '' %>" required autocomplete="email">
+              </div>
+              <div class="form-group form-group-full">
+                <label class="form-label">Teléfono <span class="req">*</span></label>
+                <input type="tel" name="telefono" class="form-input <%= errors && errors.includes('telefono') ? 'is-error' : '' %>"
+                       value="<%= form.telefono || '' %>" required placeholder="+34 600 000 000" autocomplete="tel">
+              </div>
+            </div>
+          </fieldset>
+
+          <!-- Vehículo -->
+          <fieldset>
+            <legend>El vehículo que buscas</legend>
+
+            <div class="form-group">
+              <label class="form-label">Tipo de vehículo</label>
+              <div class="form-radio-row">
+                <label class="form-radio">
+                  <input type="radio" name="tipo" value="coche" <%= form.tipo !== 'camper' ? 'checked' : '' %>>
+                  <span class="form-radio-label">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+                    Coche
+                  </span>
+                </label>
+                <label class="form-radio">
+                  <input type="radio" name="tipo" value="camper" <%= form.tipo === 'camper' ? 'checked' : '' %>>
+                  <span class="form-radio-label">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="9" width="14" height="9" rx="1.5"/><path d="M16 12 H22 V18 H16"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>
+                    Camper / Autocaravana
+                  </span>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Marca</label>
+                <input type="text" name="marca" class="form-input" value="<%= form.marca || '' %>"
+                       placeholder="Ej: BMW, Mercedes, Volkswagen…">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Modelo</label>
+                <input type="text" name="modelo" class="form-input" value="<%= form.modelo || '' %>"
+                       placeholder="Ej: Serie 3, Clase E, Golf…">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Año desde</label>
+                <select name="anio_desde" class="form-select">
+                  <option value="">Cualquiera</option>
+                  <% for (let y = new Date().getFullYear(); y >= 2000; y--) { %>
+                    <option value="<%= y %>" <%= parseInt(form.anio_desde) === y ? 'selected' : '' %>><%= y %></option>
+                  <% } %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Combustible</label>
+                <select name="combustible" class="form-select">
+                  <option value="">Cualquiera</option>
+                  <% ['gasolina','diesel','híbrido','eléctrico','GLP'].forEach(c => { %>
+                    <option value="<%= c %>" <%= form.combustible === c ? 'selected' : '' %>><%= c.charAt(0).toUpperCase()+c.slice(1) %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Transmisión</label>
+                <select name="transmision" class="form-select">
+                  <option value="">Cualquiera</option>
+                  <option value="manual"     <%= form.transmision === 'manual'     ? 'selected' : '' %>>Manual</option>
+                  <option value="automática" <%= form.transmision === 'automática' ? 'selected' : '' %>>Automática</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Kilometraje máximo</label>
+                <select name="km_max" class="form-select">
+                  <option value="">Sin límite</option>
+                  <% [50000, 80000, 100000, 130000, 160000, 200000].forEach(k => { %>
+                    <option value="<%= k %>" <%= parseInt(form.km_max) === k ? 'selected' : '' %>><%= k.toLocaleString('es-ES') %> km</option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="form-group form-group-full">
+                <label class="form-label">Presupuesto orientativo (€)</label>
+                <input type="number" name="presupuesto" class="form-input" value="<%= form.presupuesto || '' %>"
+                       min="0" step="500" placeholder="Ej: 25000">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Comentarios y características especiales</label>
+              <textarea name="comentarios" class="form-textarea" rows="5"
+                        placeholder="Cuéntanos cualquier detalle relevante: color, equipamiento, urgencia, etc."><%= form.comentarios || '' %></textarea>
+            </div>
+          </fieldset>
+
+          <!-- Disclaimer + checkbox -->
+          <div class="carta-disclaimer">
+            <p>
+              <strong>* Las solicitudes a la carta conllevan unos gastos de gestión.</strong>
+              Dedicamos tiempo y esfuerzo a buscar <em>exactamente</em> el vehículo que tienes en mente:
+              consultamos nuestra red, contactamos con concesionarios, viajamos si hace falta a verlo.
+              Te informaremos del importe antes de iniciar la búsqueda — sin compromisos ni sorpresas.
+              <strong>Trabajamos para ti, hasta que lo encontramos.</strong>
+            </p>
+            <label class="form-check carta-acepta <%= errors && errors.includes('acepta_costes') ? 'is-error' : '' %>">
+              <input type="checkbox" name="acepta_costes" value="1" required <%= form.acepta_costes ? 'checked' : '' %>>
+              <span>He leído y acepto los gastos de gestión. Entiendo que recibiré un contrato detallado antes de iniciar la búsqueda. <span class="req">*</span></span>
+            </label>
+          </div>
+
+          <div class="form-actions form-actions-row">
+            <button type="submit" class="btn btn-primary btn-lg">
+              Enviar solicitud
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <a href="https://wa.me/34618105936?text=<%- encodeURIComponent('Hola, me gustaría solicitar un coche a la carta') %>"
+               target="_blank" rel="noopener" class="btn btn-outline btn-lg">
+              ¿Prefieres WhatsApp?
+            </a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<%- include('partials/footer') %>

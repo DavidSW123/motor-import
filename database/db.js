@@ -57,6 +57,7 @@ async function initDB() {
     `CREATE TABLE IF NOT EXISTS cars (
       id           INTEGER PRIMARY KEY AUTOINCREMENT,
       categoria    TEXT    DEFAULT 'coche',
+      origen       TEXT    DEFAULT 'nacional',
       marca        TEXT    NOT NULL,
       modelo       TEXT    NOT NULL,
       anio         INTEGER NOT NULL,
@@ -94,7 +95,7 @@ async function initDB() {
     await client.execute(sql);
   }
 
-  // ── Migración: añadir columna `categoria` a tablas antiguas ──
+  // ── Migración: añadir columnas a tablas antiguas ────────────
   try {
     const cols = await getAll('PRAGMA table_info(cars)');
     if (!cols.some(c => c.name === 'categoria')) {
@@ -102,6 +103,11 @@ async function initDB() {
     }
     if (!cols.some(c => c.name === 'plazas')) {
       await run('ALTER TABLE cars ADD COLUMN plazas INTEGER');
+    }
+    if (!cols.some(c => c.name === 'origen')) {
+      await run("ALTER TABLE cars ADD COLUMN origen TEXT DEFAULT 'nacional'");
+      // Para coches que ya estaban subidos, marcamos como nacional por defecto
+      await run("UPDATE cars SET origen = 'nacional' WHERE origen IS NULL OR origen = ''");
     }
   } catch (_) {}
 

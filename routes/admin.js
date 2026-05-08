@@ -107,7 +107,7 @@ router.get('/coches/nuevo', (req, res) => {
 
 // ── Vehículos: crear ──────────────────────────────────────────────
 router.post('/coches', upload.array('imagenes', 15), async (req, res) => {
-  const { categoria, marca, modelo, anio, precio, kilometraje, combustible, transmision,
+  const { categoria, origen, marca, modelo, anio, precio, kilometraje, combustible, transmision,
           pais_origen, color, potencia, puertas, plazas, descripcion, estado, destacado } = req.body;
   if (!marca || !modelo || !anio || !precio || !kilometraje || !combustible || !transmision || !pais_origen) {
     req.session.flash = { type: 'error', msg: 'Rellena todos los campos obligatorios.' };
@@ -116,10 +116,11 @@ router.post('/coches', upload.array('imagenes', 15), async (req, res) => {
   try {
     const slug   = makeSlug(marca, modelo, anio);
     const result = await run(`
-      INSERT INTO cars (categoria, marca, modelo, anio, precio, kilometraje, combustible, transmision,
+      INSERT INTO cars (categoria, origen, marca, modelo, anio, precio, kilometraje, combustible, transmision,
         pais_origen, color, potencia, puertas, plazas, descripcion, estado, destacado, slug)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     `, [categoria === 'camper' ? 'camper' : 'coche',
+        origen === 'importacion' ? 'importacion' : 'nacional',
         marca, modelo, parseInt(anio), parseFloat(precio), parseInt(kilometraje),
         combustible, transmision, pais_origen, color || null,
         potencia ? parseInt(potencia) : null, parseInt(puertas) || 4,
@@ -153,12 +154,13 @@ router.get('/coches/:id/editar', async (req, res) => {
 
 // ── Vehículos: actualizar ─────────────────────────────────────────
 router.post('/coches/:id', async (req, res) => {
-  const { categoria, marca, modelo, anio, precio, kilometraje, combustible, transmision,
+  const { categoria, origen, marca, modelo, anio, precio, kilometraje, combustible, transmision,
           pais_origen, color, potencia, puertas, plazas, descripcion, estado, destacado } = req.body;
   try {
-    await run(`UPDATE cars SET categoria=?,marca=?,modelo=?,anio=?,precio=?,kilometraje=?,combustible=?,
+    await run(`UPDATE cars SET categoria=?,origen=?,marca=?,modelo=?,anio=?,precio=?,kilometraje=?,combustible=?,
       transmision=?,pais_origen=?,color=?,potencia=?,puertas=?,plazas=?,descripcion=?,estado=?,destacado=? WHERE id=?`,
       [categoria === 'camper' ? 'camper' : 'coche',
+       origen === 'importacion' ? 'importacion' : 'nacional',
        marca, modelo, parseInt(anio), parseFloat(precio), parseInt(kilometraje),
        combustible, transmision, pais_origen, color || null,
        potencia ? parseInt(potencia) : null, parseInt(puertas) || 4,

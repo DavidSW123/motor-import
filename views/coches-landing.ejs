@@ -1,0 +1,104 @@
+<%- include('partials/header', { title: 'Catálogo' }) %>
+
+<main class="cat-landing">
+  <div class="container">
+
+    <header class="cat-landing-head">
+      <div class="section-tag">El catálogo</div>
+      <h1>¿Qué tipo de vehículo buscas?</h1>
+      <p>Tenemos coches nacionales, traemos modelos por importación y, si quieres algo concreto, lo buscamos por ti.</p>
+    </header>
+
+    <div class="cat-cards">
+
+      <a href="/coches/nacional" class="cat-card cat-card-nacional">
+        <div class="cat-card-img">
+          <img src="https://images.unsplash.com/photo-1553440569-bcc63803a83d?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy">
+          <div class="cat-card-overlay"></div>
+        </div>
+        <div class="cat-card-body">
+          <div class="cat-card-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            Nacional
+          </div>
+          <h3>Coches nacionales</h3>
+          <p>Stock disponible para entrega rápida. Vehículos revisados y con toda la documentación al día.</p>
+          <div class="cat-card-meta">
+            <span class="cat-card-count"><%= stats.nacional %></span>
+            <span class="cat-card-label">en stock</span>
+          </div>
+          <span class="cat-card-cta">Ver catálogo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a href="/coches/importacion" class="cat-card cat-card-import">
+        <div class="cat-card-img">
+          <img src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy">
+          <div class="cat-card-overlay"></div>
+        </div>
+        <div class="cat-card-body">
+          <div class="cat-card-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            Importación
+          </div>
+          <h3>Coches de importación</h3>
+          <p>Modelos seleccionados y traídos desde Europa. Documentación, homologación y trámites incluidos.</p>
+          <div class="cat-card-meta">
+            <span class="cat-card-count"><%= stats.importacion %></span>
+            <span class="cat-card-label">disponibles</span>
+          </div>
+          <span class="cat-card-cta">Ver catálogo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a href="/coches/a-la-carta" class="cat-card cat-card-carta">
+        <div class="cat-card-img">
+          <img src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy">
+          <div class="cat-card-overlay"></div>
+          <div class="cat-card-badge">★ Servicio premium</div>
+        </div>
+        <div class="cat-card-body">
+          <div class="cat-card-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 2l2.39 7.36H22l-6.19 4.5 2.36 7.27L12 16.91l-6.18 4.22 2.36-7.27L2 9.36h7.61z"/></svg>
+            A la carta
+          </div>
+          <h3>Coches a la carta</h3>
+          <p>¿No encuentras lo que buscas? Cuéntanos qué quieres y te lo traemos. Selección personalizada.</p>
+          <div class="cat-card-meta-pill">Hecho a tu medida</div>
+          <span class="cat-card-cta">Solicitar mi coche
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+      <a href="/campers" class="cat-card cat-card-camper">
+        <div class="cat-card-img">
+          <img src="https://images.unsplash.com/photo-1523987355523-c7b5b0dd90a7?auto=format&fit=crop&w=1200&q=80" alt="" loading="lazy">
+          <div class="cat-card-overlay"></div>
+        </div>
+        <div class="cat-card-body">
+          <div class="cat-card-tag">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><rect x="2" y="9" width="14" height="9" rx="1.5"/><path d="M16 12 H22 V18 H16"/><circle cx="6" cy="20" r="2"/><circle cx="18" cy="20" r="2"/></svg>
+            Campers
+          </div>
+          <h3>Campers y autocaravanas</h3>
+          <p>Para los que viajan. Vehículos preparados para la aventura, listos para salir a la carretera.</p>
+          <div class="cat-card-meta">
+            <span class="cat-card-count"><%= stats.camper %></span>
+            <span class="cat-card-label">disponibles</span>
+          </div>
+          <span class="cat-card-cta">Ver catálogo
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </span>
+        </div>
+      </a>
+
+    </div>
+  </div>
+</main>
+
+<%- include('partials/footer') %>
