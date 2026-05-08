@@ -3335,15 +3335,16 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
   pointer-events: none;
 }
 
-/* Logo centrado en el viewport con position:fixed para garantizar
-   centrado horizontal exacto, sin depender del nav-container. */
+/* Logo centrado en el viewport con position:fixed.
+   top:24vh = el centro del logo a 24% de altura del viewport,
+   muy por encima del título "Cars & Campers" que está al ~50vh */
 body.home-hero-active .brand-logo-header .brand-mark {
   position: fixed !important;
-  top: 38vh !important;
+  top: 24vh !important;
   left: 50% !important;
   margin: 0 !important;
-  width: 280px !important;
-  height: 280px !important;
+  width: 230px !important;
+  height: 230px !important;
   transform: translate(-50%, -50%) !important;
   z-index: 50;
   filter: drop-shadow(0 16px 40px rgba(15,20,25,0.35))
@@ -3381,4 +3382,15 @@ body.home-hero-active .brand-logo-header .brand-mark {
     height: 140px !important;
     top: 28vh !important;
   }
+}
+
+/* En home-hero, ocultar la pildora "Selección premium" para que el logo
+   sea el único elemento destacado arriba del título */
+.hero-v2-eyebrow {
+  transition: opacity 0.45s ease, transform 0.45s ease;
+}
+body.home-hero-active .hero-v2-eyebrow {
+  opacity: 0;
+  transform: translateY(-12px);
+  pointer-events: none;
 }
