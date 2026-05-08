@@ -3335,62 +3335,111 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
   pointer-events: none;
 }
 
-/* Logo centrado en el viewport, MUY ARRIBA (encima del título y de
-   la pildora). El centro vertical del logo está al 22% del alto del
-   viewport. */
+/* ──────────────────────────────────────────────────────────────────
+   HOME-HERO: logo + pildora flotantes a la izquierda + derecha del
+   centro. Logo recortado para ocultar el texto 'CARS & CAMPERS'.
+   ────────────────────────────────────────────────────────────────── */
+
+/* Logo flotante: a la izquierda del centro horizontal del viewport */
 body.home-hero-active .brand-logo-header .brand-mark {
   position: fixed !important;
   top: 22vh !important;
-  left: 50% !important;
+  left: calc(50% - 12px) !important;
   margin: 0 !important;
   width: 220px !important;
   height: 220px !important;
-  transform: translate(-50%, -50%) !important;
+  transform: translate(-100%, -50%) !important;
   z-index: 50;
   filter: drop-shadow(0 16px 40px rgba(15,20,25,0.4))
           drop-shadow(0 0 24px rgba(237,28,36,0.22));
 }
 
-/* Animaciones suaves de transform/width/height/top/left */
-.brand-logo-header .brand-mark {
-  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1),
-              width 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
-              height 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
-              top 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
-              left 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
-              filter 0.4s ease;
+/* La imagen DENTRO del círculo: zoom y desplazamiento para mostrar
+   solo la parte central+inferior del logo (dibujo + BCN), ocultando
+   las cajas 'CARS & CAMPERS' superiores */
+body.home-hero-active .brand-mark img {
+  transform: scale(1.55) translateY(11%);
+  transform-origin: center center;
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.brand-mark img {
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
 
-/* Tablet / móvil — ajustar tamaño y posición vertical */
+/* Pildora 'SELECCIÓN PREMIUM · BARCELONA' a la DERECHA del logo */
+.hero-v2-eyebrow {
+  transition: opacity 0.5s ease 0.1s,
+              transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              top 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              left 0.7s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+body.home-hero-active .hero-v2-eyebrow {
+  position: fixed !important;
+  top: 22vh !important;
+  left: calc(50% + 12px) !important;
+  transform: translate(0, -50%) !important;
+  margin: 0 !important;
+  z-index: 51;
+  opacity: 1;
+  /* Aumentar tamaño un poco para que destaque al lado del logo */
+  font-size: 0.85rem;
+  padding: 0.7rem 1.4rem;
+}
+
+/* Animación suave del logo entre estados */
+.brand-logo-header .brand-mark {
+  transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              width 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              height 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              top 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              left 0.7s cubic-bezier(0.2, 0.7, 0.3, 1),
+              filter 0.5s ease,
+              opacity 0.5s ease;
+}
+
+/* Cuando NO está en home-hero, la imagen vuelve a mostrarse completa */
+.brand-mark img {
+  transform: scale(1) translateY(0);
+}
+
+/* Tablet — ambos elementos algo más pequeños */
 @media (max-width: 900px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    width: 220px !important;
-    height: 220px !important;
-    top: 34vh !important;
+    width: 180px !important;
+    height: 180px !important;
+    top: 24vh !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    /* En tablet/móvil, la pildora va DEBAJO del logo, no al lado */
+    top: calc(24vh + 100px) !important;
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+  }
+  body.home-hero-active .brand-mark img {
+    transform: scale(1.55) translateY(11%);
   }
 }
 @media (max-width: 640px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    width: 170px !important;
-    height: 170px !important;
-    top: 30vh !important;
+    width: 150px !important;
+    height: 150px !important;
+    top: 22vh !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 85px) !important;
+    font-size: 0.7rem;
+    padding: 0.5rem 1rem;
   }
 }
 @media (max-width: 380px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    width: 140px !important;
-    height: 140px !important;
-    top: 28vh !important;
+    width: 120px !important;
+    height: 120px !important;
+    top: 22vh !important;
   }
-}
-
-/* En home-hero, ocultar la pildora "Selección premium" para que el logo
-   sea el único elemento destacado arriba del título */
-.hero-v2-eyebrow {
-  transition: opacity 0.45s ease, transform 0.45s ease;
-}
-body.home-hero-active .hero-v2-eyebrow {
-  opacity: 0;
-  transform: translateY(-12px);
-  pointer-events: none;
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 70px) !important;
+  }
 }
