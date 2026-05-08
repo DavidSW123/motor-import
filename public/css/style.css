@@ -49,7 +49,7 @@
   --shadow:       0 4px 16px rgba(15,20,25,0.06);
   --shadow-card:  0 8px 28px rgba(15,20,25,0.10);
   --shadow-gold:  0 0 30px rgba(237,28,36,0.15);
-  --nav-h:        80px;
+  --nav-h:        90px;
   --nav-h-scrolled: 60px;
 }
 
@@ -3219,11 +3219,11 @@ body.admin-body { }
   z-index: 1;
 }
 .brand-logo-header .brand-mark {
-  width: 130px;
-  height: 130px;
+  width: 170px;
+  height: 170px;
   transition: width 0.32s cubic-bezier(0.2, 0.7, 0.3, 1),
               height 0.32s cubic-bezier(0.2, 0.7, 0.3, 1);
-  filter: drop-shadow(0 6px 16px rgba(15,20,25,0.18));
+  filter: drop-shadow(0 6px 18px rgba(15,20,25,0.22));
 }
 
 /* Estado scrolled: logo se mete DENTRO del header, alineado center */
@@ -3237,9 +3237,9 @@ body.admin-body { }
   filter: drop-shadow(0 2px 6px rgba(15,20,25,0.12));
 }
 
-/* Wordmark se reduce ligeramente al scroll */
+/* Wordmark grande al inicio, se reduce al scroll */
 .brand-logo-header .brand-wordmark {
-  font-size: 1.05rem;
+  font-size: 1.5rem;
   transition: font-size 0.28s ease;
 }
 .site-header.scrolled .brand-logo-header .brand-wordmark {
@@ -3247,6 +3247,7 @@ body.admin-body { }
 }
 .brand-logo-header .bw-red,
 .brand-logo-header .bw-dark {
+  padding: 0.7rem 0.85rem;
   transition: padding 0.28s ease;
 }
 .site-header.scrolled .brand-logo-header .bw-red,
@@ -3255,7 +3256,7 @@ body.admin-body { }
 }
 
 /* Padding-top de páginas internas: deja espacio para el logo
-   sobresaliendo (130px - 80px = 50px de overflow + margen) */
+   sobresaliendo (logo 170px - header 90px = 86px de overflow + margen) */
 .catalog-page,
 .car-detail-page,
 .inner-page,
@@ -3266,20 +3267,20 @@ body.admin-body { }
 .techo-page,
 .cat-landing,
 .thanks-page {
-  padding-top: 100px;
+  padding-top: 130px;
 }
 .auth-page {
-  padding-top: 100px;
-  min-height: calc(100vh - 100px);
+  padding-top: 130px;
+  min-height: calc(100vh - 130px);
 }
 
 /* Mobile: logo más pequeño pero sigue sobresaliendo un poco */
 @media (max-width: 640px) {
   :root {
-    --nav-h: 64px;
+    --nav-h: 70px;
     --nav-h-scrolled: 56px;
   }
-  .brand-logo-header .brand-mark { width: 80px !important; height: 80px !important; }
+  .brand-logo-header .brand-mark { width: 110px !important; height: 110px !important; }
   .site-header.scrolled .brand-logo-header .brand-mark {
     width: 40px !important; height: 40px !important;
   }
@@ -3292,14 +3293,14 @@ body.admin-body { }
   .carta-page,
   .techo-page,
   .cat-landing,
-  .thanks-page { padding-top: 80px; }
+  .thanks-page { padding-top: 100px; }
   .auth-page {
-    padding-top: 80px;
-    min-height: calc(100vh - 80px);
+    padding-top: 100px;
+    min-height: calc(100vh - 100px);
   }
 }
 @media (max-width: 380px) {
-  .brand-logo-header .brand-mark { width: 64px !important; height: 64px !important; }
+  .brand-logo-header .brand-mark { width: 88px !important; height: 88px !important; }
   .site-header.scrolled .brand-logo-header .brand-mark {
     width: 36px !important; height: 36px !important;
   }
