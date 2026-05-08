@@ -1,10 +1,20 @@
 /* Motor Import — Main JS */
 
-// ── Header scroll ────────────────────────────────────────────────
+// ── Header scroll + Home-hero (logo grande centrado en el hero) ─
 const header = document.getElementById('site-header');
+const isHome = location.pathname === '/' || location.pathname === '';
 if (header) {
+  // Si es home, marca el body para que el logo arranque centrado en el hero
+  if (isHome) document.body.classList.add('home-hero-active');
+
   const onScroll = () => {
-    header.classList.toggle('scrolled', window.scrollY > 40);
+    const y = window.scrollY;
+    header.classList.toggle('scrolled', y > 40);
+    if (isHome) {
+      // Cuando el usuario empieza a scrollear, el logo abandona el hero
+      // y se anima hacia el header.
+      document.body.classList.toggle('home-hero-active', y < 80);
+    }
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
