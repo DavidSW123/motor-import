@@ -3342,13 +3342,15 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
    interno hace zoom para mostrar sólo el dibujo+BCN sin el texto.
    ────────────────────────────────────────────────────────────────── */
 
-/* Posición ESTADO NORMAL del logo del header (fija sobre el viewport) */
+/* Posición ESTADO NORMAL del logo del header (fija sobre el viewport)
+   Alineado con el inicio del nav-container (que tiene max-width:1280px
+   y margin:0 auto). En pantallas anchas: max((100vw-1280)/2 + 16, 20px) */
 .brand-logo-header .brand-mark {
   position: fixed !important;
-  top: 18px;
-  left: 32px;
-  width: 44px;
-  height: 44px;
+  top: 17px;
+  left: max(20px, calc(50vw - 624px));
+  width: 50px;
+  height: 50px;
   margin: 0;
   z-index: 51;
   overflow: hidden !important;
@@ -3381,7 +3383,7 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
   min-width: 0;
 }
 .brand-logo-header .brand-wordmark {
-  margin-left: 60px; /* deja espacio donde flota el logo en el header */
+  margin-left: 65px; /* deja espacio donde flota el logo de 50px + 15px gap */
   transition: margin-left 0.5s ease, opacity 0.5s ease, transform 0.5s ease, font-size 0.5s ease;
 }
 
@@ -3397,9 +3399,11 @@ body.home-hero-active .brand-logo-header .brand-mark {
           drop-shadow(0 0 28px rgba(237,28,36,0.28));
 }
 
-/* Imagen interior con zoom: oculta el texto 'CARS & CAMPERS' superior */
+/* Imagen interior: en home-hero se mantiene en escala 1 (logo completo)
+   Si quieres recortar 'CARS & CAMPERS', necesitas un logo PNG ya
+   recortado (sin las cajas superiores). Mientras tanto se ve entero. */
 body.home-hero-active .brand-mark img {
-  transform: scale(1.55) translateY(-22%);
+  transform: scale(1) translateY(0);
   transform-origin: center center;
 }
 
@@ -3435,8 +3439,8 @@ body.home-hero-active .hero-v2-eyebrow {
 /* ─────────────────────  RESPONSIVE  ───────────────────── */
 
 @media (max-width: 900px) {
-  /* Logo en header normal: posición ajustada */
-  .brand-logo-header .brand-mark { left: 16px; }
+  /* Logo en header normal: pegado al borde izquierdo */
+  .brand-logo-header .brand-mark { left: 16px !important; }
 
   /* Home-hero: logo más pequeño centrado y pildora DEBAJO */
   body.home-hero-active .brand-logo-header .brand-mark {
@@ -3453,8 +3457,8 @@ body.home-hero-active .hero-v2-eyebrow {
   }
 }
 @media (max-width: 640px) {
-  .brand-logo-header .brand-mark { width: 40px; height: 40px; top: 12px; }
-  .brand-logo-header .brand-wordmark { margin-left: 52px; }
+  .brand-logo-header .brand-mark { width: 42px !important; height: 42px !important; top: 11px !important; left: 12px !important; }
+  .brand-logo-header .brand-wordmark { margin-left: 54px; }
 
   body.home-hero-active .brand-logo-header .brand-mark {
     width: 140px;
