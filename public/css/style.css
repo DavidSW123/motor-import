@@ -49,8 +49,8 @@
   --shadow:       0 4px 16px rgba(15,20,25,0.06);
   --shadow-card:  0 8px 28px rgba(15,20,25,0.10);
   --shadow-gold:  0 0 30px rgba(237,28,36,0.15);
-  --nav-h:        108px;
-  --nav-h-scrolled: 64px;
+  --nav-h:        80px;
+  --nav-h-scrolled: 60px;
 }
 
 /* ── 2. Reset ─────────────────────────────── */
@@ -3190,12 +3190,15 @@ body.admin-body { }
 }
 
 /* ═════════════════════════════════════════════════════════════════
-   HEADER RESIZE ON SCROLL — logo grande al inicio, compacto al scroll
+   HEADER RESIZE ON SCROLL — logo grande SOBRESALIENDO al inicio,
+   se mete dentro del header al hacer scroll
    ═════════════════════════════════════════════════════════════════ */
 
-/* El header anima su altura entre estado inicial y scrolled */
+/* El header anima su altura entre estado inicial y scrolled.
+   overflow:visible para permitir que el logo sobresalga. */
 .site-header {
   height: var(--nav-h);
+  overflow: visible !important;
   transition: height 0.28s cubic-bezier(0.2, 0.7, 0.3, 1),
               background var(--transition-md),
               border-color var(--transition-md);
@@ -3203,20 +3206,38 @@ body.admin-body { }
 .site-header.scrolled {
   height: var(--nav-h-scrolled);
 }
+.nav-container { overflow: visible !important; }
 
-/* Logo del header — grande al inicio, pequeño al scroll */
+/* Logo flotante: alineado al TOP del header con margin reducido,
+   para que sobresalga PROMINENTEMENTE hacia abajo */
+.brand-logo-header {
+  align-self: flex-start !important;
+  margin-top: 6px !important;
+  /* z-index moderado: sobre el background del header pero NO encima
+     de los menús del propio header (que tiene z-index inherente) */
+  position: relative;
+  z-index: 1;
+}
 .brand-logo-header .brand-mark {
-  width: 80px;
-  height: 80px;
-  transition: width 0.28s cubic-bezier(0.2, 0.7, 0.3, 1),
-              height 0.28s cubic-bezier(0.2, 0.7, 0.3, 1);
+  width: 130px;
+  height: 130px;
+  transition: width 0.32s cubic-bezier(0.2, 0.7, 0.3, 1),
+              height 0.32s cubic-bezier(0.2, 0.7, 0.3, 1);
+  filter: drop-shadow(0 6px 16px rgba(15,20,25,0.18));
+}
+
+/* Estado scrolled: logo se mete DENTRO del header, alineado center */
+.site-header.scrolled .brand-logo-header {
+  align-self: center !important;
+  margin-top: 0 !important;
 }
 .site-header.scrolled .brand-logo-header .brand-mark {
   width: 44px;
   height: 44px;
+  filter: drop-shadow(0 2px 6px rgba(15,20,25,0.12));
 }
 
-/* Wordmark también se reduce ligeramente al scroll */
+/* Wordmark se reduce ligeramente al scroll */
 .brand-logo-header .brand-wordmark {
   font-size: 1.05rem;
   transition: font-size 0.28s ease;
@@ -3233,19 +3254,52 @@ body.admin-body { }
   padding: 0.45rem 0.55rem;
 }
 
-/* Mobile: nav inicial más compacto, menos diferencia */
+/* Padding-top de páginas internas: deja espacio para el logo
+   sobresaliendo (130px - 80px = 50px de overflow + margen) */
+.catalog-page,
+.car-detail-page,
+.inner-page,
+.error-page,
+.contact-page,
+.coming-soon-section,
+.carta-page,
+.techo-page,
+.cat-landing,
+.thanks-page {
+  padding-top: 100px;
+}
+.auth-page {
+  padding-top: 100px;
+  min-height: calc(100vh - 100px);
+}
+
+/* Mobile: logo más pequeño pero sigue sobresaliendo un poco */
 @media (max-width: 640px) {
   :root {
-    --nav-h: 78px;
-    --nav-h-scrolled: 60px;
+    --nav-h: 64px;
+    --nav-h-scrolled: 56px;
   }
-  .brand-logo-header .brand-mark { width: 56px !important; height: 56px !important; }
+  .brand-logo-header .brand-mark { width: 80px !important; height: 80px !important; }
   .site-header.scrolled .brand-logo-header .brand-mark {
     width: 40px !important; height: 40px !important;
   }
+  .catalog-page,
+  .car-detail-page,
+  .inner-page,
+  .error-page,
+  .contact-page,
+  .coming-soon-section,
+  .carta-page,
+  .techo-page,
+  .cat-landing,
+  .thanks-page { padding-top: 80px; }
+  .auth-page {
+    padding-top: 80px;
+    min-height: calc(100vh - 80px);
+  }
 }
 @media (max-width: 380px) {
-  .brand-logo-header .brand-mark { width: 48px !important; height: 48px !important; }
+  .brand-logo-header .brand-mark { width: 64px !important; height: 64px !important; }
   .site-header.scrolled .brand-logo-header .brand-mark {
     width: 36px !important; height: 36px !important;
   }
