@@ -3335,30 +3335,50 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
   pointer-events: none;
 }
 
-/* Mover el logo al centro del hero, justo encima del título.
-   Cálculo: posición original ≈ (32 + 85, 6 + 85) = (117, 91)
-   Destino centro del logo = (50vw, ~32vh)
-   Escala extra para hacerlo aún más prominente */
+/* Logo centrado en el viewport con position:fixed para garantizar
+   centrado horizontal exacto, sin depender del nav-container. */
 body.home-hero-active .brand-logo-header .brand-mark {
-  transform: translate(calc(50vw - 117px), calc(32vh - 91px)) scale(1.7);
+  position: fixed !important;
+  top: 38vh !important;
+  left: 50% !important;
+  margin: 0 !important;
+  width: 280px !important;
+  height: 280px !important;
+  transform: translate(-50%, -50%) !important;
+  z-index: 50;
   filter: drop-shadow(0 16px 40px rgba(15,20,25,0.35))
           drop-shadow(0 0 24px rgba(237,28,36,0.18));
 }
 
-/* Mobile: ajustes de posición y escala */
+/* Animaciones suaves de transform/width/height/top/left */
+.brand-logo-header .brand-mark {
+  transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.3, 1),
+              width 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
+              height 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
+              top 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
+              left 0.55s cubic-bezier(0.2, 0.7, 0.3, 1),
+              filter 0.4s ease;
+}
+
+/* Tablet / móvil — ajustar tamaño y posición vertical */
 @media (max-width: 900px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(calc(50vw - 100px), calc(28vh - 85px)) scale(1.45);
+    width: 220px !important;
+    height: 220px !important;
+    top: 34vh !important;
   }
 }
 @media (max-width: 640px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    /* logo es 110px → centro 55px, posición original aprox (16+55, 5+55)=(71, 60) */
-    transform: translate(calc(50vw - 71px), calc(26vh - 60px)) scale(1.3);
+    width: 170px !important;
+    height: 170px !important;
+    top: 30vh !important;
   }
 }
 @media (max-width: 380px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(calc(50vw - 60px), calc(24vh - 50px)) scale(1.15);
+    width: 140px !important;
+    height: 140px !important;
+    top: 28vh !important;
   }
 }
