@@ -2,17 +2,20 @@
 // Si RESEND_API_KEY no está configurada, hace fallback a console.log
 // (los datos se ven en logs de Vercel) para no perder ninguna solicitud.
 
-const apiKey = process.env.RESEND_API_KEY;
-const TO     = process.env.EMAIL_TO   || 'ds.qnk.88@gmail.com';
-const FROM   = process.env.EMAIL_FROM || 'Cars & Campers <onboarding@resend.dev>';
-
-let resend = null;
-if (apiKey) {
+// Cargar el cliente de Resend bajo demanda (lazy) para evitar problemas
+// de env vars que aún no están disponibles cuando se carga el módulo.
+function getResend() {
+  const apiKey = process.env.RESEND_API_KEY;
+  console.log('[email][diag] RESEND_API_KEY existe:', !!apiKey,
+              '| longitud:', apiKey ? apiKey.length : 0,
+              '| prefijo:', apiKey ? apiKey.slice(0, 4) : 'N/A');
+  if (!apiKey) return null;
   try {
     const { Resend } = require('resend');
-    resend = new Resend(apiKey);
+    return new Resend(apiKey);
   } catch (err) {
-    console.error('[email] No se pudo cargar Resend:', err.message);
+    console.error('[email][diag] error cargando Resend:', err.message);
+    return null;
   }
 }
 
@@ -134,8 +137,14 @@ function buildClientCopyHtml(data, tipo) {
 
 // ── Envío real ───────────────────────────────────────────────────
 async function sendViaResend(opts) {
+  const TO   = process.env.EMAIL_TO   || 'ds.qnk.88@gmail.com';
+  const FROM = process.env.EMAIL_FROM || 'Cars & Campers <onboarding@resend.dev>';
+  const resend = getResend();
+
+  console.log('[email][diag] EMAIL_TO:', TO, '| FROM:', FROM, '| destinatario:', opts.to);
+
   if (!resend) {
-    console.log('[email][FALLBACK no Resend] →', opts.subject, '\n', opts.html?.slice(0, 400));
+    console.log('[email][FALLBACK no Resend] →', opts.subject);
     return { skipped: true, reason: 'RESEND_API_KEY not set' };
   }
   try {
@@ -146,18 +155,23 @@ async function sendViaResend(opts) {
       html:    opts.html,
       replyTo: opts.replyTo
     });
+    console.log('[email][diag] resultado Resend:', JSON.stringify(result).slice(0, 400));
     return result;
   } catch (err) {
-    console.error('[email] Error enviando:', err);
+    console.error('[email] Error enviando:', err.message || err);
     return { error: err.message || String(err) };
   }
 }
 
 // ── API pública ──────────────────────────────────────────────────
+function teamEmail() {
+  return process.env.EMAIL_TO || 'ds.qnk.88@gmail.com';
+}
+
 async function sendContactEmail(data) {
   // 1) Email interno al equipo
   const internal = await sendViaResend({
-    to:      TO,
+    to:      teamEmail(),
     subject: `Contacto solicitado por ${data.nombre}`,
     html:    buildInternalContactHtml(data),
     replyTo: data.email
@@ -173,7 +187,7 @@ async function sendContactEmail(data) {
 
 async function sendCustomCarEmail(data) {
   const internal = await sendViaResend({
-    to:      TO,
+    to:      teamEmail(),
     subject: `Solicitud de coche a la carta — preparar contrato (${data.nombre})`,
     html:    buildInternalCustomCarHtml(data),
     replyTo: data.email
