@@ -1,0 +1,198 @@
+<%- include('partials/header', { title: 'Techos elevables · Cars & Campers BCN' }) %>
+
+<main class="techo-page">
+  <div class="container">
+
+    <!-- ── HERO ───────────────────────────────────────────── -->
+    <header class="techo-hero">
+      <div class="techo-hero-content">
+        <div class="section-tag">Servicio · Instalación profesional</div>
+        <h1>Convierte tu furgo en una camper.<br><span class="techo-hero-em">Te montamos el techo elevable.</span></h1>
+        <p class="techo-hero-sub">
+          Multiplica por dos el espacio interior y añade dos plazas para dormir
+          sin perder la maniobrabilidad de tu vehículo. Instalación profesional,
+          materiales de calidad y garantía.
+        </p>
+        <div class="techo-hero-actions">
+          <a href="#presupuesto" class="btn btn-primary btn-lg">
+            Solicitar presupuesto
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="https://wa.me/34618105936?text=<%- encodeURIComponent('Hola, quería información sobre la instalación de un techo elevable') %>"
+             target="_blank" rel="noopener" class="btn btn-outline btn-lg">
+            Consultar por WhatsApp
+          </a>
+        </div>
+      </div>
+      <div class="techo-hero-img">
+        <img src="https://images.unsplash.com/photo-1569767364426-25b3deeb1f8f?auto=format&fit=crop&w=1400&q=80"
+             alt="Furgoneta camper con techo elevable" loading="eager">
+      </div>
+    </header>
+
+    <!-- ── BENEFICIOS ─────────────────────────────────────── -->
+    <section class="techo-benefits">
+      <div class="techo-benefit">
+        <div class="techo-benefit-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 21V8l9-5 9 5v13"/><path d="M9 21v-6h6v6"/></svg>
+        </div>
+        <h3>+2 plazas para dormir</h3>
+        <p>Una cama elevada cómoda para dos adultos, sin renunciar al espacio inferior.</p>
+      </div>
+      <div class="techo-benefit">
+        <div class="techo-benefit-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <h3>Estanqueidad total</h3>
+        <p>Lonas resistentes con aislamiento térmico y acústico. Probado en condiciones extremas.</p>
+      </div>
+      <div class="techo-benefit">
+        <div class="techo-benefit-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Apertura en segundos</h3>
+        <p>Mecanismo asistido por pistones de gas. Tira de la correa y listo.</p>
+      </div>
+      <div class="techo-benefit">
+        <div class="techo-benefit-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <h3>Garantía y soporte</h3>
+        <p>Instalación con materiales homologados, garantía y servicio post-venta.</p>
+      </div>
+    </section>
+
+    <!-- ── ¿CÓMO FUNCIONA? ────────────────────────────────── -->
+    <section class="techo-how">
+      <div class="techo-how-head">
+        <div class="section-tag">El proceso</div>
+        <h2>Así de fácil</h2>
+        <p>Desde la primera consulta hasta tu primera escapada, en pocos pasos.</p>
+      </div>
+      <div class="techo-how-grid">
+        <div class="techo-how-step">
+          <span class="techo-how-num">01</span>
+          <h3>Cuéntanos tu furgo</h3>
+          <p>Marca, modelo, año y qué uso le quieres dar. Eso nos basta para empezar.</p>
+        </div>
+        <div class="techo-how-step">
+          <span class="techo-how-num">02</span>
+          <h3>Presupuesto sin compromiso</h3>
+          <p>Te enviamos un presupuesto claro con el modelo de techo recomendado y plazo.</p>
+        </div>
+        <div class="techo-how-step">
+          <span class="techo-how-num">03</span>
+          <h3>Instalación en taller</h3>
+          <p>Trabajo profesional, normalmente entre 3 y 5 días hábiles según modelo.</p>
+        </div>
+        <div class="techo-how-step">
+          <span class="techo-how-num">04</span>
+          <h3>A la carretera</h3>
+          <p>Te entregamos la furgo lista para dormir bajo las estrellas.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ── FORMULARIO DE PRESUPUESTO ──────────────────────── -->
+    <section class="form-section" id="presupuesto">
+      <div class="form-card">
+        <div class="section-tag">Pídenos presupuesto</div>
+        <h2 class="form-section-title">Solicita tu presupuesto sin compromiso</h2>
+        <p class="form-section-sub">
+          Cuéntanos los datos de tu vehículo y te enviamos un presupuesto a medida.
+          Te respondemos en menos de 48 horas laborables.
+        </p>
+
+        <form action="/servicios/techos-elevables" method="post" class="big-form" novalidate>
+          <input type="text" name="_honey" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px" aria-hidden="true">
+
+          <fieldset>
+            <legend>Tus datos</legend>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Nombre y apellidos <span class="req">*</span></label>
+                <input type="text" name="nombre" class="form-input <%= errors && errors.includes('nombre') ? 'is-error' : '' %>"
+                       value="<%= form.nombre || '' %>" required autocomplete="name">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email <span class="req">*</span></label>
+                <input type="email" name="email" class="form-input <%= errors && errors.includes('email') ? 'is-error' : '' %>"
+                       value="<%= form.email || '' %>" required autocomplete="email">
+              </div>
+              <div class="form-group form-group-full">
+                <label class="form-label">Teléfono <span class="req">*</span></label>
+                <input type="tel" name="telefono" class="form-input <%= errors && errors.includes('telefono') ? 'is-error' : '' %>"
+                       value="<%= form.telefono || '' %>" required placeholder="+34 600 000 000" autocomplete="tel">
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Tu vehículo</legend>
+            <div class="form-grid-2">
+              <div class="form-group">
+                <label class="form-label">Marca</label>
+                <input type="text" name="marca" class="form-input" value="<%= form.marca || '' %>"
+                       placeholder="Volkswagen, Ford, Mercedes, Renault…">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Modelo</label>
+                <input type="text" name="modelo" class="form-input" value="<%= form.modelo || '' %>"
+                       placeholder="Transporter T6, Custom, Vito…">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Año</label>
+                <input type="number" name="anio" class="form-input" min="1990" max="<%= new Date().getFullYear()+1 %>"
+                       value="<%= form.anio || '' %>" placeholder="<%= new Date().getFullYear()-3 %>">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Tipo de techo deseado</label>
+                <select name="tipo_techo" class="form-select">
+                  <option value="">Sin preferencia / aconséjame</option>
+                  <option value="manual"     <%= form.tipo_techo === 'manual'     ? 'selected' : '' %>>Manual (apertura con correa)</option>
+                  <option value="electrico"  <%= form.tipo_techo === 'electrico'  ? 'selected' : '' %>>Eléctrico (apertura con botón)</option>
+                  <option value="reforzado"  <%= form.tipo_techo === 'reforzado'  ? 'selected' : '' %>>Reforzado (porta-bicis / placas solares)</option>
+                </select>
+              </div>
+              <div class="form-group form-group-full">
+                <label class="form-label">¿Cuántas plazas para dormir necesitas arriba?</label>
+                <select name="plazas_dormir" class="form-select">
+                  <option value="">Sin preferencia</option>
+                  <option value="2 adultos"          <%= form.plazas_dormir === '2 adultos'          ? 'selected' : '' %>>2 adultos</option>
+                  <option value="2 adultos + 1 niño" <%= form.plazas_dormir === '2 adultos + 1 niño' ? 'selected' : '' %>>2 adultos + 1 niño</option>
+                  <option value="2 niños"            <%= form.plazas_dormir === '2 niños'            ? 'selected' : '' %>>2 niños</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Comentarios adicionales <span class="form-label-hint">(opcional)</span></label>
+              <textarea name="comentarios" class="form-textarea" rows="5"
+                        placeholder="Cuéntanos cualquier detalle: color del techo, urgencia, si ya tienes otra camperización, dudas concretas…"><%= form.comentarios || '' %></textarea>
+            </div>
+          </fieldset>
+
+          <div class="techo-note">
+            <strong>Sin compromiso</strong> · Te enviamos un presupuesto detallado con el modelo
+            recomendado, los materiales, el plazo de instalación y el precio cerrado.
+            Si te encaja, programamos la cita.
+          </div>
+
+          <div class="form-actions form-actions-row">
+            <button type="submit" class="btn btn-primary btn-lg">
+              Enviar solicitud
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+            <a href="https://wa.me/34618105936?text=<%- encodeURIComponent('Hola, quería información sobre la instalación de un techo elevable') %>"
+               target="_blank" rel="noopener" class="btn btn-outline btn-lg">
+              ¿Prefieres WhatsApp?
+            </a>
+          </div>
+        </form>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<%- include('partials/footer') %>

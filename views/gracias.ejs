@@ -17,6 +17,13 @@
           Hemos recibido tu solicitud a la carta. <strong>En breve nos pondremos en contacto contigo</strong>
           para concretar los detalles y enviarte el contrato de aceptación de costes antes de iniciar la búsqueda.
         </p>
+      <% } else if (tipo === 'techo-elevable') { %>
+        <div class="section-tag">Presupuesto solicitado</div>
+        <h1>¡Gracias, <%= nombre.split(' ')[0] %>!</h1>
+        <p class="thanks-sub">
+          Hemos recibido los datos de tu vehículo. <strong>Te enviaremos un presupuesto detallado en menos de 48 horas laborables</strong>
+          con el modelo de techo recomendado, materiales y plazo de instalación.
+        </p>
       <% } else { %>
         <div class="section-tag">Mensaje enviado</div>
         <h1>¡Gracias, <%= nombre.split(' ')[0] %>!</h1>

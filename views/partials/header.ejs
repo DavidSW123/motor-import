@@ -42,10 +42,19 @@
         <ul class="nav-dropdown">
           <li><a href="/coches/nacional">Nacionales</a></li>
           <li><a href="/coches/importacion">Importación</a></li>
-          <li><a href="/coches/a-la-carta">A la carta</a></li>
         </ul>
       </li>
       <li><a href="/campers" class="<%= currentPath.startsWith('/campers') ? 'active' : '' %>">Campers</a></li>
+      <li class="has-dropdown">
+        <a href="/servicios" class="<%= currentPath.startsWith('/servicios') ? 'active' : '' %>">
+          Servicios
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </a>
+        <ul class="nav-dropdown">
+          <li><a href="/servicios/vehiculos-a-la-carta">Vehículos a la carta</a></li>
+          <li><a href="/servicios/techos-elevables">Techos elevables</a></li>
+        </ul>
+      </li>
       <li><a href="/#como-funciona">Cómo funciona</a></li>
       <li><a href="/contacto" class="<%= currentPath === '/contacto' ? 'active' : '' %>">Contacto</a></li>
     </ul>
@@ -68,11 +77,13 @@
   <!-- Menú móvil -->
   <div class="mobile-menu" id="mobileMenu">
     <a href="/" class="mobile-nav-item">Inicio</a>
-    <a href="/coches" class="mobile-nav-item">Catálogo</a>
-    <a href="/coches/nacional" class="mobile-nav-item mobile-nav-sub">— Coches nacionales</a>
-    <a href="/coches/importacion" class="mobile-nav-item mobile-nav-sub">— Coches importación</a>
-    <a href="/coches/a-la-carta" class="mobile-nav-item mobile-nav-sub">— A la carta</a>
+    <a href="/coches" class="mobile-nav-item">Coches</a>
+    <a href="/coches/nacional" class="mobile-nav-item mobile-nav-sub">— Nacionales</a>
+    <a href="/coches/importacion" class="mobile-nav-item mobile-nav-sub">— Importación</a>
     <a href="/campers" class="mobile-nav-item">Campers</a>
+    <a href="/servicios" class="mobile-nav-item">Servicios</a>
+    <a href="/servicios/vehiculos-a-la-carta" class="mobile-nav-item mobile-nav-sub">— Vehículos a la carta</a>
+    <a href="/servicios/techos-elevables" class="mobile-nav-item mobile-nav-sub">— Techos elevables</a>
     <a href="/#como-funciona" class="mobile-nav-item">Cómo funciona</a>
     <a href="/contacto" class="mobile-nav-item mobile-cta">Contacto</a>
     <% if (user && user.role === 'admin') { %>

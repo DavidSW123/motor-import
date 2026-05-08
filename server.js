@@ -104,10 +104,11 @@ if (NEEDS_SETUP) {
 } else {
 
 // ── Rutas ────────────────────────────────────────────────────────
-app.use('/',         require('./routes/index'));
-app.use('/coches',   require('./routes/cars'));
-app.use('/campers',  require('./routes/campers'));
-app.use('/admin',    require('./routes/admin'));
+app.use('/',          require('./routes/index'));
+app.use('/coches',    require('./routes/cars'));
+app.use('/campers',   require('./routes/campers'));
+app.use('/servicios', require('./routes/services'));
+app.use('/admin',     require('./routes/admin'));
 
 }
 

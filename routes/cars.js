@@ -1,6 +1,5 @@
 const express            = require('express');
 const { getOne, getAll } = require('../database/db');
-const { sendCustomCarEmail } = require('../utils/email');
 const router             = express.Router();
 
 // Helper compartido por /coches/nacional, /coches/importacion y /campers
@@ -98,53 +97,14 @@ router.get('/importacion', (req, res) =>
   listVehicles(req, res, { fixedCategoria: 'coche', fixedOrigen: 'importacion' })
 );
 
-// ── GET /coches/a-la-carta — formulario detallado ────────────────
+// ── /coches/a-la-carta — DEPRECATED, redirige a /servicios ───────
+// Mantenemos los dos métodos por compatibilidad con enlaces antiguos
 router.get('/a-la-carta', (req, res) => {
-  res.render('coches-a-la-carta', { title: 'Coches a la carta', form: {}, errors: null });
+  res.redirect(301, '/servicios/vehiculos-a-la-carta');
 });
-
-// ── POST /coches/a-la-carta — recibir solicitud y enviar emails ──
-router.post('/a-la-carta', async (req, res) => {
-  const f = req.body || {};
-  const required = ['nombre', 'email', 'telefono', 'acepta_costes'];
-  const errors = [];
-  for (const k of required) if (!f[k] || (typeof f[k] === 'string' && !f[k].trim())) errors.push(k);
-  if (f._honey) return res.redirect('/coches/a-la-carta'); // honeypot anti-spam
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(f.email || '')) errors.push('email');
-
-  if (errors.length) {
-    req.session.flash = { type: 'error', msg: 'Revisa los campos obligatorios y la aceptación de costes.' };
-    return res.render('coches-a-la-carta', { title: 'Coches a la carta', form: f, errors });
-  }
-
-  const data = {
-    nombre:      f.nombre.trim(),
-    email:       f.email.trim().toLowerCase(),
-    telefono:    f.telefono.trim(),
-    tipo:        f.tipo === 'camper' ? 'camper' : 'coche',
-    marca:       (f.marca || '').trim(),
-    modelo:      (f.modelo || '').trim(),
-    anio_desde:  f.anio_desde || '',
-    combustible: f.combustible || '',
-    transmision: f.transmision || '',
-    km_max:      f.km_max || '',
-    presupuesto: f.presupuesto || '',
-    comentarios: (f.comentarios || '').trim()
-  };
-
-  try {
-    await sendCustomCarEmail(data);
-  } catch (err) {
-    console.error('[a-la-carta] Error enviando email:', err);
-    // no bloqueamos al usuario: la solicitud se logea y mostramos gracias
-  }
-
-  res.render('gracias', {
-    title: '¡Solicitud recibida!',
-    tipo: 'a-la-carta',
-    nombre: data.nombre,
-    email:  data.email
-  });
+router.post('/a-la-carta', (req, res) => {
+  // 307 preserva el método POST y el body
+  res.redirect(307, '/servicios/vehiculos-a-la-carta');
 });
 
 // ── GET /coches/:slug — detalle (ÚLTIMO porque es dinámica) ──────
