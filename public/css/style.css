@@ -3463,3 +3463,125 @@ body.home-hero-active .hero-v2 {
 @media (max-width: 380px) {
   body.home-hero-active .hero-v2 { padding-top: 11rem; }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   AJUSTES FINALES: header compacto en TODAS las páginas
+   ═════════════════════════════════════════════════════════════════ */
+.brand-logo-header .brand-mark {
+  width: 44px !important;
+  height: 44px !important;
+}
+.brand-logo-header .brand-wordmark {
+  font-size: 0.85rem !important;
+}
+.brand-logo-header .bw-red,
+.brand-logo-header .bw-dark {
+  padding: 0.45rem 0.55rem !important;
+}
+
+/* En home-hero, el logo se sigue viendo grande gracias al transform.
+   Como el tamaño base bajó de 50 a 44, ajusto el scale para mantener
+   los 220px visuales (220 / 44 = 5) */
+body.home-hero-active .brand-logo-header .brand-mark {
+  transform: translate(min(607px, calc(50vw - 33px)), calc(22vh - 40px)) scale(5) !important;
+}
+@media (max-width: 1024px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 33px), calc(22vh - 40px)) scale(4.5) !important;
+  }
+}
+@media (max-width: 640px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 33px), calc(22vh - 35px)) scale(3.8) !important;
+  }
+}
+@media (max-width: 380px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 33px), calc(22vh - 35px)) scale(3.2) !important;
+  }
+}
+
+/* Footer brand: centrado y logo grande (3x el tamaño anterior) */
+.footer-brand {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.brand-logo-footer {
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 1rem !important;
+}
+.brand-logo-footer .brand-mark {
+  width: 180px !important;
+  height: 180px !important;
+}
+.brand-logo-footer .brand-wordmark {
+  font-size: 1.4rem !important;
+}
+.brand-logo-footer .bw-red,
+.brand-logo-footer .bw-dark {
+  padding: 0.7rem 1rem !important;
+}
+.footer-brand .footer-tagline {
+  margin-top: 1rem;
+  max-width: 320px;
+}
+.footer-brand .footer-badges {
+  align-items: center;
+}
+@media (max-width: 900px) {
+  .brand-logo-footer .brand-mark {
+    width: 140px !important;
+    height: 140px !important;
+  }
+  .brand-logo-footer .brand-wordmark { font-size: 1.2rem !important; }
+}
+
+/* Eslogan final de la página de techos elevables */
+.techo-eslogan {
+  margin: 5rem 0 2rem;
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, rgba(237,28,36,0.08) 0%, rgba(15,20,25,0.04) 100%);
+  border: 1px solid rgba(237,28,36,0.18);
+  border-radius: 22px;
+  text-align: center;
+}
+.techo-eslogan-inner {
+  max-width: 760px;
+  margin: 0 auto;
+}
+.techo-eslogan-tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--accent);
+  background: rgba(237,28,36,0.12);
+  border: 1px solid rgba(237,28,36,0.3);
+  padding: 0.45rem 1rem;
+  border-radius: 999px;
+  margin-bottom: 1.5rem;
+}
+.techo-eslogan-text {
+  font-size: clamp(1.6rem, 3.5vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0;
+  color: var(--text);
+}
+.techo-eslogan-em {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-light) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.techo-eslogan-em strong {
+  font-weight: 900;
+}
+@media (max-width: 640px) {
+  .techo-eslogan { padding: 2.5rem 1.25rem; margin: 3rem 0 1rem; }
+}
