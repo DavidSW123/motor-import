@@ -3861,3 +3861,42 @@ body.home-hero-active .brand-logo-header .brand-mark {
   }
   .hero-v2-title { font-size: clamp(1.6rem, 9vw, 2.5rem) !important; }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   FIX MOBILE V2: en mobile el .hero-v2 cambia a display:block
+   para evitar que el flex centre verticalmente el contenido
+   y quede pegado a la pildora flotante
+   ═════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  body.home-hero-active .hero-v2 {
+    display: block !important;
+    min-height: 100vh !important;
+    padding-top: 360px !important;
+    padding-bottom: 4rem !important;
+    padding-left: 1.25rem !important;
+    padding-right: 1.25rem !important;
+  }
+  body.home-hero-active .hero-v2-content {
+    position: relative !important;
+    z-index: 2;
+    margin: 0 auto !important;
+    max-width: 100%;
+    text-align: center;
+  }
+  body.home-hero-active .hero-v2-bg,
+  body.home-hero-active .hero-v2-mesh,
+  body.home-hero-active .hero-v2-grad {
+    position: absolute !important;
+    inset: 0 !important;
+  }
+}
+@media (max-width: 640px) {
+  body.home-hero-active .hero-v2 {
+    padding-top: 320px !important;
+  }
+}
+@media (max-width: 400px) {
+  body.home-hero-active .hero-v2 {
+    padding-top: 280px !important;
+  }
+}
