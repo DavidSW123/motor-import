@@ -3760,3 +3760,68 @@ body.home-hero-active .brand-logo-header .brand-mark {
     transform: translate(calc(50vw - 30px), calc(22vh - 35px)) scale(3.5) !important;
   }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   RESPONSIVE FINAL — móvil/tablet
+   ═════════════════════════════════════════════════════════════════ */
+
+/* Tablet (≤768px): pildora más arriba, título más controlado */
+@media (max-width: 768px) {
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 80px) !important;
+    font-size: 0.78rem !important;
+    padding: 0.55rem 1.1rem !important;
+  }
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 33px), calc(22vh - 40px)) scale(4.2) !important;
+  }
+}
+
+/* Móvil (≤640px): logo y pildora más sutiles, título acotado */
+@media (max-width: 640px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 30px), calc(22vh - 35px)) scale(3.6) !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 65px) !important;
+    font-size: 0.7rem !important;
+    padding: 0.5rem 0.9rem !important;
+    white-space: normal !important;
+    text-align: center;
+    max-width: 86vw;
+  }
+  /* Título un poco más pequeño en móvil */
+  .hero-v2-title { font-size: clamp(2rem, 12vw, 3.5rem) !important; }
+  .hero-v2-sub { font-size: 0.92rem !important; padding: 0 0.5rem; }
+  .hero-v2-stats {
+    flex-wrap: wrap;
+    gap: 0.6rem 1.5rem !important;
+    padding: 0.85rem 1rem !important;
+  }
+}
+
+/* Móvil pequeño (≤400px) */
+@media (max-width: 400px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 30px), calc(22vh - 35px)) scale(3) !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 55px) !important;
+    font-size: 0.65rem !important;
+    padding: 0.4rem 0.75rem !important;
+  }
+  .hero-v2-title { font-size: clamp(1.7rem, 11vw, 3rem) !important; }
+}
+
+/* Imagen Reimo en móvil: más compacta */
+@media (max-width: 640px) {
+  .techo-hero-img img { max-height: 380px; }
+}
+
+/* Showcase y otros elementos: asegurar que en móvil están bien */
+@media (max-width: 640px) {
+  .cars-grid, .cars-grid-3 {
+    grid-template-columns: 1fr !important;
+  }
+  .container { padding: 0 1rem !important; }
+}
