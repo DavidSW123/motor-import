@@ -3407,7 +3407,7 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
 }
 body.home-hero-active .hero-v2-eyebrow {
   position: fixed !important;
-  top: calc(22vh + 100px) !important; /* 110 (mitad logo) - 10 (solapamiento sutil) */
+  top: calc(22vh + 90px) !important; /* solapamiento de 20px con bottom del logo */
   left: 50% !important;
   transform: translate(-50%, 0) !important;
   margin: 0 !important;
@@ -3425,7 +3425,7 @@ body.home-hero-active .hero-v2-eyebrow {
     transform: translate(calc(50vw - 33px), calc(22vh - 40px)) scale(4);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 90px) !important;
+    top: calc(22vh + 80px) !important;
   }
 }
 @media (max-width: 640px) {
@@ -3435,7 +3435,7 @@ body.home-hero-active .hero-v2-eyebrow {
     transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(3.4);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 75px) !important;
+    top: calc(22vh + 65px) !important;
     font-size: 0.7rem;
     padding: 0.5rem 1rem;
   }
@@ -3445,21 +3445,21 @@ body.home-hero-active .hero-v2-eyebrow {
     transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(2.8);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 60px) !important;
+    top: calc(22vh + 50px) !important;
   }
 }
 
 /* En home-hero: empujar el contenido del hero (título, subtítulo, etc)
    hacia abajo para que no se solape con el logo + pildora flotantes */
 body.home-hero-active .hero-v2 {
-  padding-top: 16rem;
+  padding-top: 19rem;
 }
 @media (max-width: 1024px) {
-  body.home-hero-active .hero-v2 { padding-top: 14rem; }
+  body.home-hero-active .hero-v2 { padding-top: 16rem; }
 }
 @media (max-width: 640px) {
-  body.home-hero-active .hero-v2 { padding-top: 11rem; }
+  body.home-hero-active .hero-v2 { padding-top: 13rem; }
 }
 @media (max-width: 380px) {
-  body.home-hero-active .hero-v2 { padding-top: 9rem; }
+  body.home-hero-active .hero-v2 { padding-top: 11rem; }
 }
