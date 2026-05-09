@@ -3700,3 +3700,60 @@ body.home-hero-active .brand-logo-header .brand-mark {
   flex-shrink: 0;
 }
 .has-dropdown > a:hover > svg { opacity: 1; }
+
+/* ═════════════════════════════════════════════════════════════════
+   RESET FINAL DEFINITIVO del header brand-logo
+   Pisa todas las reglas dispersas anteriores con !important
+   ═════════════════════════════════════════════════════════════════ */
+.site-header .brand-logo-header,
+.brand-logo-header {
+  display: inline-flex !important;
+  align-items: center !important;
+  align-self: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  gap: 12px !important;
+  flex-direction: row !important;
+}
+
+.brand-logo-header .brand-mark {
+  width: 44px !important;
+  height: 44px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  filter: drop-shadow(0 2px 6px rgba(15,20,25,0.15));
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1),
+              filter 0.4s ease !important;
+}
+
+@media (max-width: 640px) {
+  .brand-logo-header .brand-mark {
+    width: 38px !important;
+    height: 38px !important;
+  }
+}
+
+/* En home-hero el transform aplica para mover/escalar al centro */
+body.home-hero-active .brand-logo-header .brand-mark {
+  transform: translate(min(607px, calc(50vw - 33px)), calc(22vh - 40px)) scale(5) !important;
+  filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
+          drop-shadow(0 0 28px rgba(237,28,36,0.28)) !important;
+}
+@media (max-width: 1024px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 33px), calc(22vh - 40px)) scale(4.5) !important;
+  }
+}
+@media (max-width: 640px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 30px), calc(22vh - 35px)) scale(4) !important;
+  }
+}
+@media (max-width: 380px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(calc(50vw - 30px), calc(22vh - 35px)) scale(3.5) !important;
+  }
+}
