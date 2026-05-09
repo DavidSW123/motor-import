@@ -3900,3 +3900,39 @@ body.home-hero-active .brand-logo-header .brand-mark {
     padding-top: 280px !important;
   }
 }
+
+/* MOBILE: desactivar efecto logo flotante. Comportamiento estándar */
+@media (max-width: 768px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: none !important;
+    position: relative !important;
+    width: 44px !important;
+    height: 44px !important;
+    top: auto !important;
+    left: auto !important;
+  }
+  body.home-hero-active .brand-logo-header .brand-wordmark {
+    opacity: 1 !important;
+    transform: none !important;
+    pointer-events: auto !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 0 auto 1.5rem !important;
+    z-index: auto !important;
+  }
+  body.home-hero-active .hero-v2 {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 6rem 1.25rem 4rem !important;
+    min-height: 100vh !important;
+  }
+  body.home-hero-active .hero-v2-content {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
