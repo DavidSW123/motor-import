@@ -3973,23 +3973,20 @@ body.home-hero-active .brand-logo-header .brand-mark {
 }
 
 /* ═════════════════════════════════════════════════════════════════
-   AJUSTE FINAL: logo MÁS GRANDE en hero + pildora bajada hasta
-   pegarse al título "Cars & Campers" (DESKTOP / ≥769px)
+   AJUSTE FINAL: logo un poco más grande en hero (DESKTOP / ≥769px).
+   Pildora y padding del título se quedan como estaban (que ya iba bien).
    ═════════════════════════════════════════════════════════════════ */
 @media (min-width: 769px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(min(607px, calc(50vw - 33px)), calc(24vh - 40px)) scale(6.5) !important;
+    transform: translate(min(607px, calc(50vw - 33px)), calc(20vh - 40px)) scale(6) !important;
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(24vh + 220px) !important;
-  }
-  body.home-hero-active .hero-v2 {
-    padding-top: 22rem !important;
+    top: calc(20vh + 130px) !important;
   }
 }
 @media (min-width: 1025px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(min(607px, calc(50vw - 33px)), calc(24vh - 40px)) scale(7) !important;
+    transform: translate(min(607px, calc(50vw - 33px)), calc(20vh - 40px)) scale(6.2) !important;
   }
 }
 
