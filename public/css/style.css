@@ -3336,88 +3336,75 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
 }
 
 /* ──────────────────────────────────────────────────────────────────
-   HOME-HERO V3: logo SIEMPRE en position:fixed para animar
-   suavemente entre el centro del hero y el header (sin saltos).
-   El círculo recorta la imagen con overflow:hidden, y un transform
-   interno hace zoom para mostrar sólo el dibujo+BCN sin el texto.
+   HOME-HERO V4: logo en flex normal del header (no fixed) para
+   alinearse perfecto con el wordmark. Para llevarlo al centro del
+   hero usamos transform translate+scale (animable, sin saltos).
    ────────────────────────────────────────────────────────────────── */
 
-/* Posición ESTADO NORMAL del logo del header (fija sobre el viewport)
-   Alineado con el inicio del nav-container (que tiene max-width:1280px
-   y margin:0 auto). En pantallas anchas: max((100vw-1280)/2 + 16, 20px) */
+/* Estado normal: logo en flex con el wordmark, separados por gap */
+.brand-logo-header {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-direction: row !important;
+}
 .brand-logo-header .brand-mark {
-  position: fixed !important;
-  top: 17px;
-  left: max(20px, calc(50vw - 624px));
+  position: relative;
   width: 50px;
   height: 50px;
   margin: 0;
-  z-index: 51;
-  overflow: hidden !important;
   border-radius: 50%;
-  transition: top 0.75s cubic-bezier(0.4, 0, 0.2, 1),
-              left 0.75s cubic-bezier(0.4, 0, 0.2, 1),
-              width 0.75s cubic-bezier(0.4, 0, 0.2, 1),
-              height 0.75s cubic-bezier(0.4, 0, 0.2, 1),
-              transform 0.75s cubic-bezier(0.4, 0, 0.2, 1),
+  overflow: hidden !important;
+  flex-shrink: 0;
+  transform: translate(0, 0) scale(1);
+  transform-origin: center center;
+  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1),
               filter 0.5s ease;
-  transform: translate(0, 0);
   filter: drop-shadow(0 2px 6px rgba(15,20,25,0.18));
+  z-index: 51;
 }
 
-/* Imagen dentro del círculo: en ESTADO NORMAL, mostrarse completa */
+/* Imagen interior: completa (con object-fit:cover para circular) */
 .brand-mark img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 0;
   display: block;
-  transform: scale(1) translateY(0);
-  transition: transform 0.75s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* El header tiene un placeholder donde irá visualmente el logo
-   cuando esté en estado normal (porque está fixed y no ocupa flex).
-   Con padding-left en el .brand-logo, el wordmark queda a la derecha */
-.brand-logo-header {
-  min-width: 0;
-}
+/* Wordmark: SIN margin-left (el gap del flex hace el espaciado) */
 .brand-logo-header .brand-wordmark {
-  margin-left: 65px; /* deja espacio donde flota el logo de 50px + 15px gap */
-  transition: margin-left 0.5s ease, opacity 0.5s ease, transform 0.5s ease, font-size 0.5s ease;
+  margin-left: 0;
+  transition: opacity 0.5s ease, transform 0.5s ease, font-size 0.5s ease;
 }
 
 /* ────────────────────  ESTADO HOME-HERO  ──────────────────── */
 
-/* Logo flota grande, a la izquierda del centro horizontal */
+/* Logo viaja al centro del viewport con transform (sin cambiar position).
+   Cálculo: el centro original del logo está aprox en
+     X = max(33px, calc((vw - 1280)/2 + 33)) — depende de pantalla
+     Y = ~40px (header de 80px, logo 50px centrado vert)
+   Para llevar el centro a (50vw, 22vh):
+     deltaX = min(607px, calc(50vw - 33px))
+     deltaY = calc(22vh - 40px)
+   Y luego scale(4.4) = 220/50 para hacerlo grande visualmente. */
 body.home-hero-active .brand-logo-header .brand-mark {
-  top: 22vh;
-  left: calc(50% - 130px);
-  width: 220px;
-  height: 220px;
+  transform: translate(min(607px, calc(50vw - 33px)), calc(22vh - 40px)) scale(4.4);
   filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
           drop-shadow(0 0 28px rgba(237,28,36,0.28));
 }
 
-/* Imagen interior: en home-hero se mantiene en escala 1 (logo completo)
-   Si quieres recortar 'CARS & CAMPERS', necesitas un logo PNG ya
-   recortado (sin las cajas superiores). Mientras tanto se ve entero. */
-body.home-hero-active .brand-mark img {
-  transform: scale(1) translateY(0);
-  transform-origin: center center;
-}
-
-/* Wordmark se oculta en home-hero (margin-left ya no necesario) */
+/* Wordmark se oculta */
 body.home-hero-active .brand-logo-header .brand-wordmark {
   opacity: 0;
   transform: translateX(-12px);
   pointer-events: none;
-  margin-left: 0;
 }
 
-/* Pildora 'SELECCIÓN PREMIUM · BARCELONA' al lado derecho del logo */
+/* Pildora 'SELECCIÓN PREMIUM · BARCELONA' DEBAJO del logo */
 .hero-v2-eyebrow {
-  transition: opacity 0.55s ease 0.15s,
+  transition: opacity 0.55s ease 0.2s,
               transform 0.75s cubic-bezier(0.4, 0, 0.2, 1),
               top 0.75s cubic-bezier(0.4, 0, 0.2, 1),
               left 0.75s cubic-bezier(0.4, 0, 0.2, 1),
@@ -3426,9 +3413,9 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
 }
 body.home-hero-active .hero-v2-eyebrow {
   position: fixed !important;
-  top: 22vh !important;
-  left: calc(50% - 100px) !important;
-  transform: translate(0, -50%) !important;
+  top: calc(22vh + 145px) !important; /* 110 (mitad logo) + 35 gap */
+  left: 50% !important;
+  transform: translate(-50%, 0) !important;
   margin: 0 !important;
   z-index: 52;
   opacity: 1;
@@ -3438,46 +3425,30 @@ body.home-hero-active .hero-v2-eyebrow {
 
 /* ─────────────────────  RESPONSIVE  ───────────────────── */
 
-@media (max-width: 900px) {
-  /* Logo en header normal: pegado al borde izquierdo */
-  .brand-logo-header .brand-mark { left: 16px !important; }
-
-  /* Home-hero: logo más pequeño centrado y pildora DEBAJO */
+@media (max-width: 1024px) {
+  /* Pantallas medianas: scale ajustado (deltas absolutos) */
   body.home-hero-active .brand-logo-header .brand-mark {
-    width: 170px;
-    height: 170px;
-    top: 24vh;
-    left: 50%;
-    transform: translate(-50%, 0);
-  }
-  body.home-hero-active .hero-v2-eyebrow {
-    top: calc(24vh + 100px) !important;
-    left: 50% !important;
-    transform: translate(-50%, 0) !important;
+    transform: translate(calc(50vw - 33px), calc(22vh - 40px)) scale(3.6);
   }
 }
 @media (max-width: 640px) {
-  .brand-logo-header .brand-mark { width: 42px !important; height: 42px !important; top: 11px !important; left: 12px !important; }
-  .brand-logo-header .brand-wordmark { margin-left: 54px; }
+  .brand-logo-header .brand-mark { width: 42px; height: 42px; }
 
   body.home-hero-active .brand-logo-header .brand-mark {
-    width: 140px;
-    height: 140px;
-    top: 22vh;
+    /* En móvil, logo origen aprox (16+21, 35) — recalculamos */
+    transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(3.5);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 85px) !important;
+    top: calc(22vh + 105px) !important;
     font-size: 0.7rem;
     padding: 0.5rem 1rem;
   }
 }
 @media (max-width: 380px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    width: 110px;
-    height: 110px;
-    top: 22vh;
+    transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(2.8);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 70px) !important;
+    top: calc(22vh + 90px) !important;
   }
 }
