@@ -3463,13 +3463,16 @@ body.home-hero-active .hero-v2 {
   padding-top: 19rem;
 }
 @media (max-width: 1024px) {
-  body.home-hero-active .hero-v2 { padding-top: 16rem; }
+  body.home-hero-active .hero-v2 { padding-top: 17rem; }
+}
+@media (max-width: 768px) {
+  body.home-hero-active .hero-v2 { padding-top: 18rem; }
 }
 @media (max-width: 640px) {
-  body.home-hero-active .hero-v2 { padding-top: 13rem; }
+  body.home-hero-active .hero-v2 { padding-top: 17rem; }
 }
 @media (max-width: 380px) {
-  body.home-hero-active .hero-v2 { padding-top: 11rem; }
+  body.home-hero-active .hero-v2 { padding-top: 15rem; }
 }
 
 /* ═════════════════════════════════════════════════════════════════
