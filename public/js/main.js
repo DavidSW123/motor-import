@@ -27,6 +27,7 @@ if (mobileMenuBtn && mobileMenu) {
   mobileMenuBtn.addEventListener('click', () => {
     const open = mobileMenu.classList.toggle('open');
     mobileMenuBtn.classList.toggle('open', open);
+    document.body.classList.toggle('mobile-menu-open', open);
     mobileMenuBtn.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
   });
 }

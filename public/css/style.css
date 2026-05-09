@@ -4032,3 +4032,15 @@ body.home-hero-active .brand-logo-header .brand-mark {
     font-size: 0.58rem !important;
   }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   MOBILE: cuando el menú hamburguesa está abierto, ocultar el logo
+   flotante y la pildora "Selección Premium" para que no se vean
+   por encima del menú desplegado.
+   ═════════════════════════════════════════════════════════════════ */
+body.mobile-menu-open .brand-logo-header .brand-mark,
+body.mobile-menu-open .hero-v2-eyebrow {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
