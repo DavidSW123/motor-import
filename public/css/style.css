@@ -3407,7 +3407,7 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
 }
 body.home-hero-active .hero-v2-eyebrow {
   position: fixed !important;
-  top: calc(22vh + 130px) !important; /* 110 (mitad logo) + 20 gap */
+  top: calc(22vh + 100px) !important; /* 110 (mitad logo) - 10 (solapamiento sutil) */
   left: 50% !important;
   transform: translate(-50%, 0) !important;
   margin: 0 !important;
@@ -3425,7 +3425,7 @@ body.home-hero-active .hero-v2-eyebrow {
     transform: translate(calc(50vw - 33px), calc(22vh - 40px)) scale(4);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 120px) !important;
+    top: calc(22vh + 90px) !important;
   }
 }
 @media (max-width: 640px) {
@@ -3435,7 +3435,7 @@ body.home-hero-active .hero-v2-eyebrow {
     transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(3.4);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 100px) !important;
+    top: calc(22vh + 75px) !important;
     font-size: 0.7rem;
     padding: 0.5rem 1rem;
   }
@@ -3445,7 +3445,7 @@ body.home-hero-active .hero-v2-eyebrow {
     transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(2.8);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 80px) !important;
+    top: calc(22vh + 60px) !important;
   }
 }
 
