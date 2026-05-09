@@ -3902,12 +3902,12 @@ body.home-hero-active .brand-logo-header .brand-mark {
 }
 
 /* MOBILE: efecto logo flotante CENTRADO + comportamiento de scroll
-   igual que desktop, pero con escalas y posiciones adaptadas */
+   igual que desktop, pero con escalas y posiciones adaptadas.
+   Logo y pildora MÁS ARRIBA, contenido MÁS ABAJO */
 @media (max-width: 768px) {
-  /* Logo flotante centrado en el hero (position fixed) */
   body.home-hero-active .brand-logo-header .brand-mark {
     position: fixed !important;
-    top: 22vh !important;
+    top: 16vh !important;
     left: 50% !important;
     width: 44px !important;
     height: 44px !important;
@@ -3921,10 +3921,9 @@ body.home-hero-active .brand-logo-header .brand-mark {
     opacity: 0 !important;
     pointer-events: none !important;
   }
-  /* Pildora debajo del logo, position fixed centrada */
   body.home-hero-active .hero-v2-eyebrow {
     position: fixed !important;
-    top: calc(22vh + 95px) !important;
+    top: calc(16vh + 90px) !important;
     left: 50% !important;
     transform: translate(-50%, 0) !important;
     margin: 0 !important;
@@ -3935,11 +3934,9 @@ body.home-hero-active .brand-logo-header .brand-mark {
     white-space: nowrap !important;
     pointer-events: auto !important;
   }
-  /* Hero con display block + padding-top suficiente para que el
-     contenido empiece debajo de la pildora con margen cómodo */
   body.home-hero-active .hero-v2 {
     display: block !important;
-    padding: 320px 1.25rem 4rem !important;
+    padding: 380px 1.25rem 4rem !important;
     min-height: 100vh !important;
   }
   body.home-hero-active .hero-v2-content {
@@ -3951,24 +3948,26 @@ body.home-hero-active .brand-logo-header .brand-mark {
 }
 @media (max-width: 640px) {
   body.home-hero-active .brand-logo-header .brand-mark {
+    top: 15vh !important;
     transform: translate(-50%, -50%) scale(2.8) !important;
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 80px) !important;
+    top: calc(15vh + 75px) !important;
   }
   body.home-hero-active .hero-v2 {
-    padding-top: 280px !important;
+    padding-top: 340px !important;
   }
 }
 @media (max-width: 400px) {
   body.home-hero-active .brand-logo-header .brand-mark {
+    top: 14vh !important;
     transform: translate(-50%, -50%) scale(2.4) !important;
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 70px) !important;
+    top: calc(14vh + 65px) !important;
     font-size: 0.65rem !important;
   }
   body.home-hero-active .hero-v2 {
-    padding-top: 250px !important;
+    padding-top: 300px !important;
   }
 }
