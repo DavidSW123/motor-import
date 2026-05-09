@@ -3901,38 +3901,74 @@ body.home-hero-active .brand-logo-header .brand-mark {
   }
 }
 
-/* MOBILE: desactivar efecto logo flotante. Comportamiento estándar */
+/* MOBILE: efecto logo flotante CENTRADO + comportamiento de scroll
+   igual que desktop, pero con escalas y posiciones adaptadas */
 @media (max-width: 768px) {
+  /* Logo flotante centrado en el hero (position fixed) */
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: none !important;
-    position: relative !important;
+    position: fixed !important;
+    top: 22vh !important;
+    left: 50% !important;
     width: 44px !important;
     height: 44px !important;
-    top: auto !important;
-    left: auto !important;
+    margin: 0 !important;
+    transform: translate(-50%, -50%) scale(3.2) !important;
+    z-index: 50 !important;
+    filter: drop-shadow(0 14px 36px rgba(15,20,25,0.4))
+            drop-shadow(0 0 22px rgba(237,28,36,0.25)) !important;
   }
   body.home-hero-active .brand-logo-header .brand-wordmark {
+    opacity: 0 !important;
+    pointer-events: none !important;
+  }
+  /* Pildora debajo del logo, position fixed centrada */
+  body.home-hero-active .hero-v2-eyebrow {
+    position: fixed !important;
+    top: calc(22vh + 95px) !important;
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+    margin: 0 !important;
+    z-index: 51 !important;
     opacity: 1 !important;
-    transform: none !important;
+    font-size: 0.72rem !important;
+    padding: 0.5rem 1rem !important;
+    white-space: nowrap !important;
     pointer-events: auto !important;
   }
-  body.home-hero-active .hero-v2-eyebrow {
-    position: relative !important;
-    top: auto !important;
-    left: auto !important;
-    transform: none !important;
-    margin: 0 auto 1.5rem !important;
-    z-index: auto !important;
-  }
+  /* Hero con display block + padding-top suficiente para que el
+     contenido empiece debajo de la pildora con margen cómodo */
   body.home-hero-active .hero-v2 {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    padding: 6rem 1.25rem 4rem !important;
+    display: block !important;
+    padding: 320px 1.25rem 4rem !important;
     min-height: 100vh !important;
   }
   body.home-hero-active .hero-v2-content {
-    margin: 0 !important;
+    margin: 0 auto !important;
     padding: 0 !important;
+    max-width: 100%;
+    text-align: center;
+  }
+}
+@media (max-width: 640px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(-50%, -50%) scale(2.8) !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 80px) !important;
+  }
+  body.home-hero-active .hero-v2 {
+    padding-top: 280px !important;
+  }
+}
+@media (max-width: 400px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(-50%, -50%) scale(2.4) !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 70px) !important;
+    font-size: 0.65rem !important;
+  }
+  body.home-hero-active .hero-v2 {
+    padding-top: 250px !important;
   }
 }
