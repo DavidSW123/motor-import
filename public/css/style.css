@@ -3971,3 +3971,67 @@ body.home-hero-active .brand-logo-header .brand-mark {
     padding-top: 300px !important;
   }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   AJUSTE FINAL: logo MÁS GRANDE en hero + pildora bajada hasta
+   pegarse al título "Cars & Campers" (DESKTOP / ≥769px)
+   ═════════════════════════════════════════════════════════════════ */
+@media (min-width: 769px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(min(607px, calc(50vw - 33px)), calc(24vh - 40px)) scale(6.5) !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(24vh + 220px) !important;
+  }
+  body.home-hero-active .hero-v2 {
+    padding-top: 22rem !important;
+  }
+}
+@media (min-width: 1025px) {
+  body.home-hero-active .brand-logo-header .brand-mark {
+    transform: translate(min(607px, calc(50vw - 33px)), calc(24vh - 40px)) scale(7) !important;
+  }
+}
+
+/* ═════════════════════════════════════════════════════════════════
+   MOBILE: wordmark del header VISIBLE cuando NO es home-hero
+   (cuando el usuario hace scroll y el logo va arriba a la izquierda)
+   Anula los display:none antiguos en mobile/tablet.
+   ═════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .site-header .brand-logo-header .brand-wordmark,
+  .brand-logo-header .brand-wordmark {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 4px;
+  }
+  .brand-logo-header .bw-red,
+  .brand-logo-header .bw-dark {
+    padding: 0.32rem 0.45rem !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.02em;
+  }
+  /* En home-hero el wordmark sigue oculto (logo grande centrado) */
+  body.home-hero-active .brand-logo-header .brand-wordmark {
+    opacity: 0 !important;
+    pointer-events: none !important;
+    transform: translateX(-12px);
+  }
+}
+@media (max-width: 540px) {
+  .brand-logo-header .brand-wordmark {
+    display: inline-flex !important;
+  }
+  .brand-logo-header .bw-red,
+  .brand-logo-header .bw-dark {
+    padding: 0.28rem 0.4rem !important;
+    font-size: 0.65rem !important;
+  }
+}
+@media (max-width: 380px) {
+  .brand-logo-header .bw-red,
+  .brand-logo-header .bw-dark {
+    padding: 0.25rem 0.35rem !important;
+    font-size: 0.58rem !important;
+  }
+}
