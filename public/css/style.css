@@ -3825,3 +3825,39 @@ body.home-hero-active .brand-logo-header .brand-mark {
   }
   .container { padding: 0 1rem !important; }
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   FIX MOBILE: forzar el contenido del hero a empezar exactamente
+   donde debe (sin centrado vertical) en home-hero
+   ═════════════════════════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  body.home-hero-active .hero-v2 {
+    align-items: flex-start !important;
+    justify-content: flex-start !important;
+    padding-top: 19rem !important;
+    min-height: auto !important;
+  }
+  body.home-hero-active .hero-v2-content {
+    margin-top: 0 !important;
+  }
+}
+@media (max-width: 640px) {
+  body.home-hero-active .hero-v2 {
+    padding-top: 18rem !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 60px) !important;
+  }
+  /* Título un poco más compacto en mobile para que respire */
+  .hero-v2-title { font-size: clamp(1.9rem, 10vw, 3rem) !important; }
+  .hero-v2-title.hero-v2-title-sm { font-size: clamp(1.6rem, 8vw, 2.5rem) !important; }
+}
+@media (max-width: 400px) {
+  body.home-hero-active .hero-v2 {
+    padding-top: 16rem !important;
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(22vh + 50px) !important;
+  }
+  .hero-v2-title { font-size: clamp(1.6rem, 9vw, 2.5rem) !important; }
+}
