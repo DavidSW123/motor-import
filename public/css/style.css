@@ -3382,15 +3382,10 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
 /* ────────────────────  ESTADO HOME-HERO  ──────────────────── */
 
 /* Logo viaja al centro del viewport con transform (sin cambiar position).
-   Cálculo: el centro original del logo está aprox en
-     X = max(33px, calc((vw - 1280)/2 + 33)) — depende de pantalla
-     Y = ~40px (header de 80px, logo 50px centrado vert)
-   Para llevar el centro a (50vw, 22vh):
-     deltaX = min(607px, calc(50vw - 33px))
-     deltaY = calc(22vh - 40px)
-   Y luego scale(4.4) = 220/50 para hacerlo grande visualmente. */
+   Centro destino: (50vw, 16vh) — bien alto, encima del título.
+   Tamaño visual: 50 * 3.6 = 180px (no compite con el título). */
 body.home-hero-active .brand-logo-header .brand-mark {
-  transform: translate(min(607px, calc(50vw - 33px)), calc(22vh - 40px)) scale(4.4);
+  transform: translate(min(607px, calc(50vw - 33px)), calc(16vh - 40px)) scale(3.6);
   filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
           drop-shadow(0 0 28px rgba(237,28,36,0.28));
 }
@@ -3413,14 +3408,14 @@ body.home-hero-active .brand-logo-header .brand-wordmark {
 }
 body.home-hero-active .hero-v2-eyebrow {
   position: fixed !important;
-  top: calc(22vh + 145px) !important; /* 110 (mitad logo) + 35 gap */
+  top: calc(16vh + 105px) !important; /* 90 (mitad logo) + 15 gap */
   left: 50% !important;
   transform: translate(-50%, 0) !important;
   margin: 0 !important;
   z-index: 52;
   opacity: 1;
   font-size: 0.85rem;
-  padding: 0.7rem 1.4rem;
+  padding: 0.6rem 1.2rem;
 }
 
 /* ─────────────────────  RESPONSIVE  ───────────────────── */
@@ -3428,7 +3423,10 @@ body.home-hero-active .hero-v2-eyebrow {
 @media (max-width: 1024px) {
   /* Pantallas medianas: scale ajustado (deltas absolutos) */
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(calc(50vw - 33px), calc(22vh - 40px)) scale(3.6);
+    transform: translate(calc(50vw - 33px), calc(16vh - 40px)) scale(3.2);
+  }
+  body.home-hero-active .hero-v2-eyebrow {
+    top: calc(16vh + 95px) !important;
   }
 }
 @media (max-width: 640px) {
@@ -3436,19 +3434,19 @@ body.home-hero-active .hero-v2-eyebrow {
 
   body.home-hero-active .brand-logo-header .brand-mark {
     /* En móvil, logo origen aprox (16+21, 35) — recalculamos */
-    transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(3.5);
+    transform: translate(calc(50vw - 37px), calc(14vh - 35px)) scale(2.8);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 105px) !important;
+    top: calc(14vh + 75px) !important;
     font-size: 0.7rem;
     padding: 0.5rem 1rem;
   }
 }
 @media (max-width: 380px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(calc(50vw - 37px), calc(22vh - 35px)) scale(2.8);
+    transform: translate(calc(50vw - 37px), calc(14vh - 35px)) scale(2.4);
   }
   body.home-hero-active .hero-v2-eyebrow {
-    top: calc(22vh + 90px) !important;
+    top: calc(14vh + 65px) !important;
   }
 }
