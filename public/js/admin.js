@@ -1,5 +1,56 @@
 /* Motor Import — Admin JS */
 
+// ── Compresión cliente de imágenes ────────────────────────────────
+// Vercel limita los requests a ~4.5MB. Las fotos de móvil suelen ser
+// 8-15MB, así que reducimos al lado long ≤ 1600px y re-codificamos en
+// JPEG calidad 0.80. Resultado típico: 180-450 KB por imagen — así
+// caben 10+ fotos en un solo POST sin pasarse del límite.
+const COMPRESS_MAX_EDGE = 1600;
+const COMPRESS_QUALITY  = 0.80;
+
+function compressImage(file) {
+  return new Promise((resolve) => {
+    // Si no es imagen o es muy pequeña, pasarla tal cual
+    if (!file.type.startsWith('image/') || file.size < 500 * 1024) {
+      return resolve(file);
+    }
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      let { width, height } = img;
+      const longEdge = Math.max(width, height);
+      if (longEdge > COMPRESS_MAX_EDGE) {
+        const scale = COMPRESS_MAX_EDGE / longEdge;
+        width  = Math.round(width  * scale);
+        height = Math.round(height * scale);
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width  = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0, width, height);
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) return resolve(file);
+          // Si la compresión empeora el peso, devuelve el original
+          if (blob.size >= file.size) return resolve(file);
+          const baseName = file.name.replace(/\.[^.]+$/, '');
+          const newFile = new File([blob], `${baseName}.jpg`, {
+            type: 'image/jpeg',
+            lastModified: Date.now()
+          });
+          resolve(newFile);
+        },
+        'image/jpeg',
+        COMPRESS_QUALITY
+      );
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); resolve(file); };
+    img.src = url;
+  });
+}
+
 // ── Image upload preview ──────────────────────────────────────────
 function setupUploadZone(inputId, previewId, zoneId) {
   const input   = document.getElementById(inputId);
@@ -22,9 +73,17 @@ function setupUploadZone(inputId, previewId, zoneId) {
     });
   }
 
-  function handleFiles(files) {
-    const newFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
-    selectedFiles = [...selectedFiles, ...newFiles].slice(0, MAX_IMAGES);
+  async function handleFiles(files) {
+    const rawNewFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+    if (!rawNewFiles.length) return;
+
+    // Mostrar estado "comprimiendo" en el hint
+    const hint = document.querySelector(`#${zoneId || ''} .upload-zone-hint`) ||
+                 zone?.querySelector('.upload-zone-hint');
+    if (hint) hint.textContent = `Optimizando ${rawNewFiles.length} imagen${rawNewFiles.length !== 1 ? 'es' : ''}…`;
+
+    const compressed = await Promise.all(rawNewFiles.map(compressImage));
+    selectedFiles = [...selectedFiles, ...compressed].slice(0, MAX_IMAGES);
     renderPreviews();
     // Update input with selectedFiles (create DataTransfer)
     if (window.DataTransfer) {
@@ -71,6 +130,37 @@ function setupUploadZone(inputId, previewId, zoneId) {
 // Initialize upload zones
 setupUploadZone('imageInput', 'uploadPreview', 'uploadZone');
 setupUploadZone('addImageInput', 'addUploadPreview', 'addUploadZone');
+
+// ── Guard previo al envío: avisa si pasaría del límite de Vercel
+const VERCEL_LIMIT = 4 * 1024 * 1024;  // 4MB de margen sobre el 4.5MB real
+
+function guardFormSize(form, inputId) {
+  const input = document.getElementById(inputId);
+  if (!input || !input.files.length) return true;
+  const totalSize = Array.from(input.files).reduce((s, f) => s + f.size, 0);
+  if (totalSize <= VERCEL_LIMIT) return true;
+  const mb = (totalSize / 1024 / 1024).toFixed(1);
+  alert(
+    `Las imágenes pesan ${mb} MB en total y el servidor solo acepta 4 MB por subida.\n\n` +
+    `Solución: guarda el coche primero con menos imágenes y añade el resto desde la edición ` +
+    `usando "Añadir imágenes" (puedes hacer varios envíos).`
+  );
+  return false;
+}
+
+const carForm = document.getElementById('carForm');
+if (carForm) {
+  carForm.addEventListener('submit', (e) => {
+    if (!guardFormSize(carForm, 'imageInput')) e.preventDefault();
+  });
+}
+
+const addImgForm = document.getElementById('addImgForm');
+if (addImgForm) {
+  addImgForm.addEventListener('submit', (e) => {
+    if (!guardFormSize(addImgForm, 'addImageInput')) e.preventDefault();
+  });
+}
 
 // ── Delete image confirmation ─────────────────────────────────────
 document.querySelectorAll('.img-action-form').forEach(form => {
