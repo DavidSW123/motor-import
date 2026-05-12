@@ -4096,3 +4096,15 @@ body.mobile-menu-open .hero-v2-eyebrow {
   pointer-events: none !important;
   visibility: hidden !important;
 }
+
+/* ═════════════════════════════════════════════════════════════════
+   ZOOM: suprimir transiciones del logo durante resize / zoom.
+   El transform del logo usa 50vw; al hacer zoom el viewport CSS
+   cambia y la transición animaría 0.7s "deslizándose" hasta el
+   nuevo centro. Esta clase la añade main.js durante 200ms tras
+   cada resize para que el logo salte instantáneamente al nuevo
+   sitio sin animación. Las animaciones de scroll siguen funcionando.
+   ═════════════════════════════════════════════════════════════════ */
+body.disable-logo-transition .brand-logo-header .brand-mark {
+  transition: none !important;
+}

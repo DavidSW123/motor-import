@@ -20,6 +20,21 @@ if (header) {
   onScroll();
 }
 
+// ── Suprimir animación del logo durante zoom / resize ────────────
+// El transform del logo usa 50vw para centrarlo. Al hacer zoom, el
+// vw cambia y la transición animada hace que el logo "se deslice"
+// durante 0.7s hasta el nuevo centro. No queremos esa animación al
+// hacer zoom (solo al scrollear). Desactivamos transitions un breve
+// instante al detectar resize.
+let _logoResizeTimer = null;
+window.addEventListener('resize', () => {
+  document.body.classList.add('disable-logo-transition');
+  clearTimeout(_logoResizeTimer);
+  _logoResizeTimer = setTimeout(() => {
+    document.body.classList.remove('disable-logo-transition');
+  }, 200);
+}, { passive: true });
+
 // ── Mobile menu ───────────────────────────────────────────────────
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileMenu    = document.getElementById('mobileMenu');
