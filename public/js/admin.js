@@ -1,12 +1,12 @@
 /* Motor Import — Admin JS */
 
 // ── Compresión cliente de imágenes ────────────────────────────────
-// Vercel limita los requests a ~4.5MB. Las fotos de móvil suelen ser
-// 8-15MB, así que reducimos al lado long ≤ 1600px y re-codificamos en
-// JPEG calidad 0.80. Resultado típico: 180-450 KB por imagen — así
-// caben 10+ fotos en un solo POST sin pasarse del límite.
-const COMPRESS_MAX_EDGE = 1600;
-const COMPRESS_QUALITY  = 0.80;
+// Servidor propio (Nginx + Node en Hetzner): aguanta 50MB por archivo.
+// Sólo redimensionamos las fotos muy grandes (>2400px en el lado long)
+// para evitar subir cosas innecesariamente enormes, pero conservando
+// calidad alta. Resultado típico: 1-3MB por foto, calidad muy buena.
+const COMPRESS_MAX_EDGE = 2400;
+const COMPRESS_QUALITY  = 0.92;
 
 function compressImage(file) {
   return new Promise((resolve) => {
@@ -131,17 +131,18 @@ function setupUploadZone(inputId, previewId, zoneId) {
 setupUploadZone('imageInput', 'uploadPreview', 'uploadZone');
 setupUploadZone('addImageInput', 'addUploadPreview', 'addUploadZone');
 
-// ── Guard previo al envío: avisa si pasaría del límite de Vercel
-const VERCEL_LIMIT = 4 * 1024 * 1024;  // 4MB de margen sobre el 4.5MB real
+// ── Guard previo al envío: avisa si pasaría del límite del servidor
+// (Nginx tiene client_max_body_size 50M, dejamos 45 de margen).
+const UPLOAD_LIMIT = 45 * 1024 * 1024;
 
 function guardFormSize(form, inputId) {
   const input = document.getElementById(inputId);
   if (!input || !input.files.length) return true;
   const totalSize = Array.from(input.files).reduce((s, f) => s + f.size, 0);
-  if (totalSize <= VERCEL_LIMIT) return true;
+  if (totalSize <= UPLOAD_LIMIT) return true;
   const mb = (totalSize / 1024 / 1024).toFixed(1);
   alert(
-    `Las imágenes pesan ${mb} MB en total y el servidor solo acepta 4 MB por subida.\n\n` +
+    `Las imágenes pesan ${mb} MB en total y el servidor acepta hasta 45 MB por subida.\n\n` +
     `Solución: guarda el coche primero con menos imágenes y añade el resto desde la edición ` +
     `usando "Añadir imágenes" (puedes hacer varios envíos).`
   );

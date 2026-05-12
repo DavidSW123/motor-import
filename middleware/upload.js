@@ -11,5 +11,7 @@ const fileFilter = (_req, file, cb) => {
 module.exports = multer({
   storage: multer.memoryStorage(),
   fileFilter,
-  limits: { fileSize: 8 * 1024 * 1024 }
+  // 50MB por archivo — el servidor (Nginx + Node) los aguanta sin
+  // problema. Antes estaba a 8MB por la limitación de Vercel.
+  limits: { fileSize: 50 * 1024 * 1024 }
 });
