@@ -3988,19 +3988,23 @@ body.home-hero-active .brand-logo-header .brand-mark {
 @media (min-width: 769px) {
   body.home-hero-active .brand-logo-header .brand-mark {
     position: fixed !important;
-    top: 20vh !important;
+    /* SUELO de 200px en CSS px → el logo no se acerca al header al hacer zoom */
+    top: max(20vh, 200px) !important;
     left: 50% !important;
-    width: 44px !important;
-    height: 44px !important;
+    /* Tamaño en px capado por vh → el logo no se desproporciona al hacer zoom */
+    width: min(264px, 28vh) !important;
+    height: min(264px, 28vh) !important;
     margin: 0 !important;
-    transform: translate(-50%, -50%) scale(6) !important;
+    /* Sin scale: ya escalamos vía width/height */
+    transform: translate(-50%, -50%) !important;
     z-index: 50 !important;
     filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
             drop-shadow(0 0 28px rgba(237,28,36,0.28)) !important;
   }
   body.home-hero-active .hero-v2-eyebrow {
     position: fixed !important;
-    top: calc(20vh + 130px) !important;
+    /* Pildora siempre 150px bajo el logo (mismo suelo de 200px) */
+    top: calc(max(20vh, 200px) + 150px) !important;
     left: 50% !important;
     transform: translate(-50%, 0) !important;
     margin: 0 !important;
@@ -4009,7 +4013,8 @@ body.home-hero-active .brand-logo-header .brand-mark {
 }
 @media (min-width: 1025px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(-50%, -50%) scale(6.2) !important;
+    width: min(280px, 30vh) !important;
+    height: min(280px, 30vh) !important;
   }
 }
 
