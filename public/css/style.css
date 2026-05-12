@@ -3985,13 +3985,19 @@ body.home-hero-active .brand-logo-header .brand-mark {
    se descompensaba (el logo se metía sobre el header o se iba a
    sitios raros de la pantalla).
    ═════════════════════════════════════════════════════════════════ */
+/* ═════════════════════════════════════════════════════════════════
+   STACK VERTICAL CONSISTENTE (DESKTOP ≥769px):
+   - Logo flotante (position: fixed) anclado al borde superior a
+     110px del viewport, tamaño capeado con min(264px, 28vh).
+   - Resto del contenido (pildora, título, subtítulo, contador, CTAs)
+     en flow dentro de .hero-v2-content como flex column con gap.
+   - Hero padding-top dinámico que sigue al logo: el contenido siempre
+     empieza 30px bajo el logo, sin importar el zoom.
+   ═════════════════════════════════════════════════════════════════ */
 @media (min-width: 769px) {
-  /* Logo: ancla por borde superior a 110px del top y crece hacia abajo.
-     Su tamaño se cappea con vh para que al hacer zoom se reduzca
-     proporcionalmente y nunca alcance el header. */
+  /* Logo flotante */
   body.home-hero-active .brand-logo-header .brand-mark {
     position: fixed !important;
-    /* center top = 110px (borde superior fijo) + radio del logo */
     top: calc(110px + min(132px, 14vh)) !important;
     left: 50% !important;
     width: min(264px, 28vh) !important;
@@ -4002,25 +4008,37 @@ body.home-hero-active .brand-logo-header .brand-mark {
     filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
             drop-shadow(0 0 28px rgba(237,28,36,0.28)) !important;
   }
-  /* Pildora: pegada al borde inferior del logo + 18px de aire.
-     Su tamaño también se reduce con vh para que no domine al hacer zoom. */
+  /* Pildora vuelve a FLOW (no position:fixed) — la posiciona el
+     padding-top del hero + el flex gap del content. */
   body.home-hero-active .hero-v2-eyebrow {
-    position: fixed !important;
-    top: calc(110px + min(264px, 28vh) + 18px) !important;
-    left: 50% !important;
-    transform: translate(-50%, 0) !important;
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    z-index: auto !important;
     margin: 0 !important;
-    z-index: 51 !important;
-    font-size: min(0.95rem, 1.7vh) !important;
-    padding: min(0.55rem, 1.1vh) min(1.1rem, 1.9vh) !important;
+    font-size: 0.95rem !important;
+    padding: 0.55rem 1.15rem !important;
     white-space: nowrap !important;
   }
-  /* Padding-top suficiente para que el título nunca se solape con la
-     pildora. Pildora ocupa hasta ~432px del top en zoom 100%; con
-     25rem = 400px de padding (+ 80px de header = 480px de viewport
-     hasta el título), queda 48px de aire bajo la pildora. */
+  /* Hero: contenido pegado al top (no flex-center) y padding-top
+     que SIEMPRE deja 30px de aire entre el logo y la pildora,
+     adaptándose al tamaño del logo. */
   body.home-hero-active .hero-v2 {
-    padding-top: 25rem !important;
+    align-items: flex-start !important;
+    padding-top: calc(60px + min(264px, 28vh)) !important;
+  }
+  /* Stack vertical de TODO el contenido con gap consistente */
+  body.home-hero-active .hero-v2-content {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 1.5rem !important;
+    width: 100%;
+  }
+  /* Reset márgenes de los hijos: el gap controla todo el espaciado */
+  body.home-hero-active .hero-v2-content > * {
+    margin: 0 !important;
   }
 }
 
