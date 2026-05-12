@@ -3986,35 +3986,39 @@ body.home-hero-active .brand-logo-header .brand-mark {
    sitios raros de la pantalla).
    ═════════════════════════════════════════════════════════════════ */
 @media (min-width: 769px) {
+  /* Logo: ancla por borde superior a 110px del top y crece hacia abajo.
+     Su tamaño se cappea con vh para que al hacer zoom se reduzca
+     proporcionalmente y nunca alcance el header. */
   body.home-hero-active .brand-logo-header .brand-mark {
     position: fixed !important;
-    /* SUELO de 200px en CSS px → el logo no se acerca al header al hacer zoom */
-    top: max(20vh, 200px) !important;
+    /* center top = 110px (borde superior fijo) + radio del logo */
+    top: calc(110px + min(132px, 14vh)) !important;
     left: 50% !important;
-    /* Tamaño en px capado por vh → el logo no se desproporciona al hacer zoom */
     width: min(264px, 28vh) !important;
     height: min(264px, 28vh) !important;
     margin: 0 !important;
-    /* Sin scale: ya escalamos vía width/height */
     transform: translate(-50%, -50%) !important;
     z-index: 50 !important;
     filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
             drop-shadow(0 0 28px rgba(237,28,36,0.28)) !important;
   }
+  /* Pildora: pegada al borde inferior del logo + 18px de aire.
+     Su tamaño también se reduce con vh para que no domine al hacer zoom. */
   body.home-hero-active .hero-v2-eyebrow {
     position: fixed !important;
-    /* Pildora siempre 150px bajo el logo (mismo suelo de 200px) */
-    top: calc(max(20vh, 200px) + 150px) !important;
+    top: calc(110px + min(264px, 28vh) + 18px) !important;
     left: 50% !important;
     transform: translate(-50%, 0) !important;
     margin: 0 !important;
     z-index: 51 !important;
+    font-size: min(0.95rem, 1.7vh) !important;
+    padding: min(0.55rem, 1.1vh) min(1.1rem, 1.9vh) !important;
+    white-space: nowrap !important;
   }
-}
-@media (min-width: 1025px) {
-  body.home-hero-active .brand-logo-header .brand-mark {
-    width: min(280px, 30vh) !important;
-    height: min(280px, 30vh) !important;
+  /* Padding-top suficiente para que el título nunca se solape con la
+     pildora (pildora ocupa ~110 + 264 + 18 + 40 = 432 al máximo). */
+  body.home-hero-active .hero-v2 {
+    padding-top: 23rem !important;
   }
 }
 
