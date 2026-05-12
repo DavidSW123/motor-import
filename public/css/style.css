@@ -3978,20 +3978,38 @@ body.home-hero-active .brand-logo-header .brand-mark {
 }
 
 /* ═════════════════════════════════════════════════════════════════
-   AJUSTE FINAL: logo un poco más grande en hero (DESKTOP / ≥769px).
-   Pildora y padding del título se quedan como estaban (que ya iba bien).
+   AJUSTE FINAL DESKTOP (≥769px): logo flotante en hero.
+   Usa position:fixed + top/left en vh — igual que mobile — para que
+   el zoom del navegador no descoloque el logo. Antes usaba un
+   translate() desde la posición natural del header y al hacer zoom
+   se descompensaba (el logo se metía sobre el header o se iba a
+   sitios raros de la pantalla).
    ═════════════════════════════════════════════════════════════════ */
 @media (min-width: 769px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(min(607px, calc(50vw - 33px)), calc(20vh - 40px)) scale(6) !important;
+    position: fixed !important;
+    top: 20vh !important;
+    left: 50% !important;
+    width: 44px !important;
+    height: 44px !important;
+    margin: 0 !important;
+    transform: translate(-50%, -50%) scale(6) !important;
+    z-index: 50 !important;
+    filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
+            drop-shadow(0 0 28px rgba(237,28,36,0.28)) !important;
   }
   body.home-hero-active .hero-v2-eyebrow {
+    position: fixed !important;
     top: calc(20vh + 130px) !important;
+    left: 50% !important;
+    transform: translate(-50%, 0) !important;
+    margin: 0 !important;
+    z-index: 51 !important;
   }
 }
 @media (min-width: 1025px) {
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(min(607px, calc(50vw - 33px)), calc(20vh - 40px)) scale(6.2) !important;
+    transform: translate(-50%, -50%) scale(6.2) !important;
   }
 }
 
