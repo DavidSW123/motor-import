@@ -3987,24 +3987,24 @@ body.home-hero-active .brand-logo-header .brand-mark {
    ═════════════════════════════════════════════════════════════════ */
 /* ═════════════════════════════════════════════════════════════════
    STACK VERTICAL CONSISTENTE (DESKTOP ≥769px):
-   - Logo flotante (position: fixed) anclado al borde superior a
-     110px del viewport, tamaño capeado con min(264px, 28vh).
-   - Resto del contenido (pildora, título, subtítulo, contador, CTAs)
-     en flow dentro de .hero-v2-content como flex column con gap.
-   - Hero padding-top dinámico que sigue al logo: el contenido siempre
-     empieza 30px bajo el logo, sin importar el zoom.
+   - Logo: se queda en su sitio natural del header pero con un
+     transform que lo lleva al centro del hero. Como transform
+     es animable, la transición a la esquina al hacer scroll vuelve
+     a funcionar.
+   - Todo CSS px (sin vh) → 100% predecible a cualquier zoom.
+   - Pildora, título, subtítulo, contador y CTAs en flow vertical
+     dentro de .hero-v2-content como flex column con gap.
    ═════════════════════════════════════════════════════════════════ */
 @media (min-width: 769px) {
-  /* Logo flotante */
+  /* Logo: mueve el logo desde su posición natural en el header
+     (≈ 54px desde el izquierdo, 32px desde arriba) hasta:
+     - X: centro del viewport (50vw)
+     - Y: 232px desde el top del viewport (header ~64px + ~168 abajo)
+     A scale 6 = 264px de diámetro visual.
+     Como transform es animable, al perder home-hero-active el logo
+     vuelve a su sitio del header con una transición suave. */
   body.home-hero-active .brand-logo-header .brand-mark {
-    position: fixed !important;
-    top: calc(110px + min(132px, 14vh)) !important;
-    left: 50% !important;
-    width: min(264px, 28vh) !important;
-    height: min(264px, 28vh) !important;
-    margin: 0 !important;
-    transform: translate(-50%, -50%) !important;
-    z-index: 50 !important;
+    transform: translate(calc(50vw - 54px), 200px) scale(6) !important;
     filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
             drop-shadow(0 0 28px rgba(237,28,36,0.28)) !important;
   }
@@ -4021,12 +4021,12 @@ body.home-hero-active .brand-logo-header .brand-mark {
     padding: 0.55rem 1.15rem !important;
     white-space: nowrap !important;
   }
-  /* Hero: contenido pegado al top (no flex-center) y padding-top
-     que SIEMPRE deja 30px de aire entre el logo y la pildora,
-     adaptándose al tamaño del logo. */
+  /* Hero: contenido pegado al top (no flex-center).
+     Padding-top 400px = logo bottom (232+132=364) + 36 de aire.
+     Como no usa vh, es idéntico a cualquier zoom. */
   body.home-hero-active .hero-v2 {
     align-items: flex-start !important;
-    padding-top: calc(60px + min(264px, 28vh)) !important;
+    padding-top: 400px !important;
   }
   /* Stack vertical de TODO el contenido con gap consistente */
   body.home-hero-active .hero-v2-content {
