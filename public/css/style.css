@@ -4016,9 +4016,11 @@ body.home-hero-active .brand-logo-header .brand-mark {
     white-space: nowrap !important;
   }
   /* Padding-top suficiente para que el título nunca se solape con la
-     pildora (pildora ocupa ~110 + 264 + 18 + 40 = 432 al máximo). */
+     pildora. Pildora ocupa hasta ~432px del top en zoom 100%; con
+     25rem = 400px de padding (+ 80px de header = 480px de viewport
+     hasta el título), queda 48px de aire bajo la pildora. */
   body.home-hero-active .hero-v2 {
-    padding-top: 23rem !important;
+    padding-top: 25rem !important;
   }
 }
 
