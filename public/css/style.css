@@ -3995,21 +3995,24 @@ body.home-hero-active .brand-logo-header .brand-mark {
    - Pildora, título, subtítulo, contador y CTAs en flow vertical
      dentro de .hero-v2-content como flex column con gap.
    ═════════════════════════════════════════════════════════════════ */
-@media (min-width: 769px) {
-  /* Logo: mueve el logo desde su posición natural en el header
-     (≈ 54px desde el izquierdo, 32px desde arriba) hasta:
-     - X: centro del viewport (50vw)
-     - Y: 232px desde el top del viewport (header ~64px + ~168 abajo)
-     A scale 6 = 264px de diámetro visual.
-     Como transform es animable, al perder home-hero-active el logo
-     vuelve a su sitio del header con una transición suave. */
+/* Cambio min-width: 769→481 para que aplique también al hacer
+   zoom in en desktop (viewport CSS baja de 768) y evitar que
+   se activen las reglas mobile con vh que solapan el header. */
+@media (min-width: 481px) {
+  /* Logo: translate desde posición natural en header al centro.
+     X: min(50vw - 54, 618) porque el nav-container tiene
+        max-width: 1280 + margin auto. A partir de vw=1344 el
+        contenedor se centra y el logo natural se aleja del
+        borde izquierdo → translate X se satura en 618px.
+     Y: 200px constantes (logo natural ≈45 → center llega a 245). */
   body.home-hero-active .brand-logo-header .brand-mark {
-    transform: translate(calc(50vw - 54px), 200px) scale(6) !important;
+    transform: translate(min(calc(50vw - 54px), 618px), 200px) scale(6) !important;
+    width: 44px !important;
+    height: 44px !important;
     filter: drop-shadow(0 18px 44px rgba(15,20,25,0.45))
             drop-shadow(0 0 28px rgba(237,28,36,0.28)) !important;
   }
-  /* Pildora vuelve a FLOW (no position:fixed) — la posiciona el
-     padding-top del hero + el flex gap del content. */
+  /* Pildora vuelve a FLOW (no position:fixed) */
   body.home-hero-active .hero-v2-eyebrow {
     position: static !important;
     top: auto !important;
@@ -4021,14 +4024,12 @@ body.home-hero-active .brand-logo-header .brand-mark {
     padding: 0.55rem 1.15rem !important;
     white-space: nowrap !important;
   }
-  /* Hero: contenido pegado al top (no flex-center).
-     Padding-top 400px = logo bottom (232+132=364) + 36 de aire.
-     Como no usa vh, es idéntico a cualquier zoom. */
+  /* Hero: contenido al top, padding fijo en CSS px */
   body.home-hero-active .hero-v2 {
     align-items: flex-start !important;
     padding-top: 400px !important;
   }
-  /* Stack vertical de TODO el contenido con gap consistente */
+  /* Stack vertical con gap consistente */
   body.home-hero-active .hero-v2-content {
     display: flex !important;
     flex-direction: column !important;
@@ -4036,7 +4037,6 @@ body.home-hero-active .brand-logo-header .brand-mark {
     gap: 1.5rem !important;
     width: 100%;
   }
-  /* Reset márgenes de los hijos: el gap controla todo el espaciado */
   body.home-hero-active .hero-v2-content > * {
     margin: 0 !important;
   }
