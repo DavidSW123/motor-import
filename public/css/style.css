@@ -759,69 +759,41 @@ strong { color: var(--text); font-weight: 700; }
 .gallery-panel { display: none; }
 .gallery-panel.is-active { display: block; }
 
-/* ── Sección Vídeos en la ficha pública ───────────────────── */
-.car-videos-section { /* hereda de .car-section, sólo añadimos cabecera */ }
-.car-videos-head {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+/* ── Bloque Vídeos dentro de la galería ───────────────────── */
+.gallery-videos-block {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
 }
-.car-videos-title {
-  display: inline-flex; align-items: center; gap: 0.55rem;
-  margin: 0;
+.gallery-videos-label {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-size: 0.82rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--text-muted, #6b7280);
+  margin-bottom: 0.6rem;
 }
-.car-videos-counter {
-  display: inline-flex; align-items: center;
-  padding: 0.35rem 0.85rem;
-  border-radius: 999px;
-  background: rgba(185, 28, 28, 0.12);
-  color: var(--accent, #b91c1c);
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.02em;
-}
-
-/* ── Grid de vídeos en la galería ─────────────────────────── */
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 0.85rem;
-}
-.video-thumb {
+.gallery-video-thumbs .gallery-thumb {
   position: relative;
-  aspect-ratio: 16 / 9;
-  border-radius: var(--radius-sm);
-  overflow: hidden;
   background: #000;
   cursor: pointer;
-  border: 1px solid var(--border);
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
-.video-thumb:hover {
-  transform: translateY(-2px);
-  border-color: var(--accent);
-  box-shadow: 0 14px 28px rgba(0,0,0,0.25);
-}
-.video-thumb video {
+.gallery-video-thumbs .gallery-thumb video {
   width: 100%; height: 100%; object-fit: cover;
   pointer-events: none;
+  display: block;
 }
-.video-thumb-overlay {
+.gallery-thumb-play {
   position: absolute; inset: 0;
   display: flex; align-items: center; justify-content: center;
-  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.4) 100%);
+  background: rgba(0,0,0,0.28);
   color: white;
-  transition: background 0.25s ease;
+  pointer-events: none;
+  transition: background 0.2s ease;
 }
-.video-thumb:hover .video-thumb-overlay { background: rgba(0,0,0,0.55); }
-.video-thumb-overlay svg {
-  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+.gallery-video-thumbs .gallery-thumb:hover .gallery-thumb-play {
+  background: rgba(0,0,0,0.5);
 }
-.video-thumb-label {
-  position: absolute; bottom: 0.5rem; left: 0.65rem;
-  color: white; font-size: 0.78rem; font-weight: 700;
-  letter-spacing: 0.04em; text-transform: uppercase;
-  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
-}
+.gallery-thumb-play svg { filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
 
 /* ── 20. Auth pages ───────────────────────── */
 .auth-page {
