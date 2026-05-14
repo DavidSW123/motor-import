@@ -5,7 +5,36 @@
   const tipoLabel = isCamper ? 'Camper' : 'Coche';
   const waMsg = encodeURIComponent(`Hola, me interesa el ${car.marca} ${car.modelo} ${car.anio} (${precio}). ¿Sigue disponible?`);
 %>
-<%- include('partials/header', { title: `${car.marca} ${car.modelo} ${car.anio}` }) %>
+<%
+  const carTitle = `${car.marca} ${car.modelo} ${car.anio} · ${precio}`;
+  const carDesc  = `${car.marca} ${car.modelo} del ${car.anio} con ${km} km · ${car.combustible} · ${car.transmision} · Cars & Campers BCN`;
+  const carImage = (images[0] && images[0].url) ? `https://carscampers.com${images[0].url}` : 'https://carscampers.com/img/logo.png';
+%>
+<%- include('partials/header', { title: carTitle, description: carDesc, ogImage: carImage }) %>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Vehicle",
+  "name": "<%= car.marca %> <%= car.modelo %> <%= car.anio %>",
+  "brand": { "@type": "Brand", "name": "<%= car.marca %>" },
+  "model": "<%= car.modelo %>",
+  "vehicleModelDate": "<%= car.anio %>",
+  "mileageFromOdometer": { "@type": "QuantitativeValue", "value": <%= car.kilometraje %>, "unitCode": "KMT" },
+  "fuelType": "<%= car.combustible %>",
+  "vehicleTransmission": "<%= car.transmision %>",
+  <% if (car.color) { %>"color": "<%= car.color %>",<% } %>
+  <% if (car.potencia) { %>"vehicleEngine": { "@type": "EngineSpecification", "enginePower": { "@type": "QuantitativeValue", "value": <%= car.potencia %>, "unitText": "CV" } },<% } %>
+  "image": "<%= carImage %>",
+  "offers": {
+    "@type": "Offer",
+    "price": <%= car.precio %>,
+    "priceCurrency": "EUR",
+    "availability": "<%= car.estado === 'disponible' ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut' %>",
+    "seller": { "@type": "AutoDealer", "name": "Cars & Campers BCN" }
+  }
+}
+</script>
 
 <main class="car-detail-page">
   <div class="container">

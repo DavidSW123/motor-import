@@ -99,4 +99,57 @@ router.post('/contacto', async (req, res) => {
   });
 });
 
+// ── SITEMAP XML (para Google Search Console) ──────────────────────
+router.get('/sitemap.xml', async (req, res) => {
+  const base = 'https://carscampers.com';
+  const today = new Date().toISOString().split('T')[0];
+  try {
+    const cars = await getAll(
+      "SELECT slug, created_at FROM cars WHERE estado = 'disponible' ORDER BY created_at DESC"
+    );
+
+    const staticPages = [
+      { loc: '/',                                priority: '1.0', change: 'daily'   },
+      { loc: '/coches',                          priority: '0.9', change: 'daily'   },
+      { loc: '/coches/nacional',                 priority: '0.8', change: 'daily'   },
+      { loc: '/coches/importacion',              priority: '0.8', change: 'daily'   },
+      { loc: '/campers',                         priority: '0.9', change: 'daily'   },
+      { loc: '/servicios',                       priority: '0.7', change: 'monthly' },
+      { loc: '/servicios/vehiculos-a-la-carta',  priority: '0.7', change: 'monthly' },
+      { loc: '/servicios/techos-elevables',      priority: '0.7', change: 'monthly' },
+      { loc: '/contacto',                        priority: '0.6', change: 'monthly' }
+    ];
+
+    let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`;
+    xml += `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n`;
+
+    for (const p of staticPages) {
+      xml += `  <url>\n`;
+      xml += `    <loc>${base}${p.loc}</loc>\n`;
+      xml += `    <lastmod>${today}</lastmod>\n`;
+      xml += `    <changefreq>${p.change}</changefreq>\n`;
+      xml += `    <priority>${p.priority}</priority>\n`;
+      xml += `  </url>\n`;
+    }
+
+    for (const car of cars) {
+      const lastmod = (car.created_at || '').split('T')[0] || today;
+      xml += `  <url>\n`;
+      xml += `    <loc>${base}/coches/${car.slug}</loc>\n`;
+      xml += `    <lastmod>${lastmod}</lastmod>\n`;
+      xml += `    <changefreq>weekly</changefreq>\n`;
+      xml += `    <priority>0.8</priority>\n`;
+      xml += `  </url>\n`;
+    }
+
+    xml += `</urlset>\n`;
+
+    res.set('Content-Type', 'application/xml');
+    res.send(xml);
+  } catch (err) {
+    console.error('[sitemap] error:', err);
+    res.status(500).send('Error generando sitemap');
+  }
+});
+
 module.exports = router;

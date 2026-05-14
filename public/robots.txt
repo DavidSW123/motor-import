@@ -1,0 +1,8 @@
+# Cars & Campers BCN - robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /admin/
+
+# Sitemap
+Sitemap: https://carscampers.com/sitemap.xml
