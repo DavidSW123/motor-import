@@ -5,14 +5,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <%
     const SITE_URL = 'https://carscampers.com';
-    const pageTitle = typeof title !== 'undefined'
+    const pageTitle = (typeof title !== 'undefined')
       ? title + ' | Cars & Campers'
       : 'Cars & Campers — Coches y autocaravanas seleccionados en Barcelona';
-    const pageDesc  = typeof description !== 'undefined'
+    const pageDesc  = (typeof description !== 'undefined')
       ? description
       : 'Concesionario premium en Barcelona. Coches nacionales y de importación + autocaravanas con documentación completa, garantía y trato cercano.';
-    const canonical = SITE_URL + (currentPath || '/');
-    const ogImage   = (typeof ogImage !== 'undefined') ? ogImage : (SITE_URL + '/img/logo.png');
+    const _currentPath = (typeof currentPath !== 'undefined') ? currentPath : '/';
+    const canonical = SITE_URL + _currentPath;
+    // OJO: no usar 'const ogImage' aquí porque entra en TDZ con la
+    //   variable passada como local desde include(). Usamos otro nombre.
+    const ogImageUrl = (typeof ogImage !== 'undefined') ? ogImage : (SITE_URL + '/img/logo.png');
   %>
   <title><%= pageTitle %></title>
   <meta name="description" content="<%= pageDesc %>">
@@ -29,14 +32,14 @@
   <meta property="og:title" content="<%= pageTitle %>">
   <meta property="og:description" content="<%= pageDesc %>">
   <meta property="og:url" content="<%= canonical %>">
-  <meta property="og:image" content="<%= ogImage %>">
+  <meta property="og:image" content="<%= ogImageUrl %>">
   <meta property="og:locale" content="es_ES">
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="<%= pageTitle %>">
   <meta name="twitter:description" content="<%= pageDesc %>">
-  <meta name="twitter:image" content="<%= ogImage %>">
+  <meta name="twitter:image" content="<%= ogImageUrl %>">
 
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="/img/logo.png">
