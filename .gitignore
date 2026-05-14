@@ -1,16 +1,22 @@
 node_modules/
+
+# ── SECRETOS: NUNCA commitear NINGÚN .env de ningún tipo ─────────
 .env
+.env.*
+.env.production
+.env.local
+.env*.local
+.env*
+*.env
 
 # SQLite local
 database/*.sqlite
 database/*.sqlite-shm
 database/*.sqlite-wal
 
-# Uploaded images (served from Cloudinary in prod)
+# Uploaded images (served from Cloudinary en prod)
 public/uploads/cars/
 
 # Build artifacts
 .vercel/
-
 .vercel
-.env*.local
