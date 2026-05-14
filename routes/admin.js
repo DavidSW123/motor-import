@@ -6,6 +6,7 @@ const { requireAdmin }   = require('../middleware/auth');
 const upload             = require('../middleware/upload');
 const { detectMediaType } = require('../middleware/upload');
 const { upload: uploadImg, uploadLogo, deleteImage } = require('../utils/imageUpload');
+const MARCAS_MODELOS     = require('../utils/car-models');
 const router             = express.Router();
 
 function makeSlug(marca, modelo, anio) {
@@ -103,7 +104,11 @@ router.get('/coches', async (req, res) => {
 
 // ── Vehículos: nuevo formulario ───────────────────────────────────
 router.get('/coches/nuevo', (req, res) => {
-  res.render('admin/coche-form', { title: 'Añadir vehículo', car: null, images: [] });
+  res.render('admin/coche-form', {
+    title: 'Añadir vehículo',
+    car: null, images: [],
+    marcasModelos: MARCAS_MODELOS
+  });
 });
 
 // ── Vehículos: crear ──────────────────────────────────────────────
@@ -160,12 +165,20 @@ router.get('/coches/:id/editar', async (req, res) => {
     const car    = await getOne('SELECT * FROM cars WHERE id = ?', [req.params.id]);
     if (!car) { req.session.flash = { type: 'error', msg: 'Vehículo no encontrado.' }; return res.redirect('/admin/coches'); }
     const images = await getAll('SELECT * FROM car_images WHERE car_id = ? ORDER BY es_principal DESC, orden ASC', [Number(car.id)]);
-    res.render('admin/coche-form', { title: `Editar: ${car.marca} ${car.modelo}`, car, images });
+    res.render('admin/coche-form', {
+      title: `Editar: ${car.marca} ${car.modelo}`,
+      car, images,
+      marcasModelos: MARCAS_MODELOS
+    });
   } catch (err) { console.error(err); res.status(500).send('Error interno'); }
 });
 
 // ── Vehículos: actualizar ─────────────────────────────────────────
-router.post('/coches/:id', async (req, res) => {
+// El form del editar usa enctype="multipart/form-data" (para que la
+// creación pueda subir imágenes). En la edición no hay archivos,
+// pero seguimos necesitando multer para que parsee los campos de
+// texto, si no req.body queda vacío.
+router.post('/coches/:id', upload.none(), async (req, res) => {
   const { categoria, origen, marca, modelo, anio, precio, kilometraje, combustible, transmision,
           pais_origen, color, potencia, puertas, plazas, descripcion, estado, destacado } = req.body;
   try {
