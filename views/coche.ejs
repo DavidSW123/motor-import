@@ -24,37 +24,73 @@
 
       <!-- ── GALERÍA ───────────────────────────────────── -->
       <div class="car-gallery">
-        <div class="gallery-main" id="galleryMain">
-          <% if (images.length > 0) { %>
-            <img src="<%= images[0].url %>"
-                 alt="<%= car.marca %> <%= car.modelo %>"
-                 id="mainImage" loading="eager">
-            <div class="gallery-zoom-hint">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-              Ampliar
+
+        <!-- Tabs Fotos / Vídeos (solo si hay vídeos) -->
+        <% if (videos && videos.length > 0) { %>
+          <div class="gallery-tabs">
+            <button type="button" class="gallery-tab is-active" data-tab="fotos">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+              Fotos (<%= images.length %>)
+            </button>
+            <button type="button" class="gallery-tab" data-tab="videos">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+              Vídeos (<%= videos.length %>)
+            </button>
+          </div>
+        <% } %>
+
+        <!-- Panel fotos -->
+        <div class="gallery-panel is-active" data-panel="fotos">
+          <div class="gallery-main" id="galleryMain">
+            <% if (images.length > 0) { %>
+              <img src="<%= images[0].url %>"
+                   alt="<%= car.marca %> <%= car.modelo %>"
+                   id="mainImage" loading="eager">
+              <div class="gallery-zoom-hint">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                Ampliar
+              </div>
+            <% } else { %>
+              <img src="/img/car-placeholder.svg" alt="Sin imagen disponible">
+            <% } %>
+          </div>
+
+          <% if (images.length > 1) { %>
+            <div class="gallery-thumbs" id="galleryThumbs">
+              <% images.forEach((img, i) => { %>
+                <div class="gallery-thumb <%= i === 0 ? 'active' : '' %>"
+                     data-src="<%= img.url %>"
+                     data-index="<%= i %>">
+                  <img src="<%= img.url %>" alt="" loading="lazy">
+                </div>
+              <% }) %>
             </div>
-          <% } else { %>
-            <img src="/img/car-placeholder.svg" alt="Sin imagen disponible">
+          <% } %>
+
+          <% if (images.length > 0) { %>
+            <div class="gallery-counter-bar">
+              <span id="galleryCurrent">1</span> / <%= images.length %> fotos
+            </div>
           <% } %>
         </div>
 
-        <% if (images.length > 1) { %>
-          <div class="gallery-thumbs" id="galleryThumbs">
-            <% images.forEach((img, i) => { %>
-              <div class="gallery-thumb <%= i === 0 ? 'active' : '' %>"
-                   data-src="<%= img.url %>"
-                   data-index="<%= i %>">
-                <img src="<%= img.url %>" alt="" loading="lazy">
+        <!-- Panel vídeos -->
+        <% if (videos && videos.length > 0) { %>
+        <div class="gallery-panel" data-panel="videos">
+          <div class="video-grid">
+            <% videos.forEach((vid, i) => { %>
+              <div class="video-thumb" data-video-index="<%= i %>">
+                <video src="<%= vid.url %>" muted preload="metadata" playsinline></video>
+                <div class="video-thumb-overlay">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                </div>
+                <div class="video-thumb-label">Vídeo <%= i + 1 %></div>
               </div>
             <% }) %>
           </div>
+        </div>
         <% } %>
 
-        <% if (images.length > 0) { %>
-          <div class="gallery-counter-bar">
-            <span id="galleryCurrent">1</span> / <%= images.length %> fotos
-          </div>
-        <% } %>
       </div>
 
       <!-- ── PANEL DE INFO ─────────────────────────────── -->
@@ -189,19 +225,29 @@
   </div>
 </main>
 
-<!-- ── LIGHTBOX ────────────────────────────────────────────── -->
-<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galería de imágenes">
+<!-- ── LIGHTBOX (soporta imágenes con zoom y vídeos) ─────────── -->
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Galería de medios">
   <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">✕</button>
   <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Anterior">&#8249;</button>
-  <img class="lightbox-img" id="lightboxImg" src="" alt="">
+  <div class="lightbox-stage" id="lightboxStage">
+    <img class="lightbox-img" id="lightboxImg" src="" alt="" draggable="false">
+    <video class="lightbox-video" id="lightboxVideo" controls playsinline preload="metadata" style="display:none"></video>
+  </div>
   <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Siguiente">&#8250;</button>
+  <div class="lightbox-toolbar">
+    <button type="button" class="lightbox-tool" id="lightboxZoomOut" aria-label="Alejar">−</button>
+    <button type="button" class="lightbox-tool" id="lightboxZoomReset" aria-label="Tamaño original">1:1</button>
+    <button type="button" class="lightbox-tool" id="lightboxZoomIn" aria-label="Acercar">+</button>
+  </div>
   <div class="lightbox-counter">
-    <span id="lightboxCurrent">1</span> / <span id="lightboxTotal"><%= images.length %></span>
+    <span id="lightboxCurrent">1</span> / <span id="lightboxTotal">1</span>
   </div>
 </div>
 
 <script>
+  // Imágenes y vídeos del coche para el lightbox y la galería
   const CAR_IMAGES = <%- JSON.stringify(images.map(img => img.url)) %>;
+  const CAR_VIDEOS = <%- JSON.stringify((videos || []).map(v => v.url)) %>;
 </script>
 
 <%- include('partials/footer') %>

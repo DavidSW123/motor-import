@@ -11,3 +11,6 @@ public/uploads/cars/
 
 # Build artifacts
 .vercel/
+
+.vercel
+.env*.local

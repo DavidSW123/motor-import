@@ -4,6 +4,7 @@ const slugify            = require('slugify');
 const { getOne, getAll, run, getSettings, setSetting } = require('../database/db');
 const { requireAdmin }   = require('../middleware/auth');
 const upload             = require('../middleware/upload');
+const { detectMediaType } = require('../middleware/upload');
 const { upload: uploadImg, uploadLogo, deleteImage } = require('../utils/imageUpload');
 const router             = express.Router();
 
@@ -130,11 +131,22 @@ router.post('/coches', upload.array('imagenes', 15), async (req, res) => {
     const carId = result.lastInsertRowid;
 
     if (req.files?.length > 0) {
-      for (let i = 0; i < req.files.length; i++) {
-        const file = req.files[i];
+      // Ordenar imágenes primero, vídeos después. Y la principal es
+      // la primera imagen (los vídeos nunca van como principal).
+      const imgs = req.files.filter(f => detectMediaType(f.originalname) === 'imagen');
+      const vids = req.files.filter(f => detectMediaType(f.originalname) === 'video');
+      const ordered = [...imgs, ...vids];
+
+      let firstImgIdx = imgs.length > 0 ? 0 : -1;
+      for (let i = 0; i < ordered.length; i++) {
+        const file = ordered[i];
+        const tipo = detectMediaType(file.originalname);
         const { url, cloud_id } = await uploadImg(file.buffer, file.originalname, carId);
-        await run('INSERT INTO car_images (car_id, url, cloud_id, orden, es_principal) VALUES (?, ?, ?, ?, ?)',
-          [carId, url, cloud_id, i, i === 0 ? 1 : 0]);
+        const esPrincipal = (tipo === 'imagen' && i === firstImgIdx) ? 1 : 0;
+        await run(
+          'INSERT INTO car_images (car_id, url, cloud_id, orden, es_principal, tipo) VALUES (?, ?, ?, ?, ?, ?)',
+          [carId, url, cloud_id, i, esPrincipal, tipo]
+        );
       }
     }
     req.session.flash = { type: 'success', msg: 'Vehículo añadido correctamente.' };
@@ -184,24 +196,38 @@ router.post('/coches/:id/eliminar', async (req, res) => {
   res.redirect('/admin/coches');
 });
 
-// ── Imágenes: subir ───────────────────────────────────────────────
-router.post('/coches/:id/imagenes', upload.array('imagenes', 15), async (req, res) => {
+// ── Imágenes / vídeos: subir ──────────────────────────────────────
+router.post('/coches/:id/imagenes', upload.array('imagenes', 20), async (req, res) => {
   const carId = parseInt(req.params.id);
-  const count = await getOne('SELECT COUNT(*) AS n FROM car_images WHERE car_id = ?', [carId]);
-  const current = count?.n || 0;
+  const countImgs = await getOne(
+    "SELECT COUNT(*) AS n FROM car_images WHERE car_id = ? AND tipo = 'imagen'", [carId]
+  );
+  const currentImgs = countImgs?.n || 0;
+  const countAll = await getOne('SELECT COUNT(*) AS n FROM car_images WHERE car_id = ?', [carId]);
+  const currentAll = countAll?.n || 0;
+
   if (!req.files?.length) {
-    req.session.flash = { type: 'error', msg: 'No se seleccionaron imágenes.' };
+    req.session.flash = { type: 'error', msg: 'No se seleccionaron archivos.' };
     return res.redirect(`/admin/coches/${carId}/editar`);
   }
-  const canAdd = Math.max(0, 15 - current);
-  const toAdd  = req.files.slice(0, canAdd);
+  const toAdd = req.files.slice(0, 25); // safety cap
+  let added = { imagen: 0, video: 0 };
   for (let i = 0; i < toAdd.length; i++) {
     const file = toAdd[i];
+    const tipo = detectMediaType(file.originalname);
     const { url, cloud_id } = await uploadImg(file.buffer, file.originalname, carId);
-    await run('INSERT INTO car_images (car_id, url, cloud_id, orden, es_principal) VALUES (?, ?, ?, ?, ?)',
-      [carId, url, cloud_id, current + i, current === 0 && i === 0 ? 1 : 0]);
+    // La principal sólo se asigna si es la PRIMERA imagen del coche
+    const esPrincipal = (tipo === 'imagen' && currentImgs === 0 && added.imagen === 0) ? 1 : 0;
+    await run(
+      'INSERT INTO car_images (car_id, url, cloud_id, orden, es_principal, tipo) VALUES (?, ?, ?, ?, ?, ?)',
+      [carId, url, cloud_id, currentAll + i, esPrincipal, tipo]
+    );
+    added[tipo]++;
   }
-  req.session.flash = { type: 'success', msg: `${toAdd.length} imagen(es) añadida(s).` };
+  const parts = [];
+  if (added.imagen) parts.push(`${added.imagen} imagen${added.imagen > 1 ? 'es' : ''}`);
+  if (added.video)  parts.push(`${added.video} vídeo${added.video > 1 ? 's' : ''}`);
+  req.session.flash = { type: 'success', msg: `Añadido${parts.length > 1 ? 's' : ''}: ${parts.join(' y ')}.` };
   res.redirect(`/admin/coches/${carId}/editar`);
 });
 
@@ -212,10 +238,15 @@ router.post('/imagenes/:imageId/eliminar', async (req, res) => {
   await deleteImage(img.url, img.cloud_id);
   await run('DELETE FROM car_images WHERE id = ?', [Number(img.id)]);
   if (img.es_principal) {
-    const next = await getOne('SELECT id FROM car_images WHERE car_id = ? ORDER BY orden LIMIT 1', [Number(img.car_id)]);
+    // Asigna como principal la siguiente IMAGEN (no vídeo)
+    const next = await getOne(
+      "SELECT id FROM car_images WHERE car_id = ? AND tipo = 'imagen' ORDER BY orden LIMIT 1",
+      [Number(img.car_id)]
+    );
     if (next) await run('UPDATE car_images SET es_principal = 1 WHERE id = ?', [Number(next.id)]);
   }
-  req.session.flash = { type: 'success', msg: 'Imagen eliminada.' };
+  const label = img.tipo === 'video' ? 'Vídeo' : 'Imagen';
+  req.session.flash = { type: 'success', msg: `${label} eliminado.` };
   res.redirect(`/admin/coches/${img.car_id}/editar`);
 });
 
@@ -223,6 +254,10 @@ router.post('/imagenes/:imageId/eliminar', async (req, res) => {
 router.post('/imagenes/:imageId/principal', async (req, res) => {
   const img = await getOne('SELECT * FROM car_images WHERE id = ?', [req.params.imageId]);
   if (!img) return res.redirect('/admin/coches');
+  if (img.tipo === 'video') {
+    req.session.flash = { type: 'error', msg: 'Sólo las imágenes pueden ser principal.' };
+    return res.redirect(`/admin/coches/${img.car_id}/editar`);
+  }
   await run('UPDATE car_images SET es_principal = 0 WHERE car_id = ?', [Number(img.car_id)]);
   await run('UPDATE car_images SET es_principal = 1 WHERE id = ?', [Number(img.id)]);
   req.session.flash = { type: 'success', msg: 'Imagen principal actualizada.' };

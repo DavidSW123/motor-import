@@ -58,7 +58,7 @@ function setupUploadZone(inputId, previewId, zoneId) {
   const zone    = document.getElementById(zoneId);
   if (!input || !preview) return;
 
-  const MAX_IMAGES = 15;
+  const MAX_FILES = 20;
   let selectedFiles = [];
 
   input.addEventListener('change', () => handleFiles(input.files));
@@ -74,18 +74,23 @@ function setupUploadZone(inputId, previewId, zoneId) {
   }
 
   async function handleFiles(files) {
-    const rawNewFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+    const rawNewFiles = Array.from(files).filter(f =>
+      f.type.startsWith('image/') || f.type.startsWith('video/')
+    );
     if (!rawNewFiles.length) return;
 
-    // Mostrar estado "comprimiendo" en el hint
     const hint = document.querySelector(`#${zoneId || ''} .upload-zone-hint`) ||
                  zone?.querySelector('.upload-zone-hint');
-    if (hint) hint.textContent = `Optimizando ${rawNewFiles.length} imagen${rawNewFiles.length !== 1 ? 'es' : ''}…`;
 
-    const compressed = await Promise.all(rawNewFiles.map(compressImage));
-    selectedFiles = [...selectedFiles, ...compressed].slice(0, MAX_IMAGES);
+    // Comprimir SOLO imágenes; los vídeos van tal cual (no se procesan)
+    const imgs = rawNewFiles.filter(f => f.type.startsWith('image/'));
+    const vids = rawNewFiles.filter(f => f.type.startsWith('video/'));
+
+    if (imgs.length && hint) hint.textContent = `Optimizando ${imgs.length} imagen${imgs.length !== 1 ? 'es' : ''}…`;
+    const compressedImgs = await Promise.all(imgs.map(compressImage));
+
+    selectedFiles = [...selectedFiles, ...compressedImgs, ...vids].slice(0, MAX_FILES);
     renderPreviews();
-    // Update input with selectedFiles (create DataTransfer)
     if (window.DataTransfer) {
       const dt = new DataTransfer();
       selectedFiles.forEach(f => dt.items.add(f));
@@ -95,16 +100,30 @@ function setupUploadZone(inputId, previewId, zoneId) {
 
   function renderPreviews() {
     preview.innerHTML = '';
+    // Calcular qué item será principal (la PRIMERA imagen, no vídeo)
+    const firstImageIdx = selectedFiles.findIndex(f => f.type.startsWith('image/'));
+
     selectedFiles.forEach((file, i) => {
+      const isVideo = file.type.startsWith('video/');
+      const item = document.createElement('div');
+      item.className = 'upload-preview-item' + (isVideo ? ' upload-preview-video' : '');
+
       const reader = new FileReader();
       reader.onload = e => {
-        const item = document.createElement('div');
-        item.className = 'upload-preview-item';
-        item.innerHTML = `
-          <img src="${e.target.result}" alt="">
-          <button type="button" class="remove-preview" data-index="${i}">✕</button>
-          ${i === 0 ? '<div style="position:absolute;bottom:0;left:0;right:0;background:var(--gold);color:#0a0800;font-size:0.6rem;font-weight:800;text-align:center;padding:1px">PRINCIPAL</div>' : ''}
-        `;
+        if (isVideo) {
+          item.innerHTML = `
+            <video src="${e.target.result}" muted preload="metadata" playsinline></video>
+            <div class="upload-preview-video-badge">▶ Vídeo</div>
+            <button type="button" class="remove-preview" data-index="${i}">✕</button>
+          `;
+        } else {
+          const isPrincipal = i === firstImageIdx;
+          item.innerHTML = `
+            <img src="${e.target.result}" alt="">
+            <button type="button" class="remove-preview" data-index="${i}">✕</button>
+            ${isPrincipal ? '<div style="position:absolute;bottom:0;left:0;right:0;background:var(--gold);color:#0a0800;font-size:0.6rem;font-weight:800;text-align:center;padding:1px">PRINCIPAL</div>' : ''}
+          `;
+        }
         item.querySelector('.remove-preview').addEventListener('click', () => {
           selectedFiles.splice(i, 1);
           renderPreviews();
@@ -114,15 +133,20 @@ function setupUploadZone(inputId, previewId, zoneId) {
             input.files = dt.files;
           }
         });
-        preview.appendChild(item);
       };
       reader.readAsDataURL(file);
+      preview.appendChild(item);
     });
 
-    // Show count
-    const hint = document.querySelector('.upload-zone-hint');
+    const hint = document.querySelector(`#${zoneId || ''} .upload-zone-hint`) ||
+                 zone?.querySelector('.upload-zone-hint');
     if (hint && selectedFiles.length > 0) {
-      hint.textContent = `${selectedFiles.length} imagen${selectedFiles.length !== 1 ? 'es' : ''} seleccionada${selectedFiles.length !== 1 ? 's' : ''}`;
+      const imgs = selectedFiles.filter(f => f.type.startsWith('image/')).length;
+      const vids = selectedFiles.filter(f => f.type.startsWith('video/')).length;
+      const parts = [];
+      if (imgs) parts.push(`${imgs} foto${imgs !== 1 ? 's' : ''}`);
+      if (vids) parts.push(`${vids} vídeo${vids !== 1 ? 's' : ''}`);
+      hint.textContent = parts.join(' y ');
     }
   }
 }
@@ -132,8 +156,8 @@ setupUploadZone('imageInput', 'uploadPreview', 'uploadZone');
 setupUploadZone('addImageInput', 'addUploadPreview', 'addUploadZone');
 
 // ── Guard previo al envío: avisa si pasaría del límite del servidor
-// (Nginx tiene client_max_body_size 50M, dejamos 45 de margen).
-const UPLOAD_LIMIT = 45 * 1024 * 1024;
+// Nginx admite client_max_body_size 150M; dejamos 140 de margen.
+const UPLOAD_LIMIT = 140 * 1024 * 1024;
 
 function guardFormSize(form, inputId) {
   const input = document.getElementById(inputId);
@@ -142,9 +166,9 @@ function guardFormSize(form, inputId) {
   if (totalSize <= UPLOAD_LIMIT) return true;
   const mb = (totalSize / 1024 / 1024).toFixed(1);
   alert(
-    `Las imágenes pesan ${mb} MB en total y el servidor acepta hasta 45 MB por subida.\n\n` +
-    `Solución: guarda el coche primero con menos imágenes y añade el resto desde la edición ` +
-    `usando "Añadir imágenes" (puedes hacer varios envíos).`
+    `Los archivos pesan ${mb} MB en total y el servidor acepta hasta 140 MB por subida.\n\n` +
+    `Solución: sube los vídeos uno a uno o reduce el peso. Puedes guardar el coche con ` +
+    `menos archivos y añadir el resto desde "Añadir fotos o vídeos" en varios envíos.`
   );
   return false;
 }

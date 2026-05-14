@@ -670,13 +670,28 @@ strong { color: var(--text); font-weight: 700; }
   position: fixed; inset: 0; z-index: 9999;
   background: rgba(0,0,0,0.96); backdrop-filter: blur(10px);
   display: flex; align-items: center; justify-content: center;
-  opacity: 0; visibility: hidden; transition: all var(--transition-md);
+  opacity: 0; visibility: hidden; transition: opacity var(--transition-md), visibility var(--transition-md);
 }
 .lightbox.open { opacity: 1; visibility: visible; }
+.lightbox-stage {
+  width: 90vw; height: 88vh;
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden;
+  user-select: none;
+}
 .lightbox-img {
-  max-height: 90vh; max-width: 90vw; object-fit: contain;
+  max-height: 100%; max-width: 100%; object-fit: contain;
   border-radius: var(--radius-sm); box-shadow: 0 0 80px rgba(0,0,0,0.5);
-  transition: transform 0.2s ease;
+  transform-origin: center center;
+  cursor: zoom-in;
+  transition: transform 0.15s ease;
+  -webkit-user-drag: none;
+}
+.lightbox-stage.is-zoomed .lightbox-img { transition: none; }
+.lightbox-video {
+  max-height: 100%; max-width: 100%;
+  border-radius: var(--radius-sm); box-shadow: 0 0 80px rgba(0,0,0,0.5);
+  background: #000;
 }
 .lightbox-close {
   position: absolute; top: 1.25rem; right: 1.25rem;
@@ -684,6 +699,8 @@ strong { color: var(--text); font-weight: 700; }
   background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8);
   font-size: 1.1rem; display: flex; align-items: center; justify-content: center;
   transition: all var(--transition);
+  border: 0; cursor: pointer;
+  z-index: 2;
 }
 .lightbox-close:hover { background: rgba(255,255,255,0.2); color: white; }
 .lightbox-nav {
@@ -692,13 +709,97 @@ strong { color: var(--text); font-weight: 700; }
   background: rgba(255,255,255,0.1); color: white;
   font-size: 2rem; display: flex; align-items: center; justify-content: center;
   line-height: 1; transition: all var(--transition);
+  border: 0; cursor: pointer;
+  z-index: 2;
 }
 .lightbox-nav:hover { background: rgba(255,255,255,0.2); }
 .lightbox-prev { left: 1.5rem; }
 .lightbox-next { right: 1.5rem; }
 .lightbox-counter {
   position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%);
-  color: rgba(255,255,255,0.5); font-size: 0.85rem; letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.7); font-size: 0.85rem; letter-spacing: 0.05em;
+}
+.lightbox-toolbar {
+  position: absolute; bottom: 1.25rem; right: 1.5rem;
+  display: flex; gap: 0.4rem;
+  z-index: 2;
+}
+.lightbox-tool {
+  min-width: 44px; height: 44px; padding: 0 0.85rem;
+  border-radius: 22px; border: 0; cursor: pointer;
+  background: rgba(255,255,255,0.1); color: white;
+  font-size: 1.1rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition);
+}
+.lightbox-tool:hover { background: rgba(255,255,255,0.22); }
+
+/* ── Tabs Fotos / Vídeos en galería ─────────────────────── */
+.gallery-tabs {
+  display: flex; gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+.gallery-tab {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-dim, var(--text));
+  border-radius: 999px;
+  font-size: 0.88rem; font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition);
+}
+.gallery-tab:hover { border-color: var(--accent); color: var(--accent); }
+.gallery-tab.is-active {
+  background: var(--accent);
+  color: white;
+  border-color: var(--accent);
+}
+.gallery-panel { display: none; }
+.gallery-panel.is-active { display: block; }
+
+/* ── Grid de vídeos en la galería ─────────────────────────── */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 0.85rem;
+}
+.video-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: #000;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.video-thumb:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.25);
+}
+.video-thumb video {
+  width: 100%; height: 100%; object-fit: cover;
+  pointer-events: none;
+}
+.video-thumb-overlay {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.4) 100%);
+  color: white;
+  transition: background 0.25s ease;
+}
+.video-thumb:hover .video-thumb-overlay { background: rgba(0,0,0,0.55); }
+.video-thumb-overlay svg {
+  filter: drop-shadow(0 6px 12px rgba(0,0,0,0.6));
+}
+.video-thumb-label {
+  position: absolute; bottom: 0.5rem; left: 0.65rem;
+  color: white; font-size: 0.78rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.6);
 }
 
 /* ── 20. Auth pages ───────────────────────── */
@@ -987,6 +1088,40 @@ body.admin-body { }
   padding: 0.15rem 0.5rem; margin-left: 0.5rem;
 }
 .img-action-form { display: inline; }
+
+/* ── Preview de VÍDEO en el upload del admin ─────────────── */
+.upload-preview-item.upload-preview-video {
+  width: 110px; height: 64px;
+  background: #000;
+}
+.upload-preview-item.upload-preview-video video {
+  width: 100%; height: 100%; object-fit: cover;
+  pointer-events: none;
+}
+.upload-preview-video-badge {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  background: rgba(0,0,0,0.7); color: white;
+  font-size: 0.6rem; font-weight: 700;
+  text-align: center; padding: 1px;
+  letter-spacing: 0.05em;
+}
+
+/* ── VÍDEO en el grid admin del coche ─────────────────────── */
+.admin-img-item.is-video { background: #000; }
+.admin-img-item.is-video video {
+  width: 100%; height: 100%; object-fit: cover;
+  pointer-events: none;
+}
+.admin-video-badge {
+  position: absolute; top: 0.4rem; left: 0.4rem;
+  display: inline-flex; align-items: center; gap: 0.25rem;
+  padding: 0.2rem 0.5rem; border-radius: 999px;
+  background: rgba(0,0,0,0.75); color: white;
+  font-size: 0.65rem; font-weight: 700;
+  letter-spacing: 0.04em; text-transform: uppercase;
+  z-index: 1;
+  backdrop-filter: blur(4px);
+}
 
 /* ── 26. Tickets admin ────────────────────── */
 .tickets-admin-list { display: flex; flex-direction: column; gap: 1rem; }

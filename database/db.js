@@ -111,6 +111,15 @@ async function initDB() {
     }
   } catch (_) {}
 
+  // ── Migración: añadir columna 'tipo' a car_images para soportar vídeos
+  try {
+    const imgCols = await getAll('PRAGMA table_info(car_images)');
+    if (!imgCols.some(c => c.name === 'tipo')) {
+      await run("ALTER TABLE car_images ADD COLUMN tipo TEXT DEFAULT 'imagen'");
+      await run("UPDATE car_images SET tipo = 'imagen' WHERE tipo IS NULL OR tipo = ''");
+    }
+  } catch (_) {}
+
   // ── Crear los dos administradores por defecto ─────────────────
   const admins = [
     {

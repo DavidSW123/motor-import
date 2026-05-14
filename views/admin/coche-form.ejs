@@ -173,18 +173,18 @@
           </div>
 
           <% if (!car) { %>
-          <!-- Imágenes en creación -->
+          <!-- Imágenes y vídeos en creación -->
           <div class="form-group">
             <label class="form-label">
-              Imágenes
-              <span class="form-label-hint">(máx. 15 · JPG, PNG, WebP · 8 MB/foto)</span>
+              Fotos y vídeos
+              <span class="form-label-hint">(JPG/PNG/WebP hasta ~45 MB; MP4/WebM/MOV hasta 100 MB)</span>
             </label>
             <div class="upload-zone" id="uploadZone">
-              <input type="file" name="imagenes" id="imageInput" multiple accept="image/*" class="upload-input">
+              <input type="file" name="imagenes" id="imageInput" multiple accept="image/*,video/*" class="upload-input">
               <div class="upload-zone-content">
                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <p>Arrastra las imágenes aquí o <span class="upload-zone-link">haz clic para seleccionar</span></p>
-                <p class="upload-zone-hint">La primera imagen será la principal</p>
+                <p>Arrastra fotos y vídeos aquí o <span class="upload-zone-link">haz clic para seleccionar</span></p>
+                <p class="upload-zone-hint">La primera foto será la principal · Los vídeos aparecen en una pestaña separada</p>
               </div>
             </div>
             <div class="upload-preview" id="uploadPreview"></div>
@@ -198,24 +198,33 @@
         </form>
       </div>
 
-      <!-- ── GESTIÓN DE IMÁGENES (solo edición) ─────── -->
+      <!-- ── GESTIÓN DE IMÁGENES Y VÍDEOS (solo edición) ──── -->
       <% if (car) { %>
       <div class="admin-card">
         <div class="admin-card-head">
           <h2 class="admin-card-title">
-            Imágenes
-            <span class="img-counter-badge"><%= images.length %>/15</span>
+            Fotos y vídeos
+            <span class="img-counter-badge"><%= images.length %></span>
           </h2>
         </div>
 
-        <!-- Grid de imágenes existentes -->
+        <!-- Grid de medios existentes -->
         <% if (images.length > 0) { %>
           <div class="admin-img-grid" id="adminImgGrid">
             <% images.forEach(img => { %>
-              <div class="admin-img-item" data-id="<%= img.id %>">
-                <img src="<%= img.url %>" alt="" loading="lazy">
+              <% const isVideo = img.tipo === 'video'; %>
+              <div class="admin-img-item <%= isVideo ? 'is-video' : '' %>" data-id="<%= img.id %>">
+                <% if (isVideo) { %>
+                  <video src="<%= img.url %>" muted preload="metadata" playsinline></video>
+                  <div class="admin-video-badge">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="6,4 20,12 6,20"/></svg>
+                    Vídeo
+                  </div>
+                <% } else { %>
+                  <img src="<%= img.url %>" alt="" loading="lazy">
+                <% } %>
                 <div class="admin-img-overlay">
-                  <% if (!img.es_principal) { %>
+                  <% if (!isVideo && !img.es_principal) { %>
                     <form action="/admin/imagenes/<%= img.id %>/principal" method="post" class="img-action-form">
                       <button type="submit" class="admin-img-btn" title="Marcar como principal">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
@@ -223,8 +232,8 @@
                     </form>
                   <% } %>
                   <form action="/admin/imagenes/<%= img.id %>/eliminar" method="post" class="img-action-form"
-                        onsubmit="return confirm('¿Eliminar esta imagen?')">
-                    <button type="submit" class="admin-img-btn admin-img-btn-del" title="Eliminar imagen">
+                        onsubmit="return confirm('¿Eliminar este <%= isVideo ? 'vídeo' : 'archivo' %>?')">
+                    <button type="submit" class="admin-img-btn admin-img-btn-del" title="Eliminar">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
                     </button>
                   </form>
@@ -236,32 +245,28 @@
             <% }) %>
           </div>
         <% } else { %>
-          <p class="admin-empty" style="padding:1.5rem">Este vehículo aún no tiene imágenes.</p>
+          <p class="admin-empty" style="padding:1.5rem">Este vehículo aún no tiene fotos ni vídeos.</p>
         <% } %>
 
-        <!-- Subir más imágenes -->
-        <% if (images.length < 15) { %>
+        <!-- Subir más fotos/vídeos -->
         <div style="margin-top:1.5rem">
           <form action="/admin/coches/<%= car.id %>/imagenes" method="post"
                 enctype="multipart/form-data" id="addImgForm">
             <label class="form-label">
-              Añadir imágenes
-              <span class="form-label-hint">(puedes añadir hasta <%= 15 - images.length %> más)</span>
+              Añadir fotos o vídeos
+              <span class="form-label-hint">(JPG/PNG/WebP, MP4/WebM/MOV)</span>
             </label>
             <div class="upload-zone upload-zone-sm" id="addUploadZone">
-              <input type="file" name="imagenes" id="addImageInput" multiple accept="image/*" class="upload-input">
+              <input type="file" name="imagenes" id="addImageInput" multiple accept="image/*,video/*" class="upload-input">
               <div class="upload-zone-content">
                 <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                <p>Arrastra o <span class="upload-zone-link">selecciona imágenes</span></p>
+                <p>Arrastra o <span class="upload-zone-link">selecciona archivos</span></p>
               </div>
             </div>
             <div class="upload-preview" id="addUploadPreview"></div>
-            <button type="submit" class="btn btn-primary btn-sm" style="margin-top:1rem">Subir imágenes</button>
+            <button type="submit" class="btn btn-primary btn-sm" style="margin-top:1rem">Subir</button>
           </form>
         </div>
-        <% } else { %>
-          <p class="form-label-hint" style="margin-top:1rem">Límite de 15 imágenes alcanzado. Elimina alguna para poder añadir más.</p>
-        <% } %>
       </div>
 
       <!-- Vista previa en web -->

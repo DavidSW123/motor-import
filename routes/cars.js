@@ -120,17 +120,22 @@ router.get('/:slug', async (req, res) => {
       return res.redirect('/coches');
     }
 
-    const [images, related] = await Promise.all([
+    const [media, related] = await Promise.all([
       getAll('SELECT * FROM car_images WHERE car_id = ? ORDER BY es_principal DESC, orden ASC', [Number(car.id)]),
       getAll(`
         SELECT c.*,
           (SELECT url FROM car_images WHERE car_id = c.id AND es_principal = 1 LIMIT 1) AS imagen_principal,
-          (SELECT url FROM car_images WHERE car_id = c.id ORDER BY orden LIMIT 1)       AS imagen_primera
+          (SELECT url FROM car_images WHERE car_id = c.id AND (tipo = 'imagen' OR tipo IS NULL) ORDER BY orden LIMIT 1) AS imagen_primera
         FROM cars c WHERE c.id != ? AND c.categoria = ? AND c.estado = 'disponible' LIMIT 3
       `, [Number(car.id), car.categoria || 'coche'])
     ]);
 
-    res.render('coche', { title: `${car.marca} ${car.modelo} ${car.anio}`, car, images, related });
+    // Separar imágenes y vídeos. tipo IS NULL trata como imagen
+    // (compatibilidad con filas antiguas pre-migración).
+    const images = media.filter(m => !m.tipo || m.tipo === 'imagen');
+    const videos = media.filter(m => m.tipo === 'video');
+
+    res.render('coche', { title: `${car.marca} ${car.modelo} ${car.anio}`, car, images, videos, related });
   } catch (err) {
     console.error(err);
     res.status(500).send('Error interno');
