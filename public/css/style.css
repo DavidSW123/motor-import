@@ -759,6 +759,27 @@ strong { color: var(--text); font-weight: 700; }
 .gallery-panel { display: none; }
 .gallery-panel.is-active { display: block; }
 
+/* ── Sección Vídeos en la ficha pública ───────────────────── */
+.car-videos-section { /* hereda de .car-section, sólo añadimos cabecera */ }
+.car-videos-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 1rem; margin-bottom: 1.25rem; flex-wrap: wrap;
+}
+.car-videos-title {
+  display: inline-flex; align-items: center; gap: 0.55rem;
+  margin: 0;
+}
+.car-videos-counter {
+  display: inline-flex; align-items: center;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: rgba(185, 28, 28, 0.12);
+  color: var(--accent, #b91c1c);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
 /* ── Grid de vídeos en la galería ─────────────────────────── */
 .video-grid {
   display: grid;
@@ -1062,20 +1083,39 @@ body.admin-body { }
   background: var(--surface);
 }
 .admin-img-item img { width: 100%; height: 100%; object-fit: cover; }
+/* Acciones SIEMPRE visibles, esquina superior derecha */
 .admin-img-overlay {
-  position: absolute; inset: 0; background: rgba(0,0,0,0); transition: background var(--transition);
-  display: flex; align-items: flex-start; justify-content: flex-end; padding: 0.35rem; gap: 0.25rem;
+  position: absolute;
+  top: 0.4rem;
+  right: 0.4rem;
+  display: flex;
+  gap: 0.3rem;
+  z-index: 2;
 }
-.admin-img-item:hover .admin-img-overlay { background: rgba(0,0,0,0.5); }
+/* Las <form> envuelven a los botones; las hacemos invisibles en layout */
+.admin-img-overlay .img-action-form { display: contents; }
 .admin-img-btn {
-  width: 28px; height: 28px; border-radius: var(--radius-sm);
-  background: rgba(0,0,0,0.6); color: white;
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity var(--transition);
+  width: 30px; height: 30px;
+  flex-shrink: 0;
+  border-radius: 6px;
+  border: 0;
+  padding: 0;
+  background: rgba(0,0,0,0.65);
+  color: white;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   backdrop-filter: blur(4px);
+  transition: background var(--transition), transform 0.15s ease;
 }
-.admin-img-item:hover .admin-img-btn { opacity: 1; }
-.admin-img-btn-del { background: rgba(239,68,68,0.7) !important; }
+.admin-img-btn:hover {
+  background: rgba(0,0,0,0.9);
+  transform: scale(1.06);
+}
+.admin-img-btn svg { display: block; }
+.admin-img-btn-del { background: rgba(239,68,68,0.78); }
+.admin-img-btn-del:hover { background: rgba(220,38,38,1); }
 .admin-img-principal {
   position: absolute; bottom: 0; left: 0; right: 0;
   background: var(--gold); color: #0a0800;
