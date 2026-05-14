@@ -100,6 +100,14 @@ router.post('/contacto', async (req, res) => {
 });
 
 // ── SITEMAP XML (para Google Search Console) ──────────────────────
+function toIsoDate(value) {
+  if (!value) return null;
+  // SQLite/Turso devuelve 'YYYY-MM-DD HH:MM:SS' (con espacio), no ISO
+  const d = new Date(String(value).replace(' ', 'T') + (String(value).endsWith('Z') ? '' : 'Z'));
+  if (isNaN(d.getTime())) return null;
+  return d.toISOString().split('T')[0]; // YYYY-MM-DD
+}
+
 router.get('/sitemap.xml', async (req, res) => {
   const base = 'https://carscampers.com';
   const today = new Date().toISOString().split('T')[0];
@@ -133,7 +141,7 @@ router.get('/sitemap.xml', async (req, res) => {
     }
 
     for (const car of cars) {
-      const lastmod = (car.created_at || '').split('T')[0] || today;
+      const lastmod = toIsoDate(car.created_at) || today;
       xml += `  <url>\n`;
       xml += `    <loc>${base}/coches/${car.slug}</loc>\n`;
       xml += `    <lastmod>${lastmod}</lastmod>\n`;
